@@ -10,11 +10,13 @@ import Book from 'commons/components/elements/Icons/Book';
 import { useExercise } from 'exercises/contexts/ExerciseProvider';
 import ExerciseReportNavigationFooter from './ExerciseReportNavigationFooter';
 import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
+import { ExerciseDetail } from 'exercises/types/exercises';
 
 const ExerciseQuestionFooter: React.FC<{
     saveAnswer: () => Promise<void>;
     isDisabled: boolean;
-}> = ({ saveAnswer, isDisabled }) => {
+    exercise: ExerciseDetail | undefined;
+}> = ({ saveAnswer, isDisabled, exercise }) => {
     const router = useRouter();
     const {
         slug,
@@ -186,12 +188,7 @@ const ExerciseQuestionFooter: React.FC<{
     };
 
     if (problemsetId) {
-        return (
-            <ExerciseReportNavigationFooter
-                saveAnswer={saveAnswer}
-                isDisabled={isDisabled}
-            />
-        );
+        return <ExerciseReportNavigationFooter exercise={exercise} />;
     }
 
     return (

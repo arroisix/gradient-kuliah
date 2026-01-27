@@ -241,6 +241,7 @@ const AnswerContainer = () => {
                 )}
             </div>
             <ExerciseQuestionFooter
+                exercise={exercise}
                 saveAnswer={() =>
                     solution
                         ? onNextSolution()

@@ -14,9 +14,7 @@ const ExerciseQuestion: React.FC = () => {
 
     const { data: exercise } = useGetExerciseDetailV2Query(
         { exercise_slug: slug as string },
-        {
-            skip: !slug
-        }
+        { skip: !slug }
     );
 
     useEffect(() => {
@@ -40,7 +38,7 @@ const ExerciseQuestion: React.FC = () => {
     return (
         <LatihanLayout>
             <div className="flex flex-col h-full gap-4 lg:gap-6 overflow-y-auto pb-12 lg:pb-0">
-                <ExerciseWorksheetHeader />
+                <ExerciseWorksheetHeader exercise={exercise} />
                 <ProblemsetTitle />
                 <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 lg:pb-8 flex-1 h-full lg:min-h-0 overflow-y-auto lg:overflow-hidden">
                     <QuestionContent />

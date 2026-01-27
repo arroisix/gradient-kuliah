@@ -10,7 +10,9 @@ import {
 
 interface VideoTranscriptContextType {
     videoTimestamp: number;
+    isPlaying: boolean;
     setVideoTimestamp: Dispatch<SetStateAction<number>>;
+    setIsPlaying: Dispatch<SetStateAction<boolean>>;
 }
 
 const VideoTranscriptContext = createContext<VideoTranscriptContextType | null>(
@@ -19,10 +21,11 @@ const VideoTranscriptContext = createContext<VideoTranscriptContextType | null>(
 
 function VideoTranscriptProvider({ children }: PropsWithChildren): JSX.Element {
     const [videoTimestamp, setVideoTimestamp] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const value = useMemo((): VideoTranscriptContextType => {
-        return { videoTimestamp, setVideoTimestamp };
-    }, [videoTimestamp]);
+        return { videoTimestamp, isPlaying, setVideoTimestamp, setIsPlaying };
+    }, [isPlaying, videoTimestamp]);
 
     return (
         <VideoTranscriptContext.Provider value={value}>
