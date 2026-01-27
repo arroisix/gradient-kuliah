@@ -12,6 +12,7 @@ import moment from 'moment';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { cn } from 'commons/utils';
+import { useRouter } from 'next/router';
 
 type FooterItemProps = {
     title: string;
@@ -354,11 +355,12 @@ const SocialMedia = ({ Icon, url }: FooterSocialMediaProps): JSX.Element => {
 };
 
 const AppButtons = (): JSX.Element => {
-    const isCopilotPage =
-        typeof window !== 'undefined' &&
-        window.location.pathname.includes('/copilot');
+    const router = useRouter();
+    const isCopilotPage = router.pathname.includes('/copilot');
 
-    if (isCopilotPage) return <></>;
+    if (isCopilotPage) {
+        return <></>;
+    }
 
     return (
         <div className="flex items-center gap-4">
