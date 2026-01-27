@@ -1,0 +1,59 @@
+import { MainSectionProps } from 'copilot/types/copilot';
+import ActionButtons from './ActionButtons';
+import ExamplePrompts from './ExamplePrompts';
+import { cn } from 'commons/utils';
+
+type ContentType =
+    | 'course_video'
+    | 'textbook_problem'
+    | 'bank_soal_problem'
+    | 'astronotes_content'
+    | null;
+
+const MainSection = ({
+    onSendMessage,
+    onImageCapture,
+    className,
+    showTitle = true,
+    showActionButtons = true,
+    contentType
+}: MainSectionProps & {
+    className?: string;
+    showTitle?: boolean;
+    showActionButtons?: boolean;
+    contentType?: ContentType;
+}): JSX.Element => {
+    return (
+        <div
+            className={cn(
+                'flex-1 flex flex-col h-full bg-[#101010] overflow-hidden',
+                className
+            )}>
+            <div className="flex-1 min-h-0 overflow-y-auto mt-16 mb-24 md:mt-0 md:mb-0">
+                <div className="flex flex-col md:items-center md:justify-center min-h-full max-w-3xl mx-auto w-full gap-4 py-8">
+                    {showTitle && (
+                        <h1 className="text-xl md:text-2xl font-bold text-center">
+                            Lagi butuh bantuan apa sobat?
+                        </h1>
+                    )}
+
+                    {showActionButtons && (
+                        <ActionButtons onImageCapture={onImageCapture} />
+                    )}
+
+                    <div className="w-full md:max-w-[360px]">
+                        <p className="text-neutral-400 mb-4">
+                            Psst... kamu bisa nanya kayak gini:
+                        </p>
+                        <ExamplePrompts
+                            onPromptClick={onSendMessage}
+                            contentType={contentType}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MainSection;
