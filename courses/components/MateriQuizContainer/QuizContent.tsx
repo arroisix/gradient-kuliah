@@ -22,6 +22,10 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
     const isInProgress =
         exercise?.latest_exercise_progress?.status === 'IN_PROGRESS';
 
+    const quizDuration = Number(
+        ((exercise?.total_duration ?? 0) / 60).toFixed(0)
+    );
+
     const userScore =
         ((exercise?.latest_completed_exercise_progress?.correct_answers ?? 0) /
             (exercise?.latest_completed_exercise_progress?.total_questions ??
@@ -66,7 +70,7 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
                         Uji pemahaman kamu tentang materi {exercise?.title}.
                     </p>
 
-                    <div className="grid grid-cols-3 gap-3 lg:max-w-[444px] lg:mx-auto">
+                    <div className="flex justify-center items-center gap-3 lg:max-w-[444px] lg:mx-auto">
                         <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
                             <ListIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
                             <span className="text-white font-semibold">
@@ -74,24 +78,29 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
                             </span>
                         </div>
 
-                        <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
-                            <TimerIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
-                            <span className="text-white font-semibold">
-                                {((exercise?.total_duration ?? 0) / 60).toFixed(
-                                    0
-                                )}{' '}
-                                Menit
-                            </span>
-                        </div>
+                        {quizDuration ? (
+                            <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
+                                <TimerIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
+                                <span className="text-white font-semibold">
+                                    {quizDuration} Menit
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
 
-                        <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
-                            <span className="text-[#B6A6F3] font-semibold">
-                                {exercise?.minimum_score} poin
-                            </span>
-                            <span className="text-white font-semibold">
-                                Min. Skor
-                            </span>
-                        </div>
+                        {exercise?.minimum_score ? (
+                            <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
+                                <span className="text-[#B6A6F3] font-semibold">
+                                    {exercise?.minimum_score} poin
+                                </span>
+                                <span className="text-white font-semibold">
+                                    Min. Skor
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                     </div>
 
                     {isEverCompleted ? (
