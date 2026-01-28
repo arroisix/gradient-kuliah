@@ -70,6 +70,12 @@ function ArticleMarkdown({
 
             if (redirectionURL) {
                 router.push(redirectionURL);
+            } else {
+                toast.info('Progress kamu telah tersimpan', {
+                    position: 'top-right',
+                    theme: 'colored',
+                    hideProgressBar: true
+                });
             }
         } catch (error) {
             console.error(
