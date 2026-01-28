@@ -107,6 +107,12 @@ function ArticleContent({
                     page={page}
                     subchapter_slug={subchapter.subchapter_slug}
                     book_slug={subchapter.notebook?.book_slug}
+                    redirectionURL={
+                        subchapter.next_chapter_slug &&
+                        subchapter.next_subchapter_slug
+                            ? `/utbk/materi/${slug_subtest}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
+                            : ''
+                    }
                 />
             ) : (
                 <div className="animate-pulse bg-[#333333] rounded-2xl mt-4 h-[calc(100vh-32px-30px-16px-80px-80px-16px)] lg:h-[calc(100vh-32px-36px-16px-32px-36px-16px-16px)] lg:mx-6"></div>

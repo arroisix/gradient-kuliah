@@ -266,6 +266,12 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                             undefined,
                             { scroll: false, shallow: true }
                         );
+                    } else if (exercise?.tryout_type === 'MATERI') {
+                        router.replace(
+                            `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
                     } else {
                         router.replace(
                             `/latihan/${slug}/report/${exerciseProgressId}/leaderboard/`,

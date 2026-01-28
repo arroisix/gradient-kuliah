@@ -14,6 +14,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import Button from 'commons/components/elements/Button';
 import { usePostFinishArticleMutation } from 'courses/redux/api/astronotesApi';
+import { toast } from 'react-toastify';
 
 interface ArticleMarkdownProps {
     subchapter_slug: string | undefined;
@@ -22,6 +23,7 @@ interface ArticleMarkdownProps {
     initialContent: string | null;
     book: BookDetailInterface;
     article: GetAstronotesContentResponse;
+    redirectionURL: string;
 }
 
 function ArticleMarkdown({
@@ -30,7 +32,8 @@ function ArticleMarkdown({
     page,
     initialContent,
     book,
-    article
+    article,
+    redirectionURL
 }: ArticleMarkdownProps): JSX.Element {
     const [finishArticle, { isLoading }] = usePostFinishArticleMutation();
     const [content, setContent] = useState<GetAstronotesContentResponse | null>(
@@ -57,12 +60,33 @@ function ArticleMarkdown({
         smallText ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
     );
 
-    const handleFinishArticle = () => {
-        finishArticle({
-            subchapter_slug: subchapter_slug as string,
-            book_slug: book_slug as string,
-            page: article.current_page
-        });
+    const handleFinishArticle = async () => {
+        try {
+            await finishArticle({
+                subchapter_slug: subchapter_slug as string,
+                book_slug: book_slug as string,
+                page: article.current_page
+            });
+
+            if (redirectionURL) {
+                router.push(redirectionURL);
+            } else {
+                toast.info('Progress kamu telah tersimpan', {
+                    position: 'top-right',
+                    theme: 'colored',
+                    hideProgressBar: true
+                });
+            }
+        } catch (error) {
+            console.error(
+                new Error('failed to finish notebook', { cause: error })
+            );
+            toast.error('Gagal menyelesaikan notebook, mohon coba lagi', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true
+            });
+        }
     };
 
     useEffect(() => {
