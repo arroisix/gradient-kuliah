@@ -10,6 +10,7 @@ import { useThemeContext } from './contexts/ThemeProvider';
 import K12Paywall from './components/elements/K12Paywall';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useRouter } from 'next/router';
 // const AppInstallBanner = dynamic(
 //     () => import('./components/modules/Navbar/components/AppInstallBanner')
 // );
@@ -46,6 +47,7 @@ const LearnLayout = ({
     const lightMode = theme === 'light';
     // const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const router = useRouter();
 
     return (
         <>
@@ -97,7 +99,10 @@ const LearnLayout = ({
                         })}>
                         <div
                             className={cn(
-                                'px-4 md:px-0 w-full font-inter',
+                                'md:px-0 w-full font-inter',
+                                router.pathname.includes('/copilot')
+                                    ? 'px-0'
+                                    : 'px-4',
                                 {
                                     'md:px-8 lg:px-12':
                                         fullHeightSidebar &&

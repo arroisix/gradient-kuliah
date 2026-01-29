@@ -1,5 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import CopilotContainer from 'copilot/containers/revamp/CopilotContainer';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useSelector } from 'react-redux';
