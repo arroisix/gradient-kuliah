@@ -1,8 +1,7 @@
-import { FiArrowUpRight } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 import { chatApi } from 'copilot/redux/api/copilotApi';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useTracker } from 'tracker/tracker';
+import { BookOpenIcon } from 'lucide-react';
 
 type ContentType =
     | 'course_video'
@@ -41,17 +40,17 @@ const ExamplePrompts = ({
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center py-4">
-                <AiOutlineLoading3Quarters
-                    size={24}
-                    className="animate-spin text-neutral-400"
-                />
+            <div className="flex flex-wrap justify-center gap-3 w-full max-w-[343px] mx-auto">
+                <div className="animate-pulse bg-gradient-to-b from-black/10 to-white/10 w-48 h-11 border border-[#333540] rounded-xl"></div>
+                <div className="animate-pulse bg-gradient-to-b from-black/10 to-white/10 w-32 h-11 border border-[#333540] rounded-xl"></div>
+                <div className="animate-pulse bg-gradient-to-b from-black/10 to-white/10 w-32 h-11 border border-[#333540] rounded-xl"></div>
+                <div className="animate-pulse bg-gradient-to-b from-black/10 to-white/10 w-48 h-11 border border-[#333540] rounded-xl"></div>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap justify-center gap-3 w-full max-w-[343px] mx-auto">
             {templates.map((prompt, index) => (
                 <button
                     key={index}
@@ -61,9 +60,11 @@ const ExamplePrompts = ({
                         });
                         onPromptClick(prompt);
                     }}
-                    className="flex items-center justify-between border border-neutral-800 hover:bg-neutral-800/50 px-4 py-3 rounded-lg text-left transition-colors">
-                    <span>{prompt}</span>
-                    <FiArrowUpRight className="text-neutral-400" />
+                    className="bg-gradient-to-b from-black/10 to-white/10 border border-[#333540] flex items-center gap-2 py-3 px-4 rounded-xl w-full max-w-[256px]">
+                    <BookOpenIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
+                    <span className="text-white text-xs text-start">
+                        {prompt}
+                    </span>
                 </button>
             ))}
         </div>

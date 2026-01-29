@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import MainSection from 'copilot/components/revamp/MainSection/index.tsx';
-import ChatSection from 'copilot/components/revamp/ChatSection/index.tsx';
+import MainSection from 'copilot/components/revamp/MainSection';
+import ChatSection from 'copilot/components/revamp/ChatSection';
 import {
     ChatMessage,
     ContextReference,
@@ -13,14 +13,12 @@ import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
 import MobileHeader from 'copilot/components/revamp/MobileHeader';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { cn } from 'commons/utils';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
 import HistorySection from 'copilot/components/revamp/HistorySection';
 import ReferenceModal from 'copilot/components/revamp/Reference/ReferenceModal';
 import ReferenceContentModal from 'copilot/components/revamp/Reference/ReferenceContentModal';
+import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -52,11 +50,12 @@ const CopilotContainer = ({
         timestamp: string;
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
+    console.log(showScrollButton, pendingMessage, isEditorOpen);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    const promptBarRef = useRef<HTMLInputElement>(null);
+    const promptBarRef = useRef<HTMLTextAreaElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -86,10 +85,6 @@ const CopilotContainer = ({
         }
         return undefined;
     }, [isReferenceModalOpen]);
-
-    const handleImageCapture = () => {
-        fileInputRef.current?.click();
-    };
 
     const convertHistoryContextToSelectedReferences = (historyContext?: {
         data: ChatHistoryContextItem[];
@@ -491,12 +486,8 @@ const CopilotContainer = ({
     };
 
     return (
-        <div
-            className={cn(
-                'flex bg-[#101010] overflow-hidden',
-                '-mx-4 md:mx-0',
-                'md:fixed md:top-[64px] md:bottom-0 md:left-0 md:right-0'
-            )}>
+        <div className="flex flex-col h-[calc(100vh-64px)]">
+            <MobileHeader onOpenHistory={handleOpenHistory} />
             {isAuthenticated && (
                 <HistorySection
                     isOpen={isHistoryOpen}
@@ -507,108 +498,45 @@ const CopilotContainer = ({
             )}
 
             <div
-                className={cn(
-                    'flex-1 flex flex-col w-full relative md:items-center',
-                    'px-4 md:px-24 md:h-full',
-                    messages.length === 0 ? 'h-screen md:h-auto' : 'md:h-full'
-                )}>
-                <div className="md:hidden fixed top-0 left-0 right-0 z-10 bg-[#101010]">
-                    <MobileHeader onOpenHistory={handleOpenHistory} />
-                </div>
-
+                className={`${
+                    isLoadingHistory ? 'grid place-items-center' : ''
+                } flex-grow overflow-scroll no-scrollbar p-4`}>
                 {isLoadingHistory ? (
-                    <div className="flex-1 flex items-center justify-center">
-                        <AiOutlineLoading3Quarters
-                            size={24}
-                            className="animate-spin text-neutral-400"
-                        />
-                        <span className="ml-2 text-neutral-400">
-                            Loading chat history...
-                        </span>
-                    </div>
+                    <LoadingIndicator />
                 ) : messages.length > 0 ? (
-                    <>
-                        <div
-                            ref={chatContainerRef}
-                            onScroll={handleScroll}
-                            className={cn(
-                                'flex-1 pt-4 w-full max-w-4xl overflow-y-auto relative no-scrollbar',
-                                'mt-16 pb-16 min-h-screen',
-                                'md:mt-0 md:pt-6 md:min-h-0',
-                                messages.length <= 2 &&
-                                    'flex flex-col justify-end'
-                            )}>
-                            <ChatSection
-                                messages={messages}
-                                pendingMessage={pendingMessage}
-                                setMessages={setMessages}
-                                onRetry={handleRetry}
-                                isLoading={isLoadingResponse}
-                                currentSessionId={currentSessionId}
-                                onOpenUsedReferencesModal={
-                                    handleOpenUsedReferencesModal
-                                }
-                            />
-                            <div ref={messagesEndRef} id="dummy-bubble" />
-                        </div>
-                    </>
+                    <div
+                        ref={chatContainerRef}
+                        onScroll={handleScroll}
+                        className="space-y-4">
+                        <ChatSection
+                            messages={messages}
+                            setMessages={setMessages}
+                            onRetry={handleRetry}
+                            isLoading={isLoadingResponse}
+                            currentSessionId={currentSessionId}
+                            onOpenUsedReferencesModal={
+                                handleOpenUsedReferencesModal
+                            }
+                        />
+                        <div ref={messagesEndRef} />
+                    </div>
                 ) : (
-                    <MainSection
-                        onSendMessage={handleSendMessage}
-                        onImageCapture={handleImageCapture}
-                    />
+                    <MainSection onSendMessage={handleSendMessage} />
                 )}
-
-                <div
-                    className={cn(
-                        'w-full max-w-4xl mx-auto',
-                        'fixed bottom-8 left-0 right-0 bg-[#101010] pb-6',
-                        'md:static md:mb-8 md:pb-0'
-                    )}>
-                    <PromptBar
-                        ref={promptBarRef}
-                        fileInputRef={fileInputRef}
-                        onSend={handleSendMessage}
-                        isLoading={isLoadingResponse}
-                        onStateChange={({ isEditorOpen }) =>
-                            setIsEditorOpen(isEditorOpen)
-                        }
-                        onOpenReferenceModal={handleOpenReferenceModal}
-                        onOpenReferenceContentModal={
-                            handleOpenReferenceContentModal
-                        }
-                        referenceCount={selectedReferences.length}
-                    />
-                </div>
-
-                {showScrollButton && !isEditorOpen && (
-                    <button
-                        onClick={scrollToBottom}
-                        className={cn(
-                            'fixed p-3 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200 z-10',
-                            'bottom-32 left-1/2 -translate-x-1/2',
-                            'md:left-[calc(50%+144px)] md:translate-x-[-50%]',
-                            !isHistoryOpen && 'md:left-1/2 md:-translate-x-1/2'
-                        )}
-                        aria-label="Scroll to bottom">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                            />
-                        </svg>
-                    </button>
-                )}
-
-                {!isAuthenticated && <CopilotAuthPrompt />}
             </div>
+
+            <PromptBar
+                ref={promptBarRef}
+                fileInputRef={fileInputRef}
+                onSend={handleSendMessage}
+                isLoading={isLoadingResponse}
+                onStateChange={({ isEditorOpen }) =>
+                    setIsEditorOpen(isEditorOpen)
+                }
+                onOpenReferenceModal={handleOpenReferenceModal}
+                onOpenReferenceContentModal={handleOpenReferenceContentModal}
+                referenceCount={selectedReferences.length}
+            />
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}

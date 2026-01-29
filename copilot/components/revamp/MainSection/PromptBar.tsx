@@ -1,57 +1,57 @@
 import {
     useState,
-    useRef,
     KeyboardEvent,
     DragEvent,
     useEffect,
-    forwardRef
+    forwardRef,
+    FormEvent
 } from 'react';
-import { BsImage, BsArrowUpShort } from 'react-icons/bs';
-import { ImOmega } from 'react-icons/im';
-import { IoMdClose } from 'react-icons/io';
-import { Plus, ChevronDown } from 'lucide-react';
+import {
+    PlusIcon,
+    XIcon,
+    BookOpenIcon,
+    ImageIcon,
+    CameraIcon
+} from 'lucide-react';
 import { cn } from 'commons/utils';
-import MathForm from 'komunitas/components/KomunitasForm/MathForm';
 import SymbolForm from 'komunitas/components/KomunitasForm/SymbolForm';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import CropModal from '../../CropModal';
 import { useTracker } from 'tracker/tracker';
+import { FaArrowUp } from 'react-icons/fa6';
+import Modal from 'commons/components/modules/Modal';
+import { TbMath } from 'react-icons/tb';
 
 interface PromptBarProps {
     onSend?: (prompt: string, imageUrl?: string) => void;
     isLoading?: boolean;
     onStateChange?: (state: { isEditorOpen: boolean }) => void;
-    fileInputRef?: React.RefObject<HTMLInputElement>;
+    fileInputRef: React.RefObject<HTMLInputElement>;
     placeholder?: string;
-    showBorder?: boolean;
-    isSidebar?: boolean;
     onOpenReferenceModal?: () => void;
     onOpenReferenceContentModal?: () => void;
     referenceCount?: number;
 }
 
-const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
+const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
     (
         {
             onSend,
             isLoading,
             onStateChange,
-            fileInputRef: externalFileInputRef,
-            placeholder = 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!',
-            showBorder = true,
-            isSidebar = false,
+            fileInputRef,
+            placeholder = 'Lagi butuh bantuan apa sobat?',
             onOpenReferenceModal,
             onOpenReferenceContentModal,
             referenceCount = 0
         },
         ref
     ) => {
+        const [isModalOpen, setIsModalOpen] = useState(false);
         const [prompt, setPrompt] = useState('');
         const [imageUrl, setImageUrl] = useState<string | null>(null);
         const [imageName, setImageName] = useState<string | null>(null);
         const [isDragging, setIsDragging] = useState(false);
-        const internalFileInputRef = useRef<HTMLInputElement>(null);
-        const fileInputRef = externalFileInputRef || internalFileInputRef;
         const [activeForm, setActiveForm] = useState<'math' | 'symbol' | null>(
             null
         );
@@ -80,7 +80,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             }
         };
 
-        const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+        const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSend();
@@ -140,6 +140,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             const file = event.target.files?.[0];
             if (file) {
                 await handleFileUpload(file);
+                setIsModalOpen(false);
             }
         };
 
@@ -196,246 +197,214 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             }
         };
 
+        const handleAutogrowPrompt = (
+            event: FormEvent<HTMLTextAreaElement>
+        ): void => {
+            event.currentTarget.style.height = 'auto';
+            event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
+        };
+
+        const handleClickCamera = (): void => {
+            tracker?.genericTrack('Click Scan Foto Soal CTA');
+            fileInputRef.current?.click();
+        };
+
+        const handleClickImage = (): void => {
+            tracker?.genericTrack('Click Image Attachment');
+            fileInputRef.current?.click();
+        };
+
+        const handleClickSymbol = (): void => {
+            tracker?.genericTrack('Click Special Symbol Button');
+            setActiveForm(activeForm === 'symbol' ? null : 'symbol');
+            setIsModalOpen(false);
+        };
+
         return (
-            <>
-                <div className="flex flex-col gap-2">
-                    <div
-                        className={cn(
-                            'py-2 relative',
-                            showBorder &&
-                                'border-t md:border-t-0 md:border-2 border-neutral-800 md:rounded-xl',
-                            isDragging && 'border-[#5F2BCE] border-2',
-                            isDragging && 'ring-2 ring-[#5F2BCE]/50'
-                        )}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}>
-                        {isDragging && (
-                            <div className="absolute inset-0 bg-[#5F2BCE]/10 rounded-xl flex items-center justify-center pointer-events-none z-10">
-                                <div className="bg-[#1D1D1D] px-4 py-2 rounded-lg text-sm font-medium">
-                                    Drop image here
-                                </div>
-                            </div>
-                        )}
-
-                        {imageUrl && (
-                            <div className="px-5 pb-3">
-                                <div className="relative inline-block px-[10px] py-[6px] text-[10px] font-body bg-[#272727] rounded-[4px]">
-                                    <button
-                                        className="inline-block text-white hover:underline focus:outline-none focus:ring-2 focus:ring-[#5F2BCE] focus:ring-offset-1 focus:ring-offset-[#272727] rounded"
-                                        onClick={() => window.open(imageUrl)}
-                                        onKeyDown={(e) => {
-                                            if (
-                                                e.key === 'Enter' ||
-                                                e.key === ' '
-                                            ) {
-                                                e.preventDefault();
-                                                window.open(imageUrl);
-                                            }
-                                        }}
-                                        tabIndex={0}>
-                                        {imageName}
-                                    </button>
-                                    <button
-                                        className="absolute top-[-5px] right-[-5px] w-[15px] h-[15px] bg-[#373737] hover:bg-[#444444] rounded-full flex justify-center items-center cursor-pointer transition-colors"
-                                        onClick={handleRemoveImage}
-                                        aria-label="Remove image">
-                                        <IoMdClose className="text-neutral-400" />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="px-2 pb-3">
-                            <input
-                                ref={ref}
-                                type="text"
-                                value={prompt}
-                                onChange={(e) => setPrompt(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                onPaste={handlePaste}
-                                placeholder={placeholder}
-                                className="w-full bg-transparent border-none focus:ring-0 outline-none text-white md:placeholder:text-base placeholder:text-sm"
-                                disabled={isLoading}
-                            />
-                        </div>
-
-                        <div className="px-5 pb-4">
-                            <div
-                                className={cn(
-                                    isSidebar ? 'mb-3' : 'md:hidden mb-3'
-                                )}>
-                                {referenceCount === 0 ? (
-                                    <button
-                                        onClick={handleReferensiClick}
-                                        className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
-                                        disabled={isLoading}>
-                                        <Plus size={14} />
-                                        <span>Tambah Referensi</span>
-                                    </button>
-                                ) : (
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() =>
-                                                onOpenReferenceModal?.()
-                                            }
-                                            className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
-                                            disabled={isLoading}>
-                                            <Plus size={14} />
-                                        </button>
-                                        <button
-                                            onClick={handleReferensiClick}
-                                            className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
-                                            disabled={isLoading}>
-                                            <span>
-                                                {referenceCount} Referensi
-                                                ditambahkan
-                                            </span>
-                                            <ChevronDown
-                                                size={14}
-                                                className="rotate-180"
-                                            />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                                <div className="flex gap-2 items-center">
-                                    <input
-                                        ref={fileInputRef}
-                                        type="file"
-                                        hidden
-                                        accept="image/png,image/gif,image/jpeg,image/jpg"
-                                        capture="environment"
-                                        onChange={handleImageUpload}
-                                    />
-                                    <button
-                                        onClick={() => {
-                                            tracker?.genericTrack(
-                                                'Click Image Attachment'
-                                            );
-                                            fileInputRef.current?.click();
-                                        }}
-                                        disabled={isLoading}
-                                        className={cn(
-                                            'text-neutral-400 hover:text-white transition-colors',
-                                            imageUrl && 'text-white'
-                                        )}
-                                        aria-label="Upload image">
-                                        <BsImage size={20} />
-                                    </button>
-                                    <button
-                                        className={cn(
-                                            'text-neutral-400 hover:text-white p-2 rounded-lg transition-colors',
-                                            activeForm === 'symbol' &&
-                                                'bg-neutral-800 text-white'
-                                        )}
-                                        onClick={() => {
-                                            tracker?.genericTrack(
-                                                'Click Special Symbol Button'
-                                            );
-                                            setActiveForm(
-                                                activeForm === 'symbol'
-                                                    ? null
-                                                    : 'symbol'
-                                            );
-                                        }}
-                                        disabled={isLoading}
-                                        aria-label="Symbol input">
-                                        <ImOmega size={16} />
-                                    </button>
-
-                                    <div
-                                        className={cn(
-                                            isSidebar
-                                                ? 'hidden'
-                                                : 'hidden md:block'
-                                        )}>
-                                        {referenceCount === 0 ? (
-                                            <button
-                                                onClick={handleReferensiClick}
-                                                className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
-                                                disabled={isLoading}>
-                                                <Plus size={14} />
-                                                <span>Tambah Referensi</span>
-                                            </button>
-                                        ) : (
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={() =>
-                                                        onOpenReferenceModal?.()
-                                                    }
-                                                    className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
-                                                    disabled={isLoading}>
-                                                    <Plus size={14} />
-                                                </button>
-                                                <button
-                                                    onClick={
-                                                        handleReferensiClick
-                                                    }
-                                                    className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
-                                                    disabled={isLoading}>
-                                                    <span>
-                                                        {referenceCount}{' '}
-                                                        Referensi ditambahkan
-                                                    </span>
-                                                    <ChevronDown
-                                                        size={14}
-                                                        className="rotate-180"
-                                                    />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-1 md:gap-2">
-                                    <span className="text-neutral-500 text-xs font-thin">
-                                        *Copilot bisa salah, tolong cek lagi
-                                        yaa!
-                                    </span>
-                                    <button
-                                        onClick={handleSend}
-                                        disabled={isLoading || !prompt.trim()}
-                                        className={cn(
-                                            'transition-colors bg-[#5F2BCE] p-1.5 rounded-full',
-                                            prompt.trim() && !isLoading
-                                                ? 'opacity-100 hover:opacity-90'
-                                                : 'opacity-50 cursor-not-allowed'
-                                        )}
-                                        aria-label="Send message">
-                                        <BsArrowUpShort
-                                            size={24}
-                                            className="text-white"
-                                        />
-                                    </button>
-                                </div>
-                            </div>
+            <div
+                className="bg-[#101010] bg-opacity-[55%] px-6 py-4 rounded-tl-2xl rounded-tr-2xl border-t border-[#222222] space-y-4"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}>
+                {/* TODO: belum dicek */}
+                {isDragging ? (
+                    <div className="absolute inset-0 bg-[#5F2BCE]/10 rounded-xl flex items-center justify-center pointer-events-none z-10">
+                        <div className="bg-[#1D1D1D] px-4 py-2 rounded-lg text-sm font-medium">
+                            Drop image here
                         </div>
                     </div>
+                ) : (
+                    <></>
+                )}
 
-                    {activeForm === 'math' && (
-                        <div className="bg-[#242424] rounded-lg max-h-[300px] overflow-y-auto">
-                            <div className="p-4">
-                                <MathForm />
+                {imageUrl ? (
+                    <div className="relative inline-block px-[10px] py-[6px] text-[10px] font-body bg-[#272727] rounded-full">
+                        <button
+                            className="inline-block text-white hover:underline focus:outline-none focus:ring-2 focus:ring-[#5F2BCE] focus:ring-offset-1 focus:ring-offset-[#272727] rounded"
+                            onClick={() => window.open(imageUrl)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    window.open(imageUrl);
+                                }
+                            }}
+                            tabIndex={0}>
+                            {imageName}
+                        </button>
+                        <button
+                            className="absolute top-[-5px] right-[-5px] w-[15px] h-[15px] bg-[#373737] hover:bg-[#444444] rounded-full flex justify-center items-center cursor-pointer transition-colors"
+                            onClick={handleRemoveImage}
+                            aria-label="Remove image">
+                            <XIcon className="text-neutral-400" />
+                        </button>
+                    </div>
+                ) : (
+                    <></>
+                )}
+
+                <textarea
+                    ref={ref}
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onPaste={handlePaste}
+                    placeholder={placeholder}
+                    disabled={isLoading}
+                    rows={1}
+                    onInput={handleAutogrowPrompt}
+                    className="scrollbar-thin text-white placeholder:text-[#4D5165] text-sm w-full max-h-64 bg-transparent p-0 resize-none border-none focus:outline-none focus:ring-0"
+                />
+
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <button
+                            disabled={isLoading}
+                            onClick={() => setIsModalOpen(true)}
+                            type="button"
+                            className="shrink-0 bg-[#191920] hover:bg-[#20222E] border border-[#333540] text-[#DEDEDE] hover:text-white transition-colors rounded-full w-8 h-8 grid place-items-center">
+                            <PlusIcon className="w-4 h-4" />
+                            <span className="sr-only">open modal</span>
+                        </button>
+
+                        <button
+                            disabled={isLoading}
+                            onClick={handleClickSymbol}
+                            type="button"
+                            className={cn(
+                                'shrink-0 hover:bg-[#20222E] border border-[#333540] hover:text-white transition-colors rounded-full w-8 h-8 grid place-items-center',
+                                activeForm === 'symbol'
+                                    ? 'bg-[#282B3C] text-white'
+                                    : 'bg-[#191920] text-[#DEDEDE]'
+                            )}>
+                            <TbMath className="w-4 h-4" />
+                            <span className="sr-only">Rumus</span>
+                        </button>
+                    </div>
+
+                    {isModalOpen ? (
+                        <Modal
+                            isOpen={isModalOpen}
+                            setOpen={(value) => setIsModalOpen(value)}
+                            permanent={true}
+                            variant="dark">
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="text-white font-semibold">
+                                        Tambahkan di chat
+                                    </h3>
+
+                                    <button
+                                        onClick={() => setIsModalOpen(false)}
+                                        type="button">
+                                        <XIcon className="text-[#4D5165] w-6 h-6" />
+                                        <span className="sr-only">
+                                            close modal
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <div className="w-full max-w-[343px] mx-auto space-y-3">
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            hidden
+                                            ref={fileInputRef}
+                                            onChange={handleImageUpload}
+                                            type="file"
+                                            accept="image/png,image/gif,image/jpeg,image/jpg,image/*"
+                                            capture="environment"
+                                        />
+
+                                        <button
+                                            onClick={handleClickCamera}
+                                            className="bg-[#282B3C] flex flex-col items-center gap-3 p-3 rounded-lg w-full">
+                                            <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                                <CameraIcon className="text-[#DEDEDE] w-5 h-5" />
+                                            </div>
+                                            <span className="text-white text-sm leading-[125%]">
+                                                Kamera
+                                            </span>
+                                        </button>
+
+                                        <button
+                                            onClick={handleClickImage}
+                                            className="bg-[#282B3C] flex flex-col items-center gap-3 p-3 rounded-lg w-full">
+                                            <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                                <ImageIcon className="text-[#DEDEDE] w-5 h-5" />
+                                            </div>
+                                            <span className="text-white text-sm leading-[125%]">
+                                                Gambar
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        onClick={handleReferensiClick}
+                                        type="button"
+                                        className="bg-[#282B3C] flex items-center gap-3 p-3 rounded-lg w-full">
+                                        <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                            <BookOpenIcon className="text-[#DEDEDE] w-5 h-5" />
+                                        </div>
+                                        <div className="flex flex-col items-start gap-1">
+                                            <span className="text-white text-sm">
+                                                Pakai Referensi
+                                            </span>
+                                            <span className="text-[#999999] text-sm">
+                                                Gunakan materi kelas dari
+                                                Gradient.
+                                            </span>
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </Modal>
+                    ) : (
+                        <></>
                     )}
 
-                    {activeForm === 'symbol' && (
-                        <div className="bg-[#242424] rounded-lg max-h-[300px] overflow-y-auto">
-                            <div className="p-4">
-                                <SymbolForm onClickSymbol={handleSymbolClick} />
-                            </div>
-                        </div>
-                    )}
-                </div>
-                {showCropModal && tempImageUrl && (
-                    <div
+                    <button
+                        onClick={handleSend}
+                        disabled={isLoading || !prompt.trim()}
                         className={cn(
-                            'absolute inset-0 bg-[#101010]',
-                            'fixed md:absolute z-50 md:z-auto'
+                            'bg-[#5F2BCE] hover:opacity-90 transition-colors w-8 h-8 grid place-items-center rounded-full',
+                            isLoading || !prompt.trim()
+                                ? 'opacity-50 pointer-events-none'
+                                : ''
                         )}>
+                        <FaArrowUp className="text-white w-4 h-4" />
+                        <span className="sr-only">send message</span>
+                    </button>
+                </div>
+
+                {activeForm === 'symbol' ? (
+                    <div className="bg-[#242424] rounded-lg max-h-[300px] overflow-y-auto p-4 scrollbar-thin">
+                        <SymbolForm onClickSymbol={handleSymbolClick} />
+                    </div>
+                ) : (
+                    <></>
+                )}
+
+                {showCropModal && tempImageUrl ? (
+                    <div className="fixed z-50 inset-0 bg-[#101010] md:absolute md:z-auto">
                         <CropModal
                             onClose={() => {
                                 setShowCropModal(false);
@@ -448,8 +417,10 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                             onCropComplete={handleCropComplete}
                         />
                     </div>
+                ) : (
+                    <></>
                 )}
-            </>
+            </div>
         );
     }
 );

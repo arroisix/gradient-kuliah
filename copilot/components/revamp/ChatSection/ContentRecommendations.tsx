@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Library } from 'lucide-react';
-import { FiArrowUpLeft } from 'react-icons/fi';
+import { GoArrowUpRight } from 'react-icons/go';
 import { ContentRecommendation } from 'copilot/types/copilot';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -57,7 +57,7 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
 
     const renderRecommendations = () => {
         if (!isLoading && (!recommendations || recommendations.length === 0)) {
-            return null;
+            return <></>;
         }
 
         return (
@@ -155,12 +155,12 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
     };
 
     return (
-        <div className="mt-4 space-y-4">
+        <div className="space-y-4">
             <button
                 onClick={handleSeeRelatedMaterials}
-                className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
-                <span className="text-sm">Lihat materi terkait</span>
-                <FiArrowUpLeft className="text-neutral-400" />
+                className="p-3 rounded-xl border border-[#2C2C2C] flex justify-between items-center w-full text-xs bg-gradient-to-b from-black/10 to-white/10">
+                Lihat materi terkait
+                <GoArrowUpRight className="text-[#666666] w-5 h-5" />
             </button>
             {renderRecommendations()}
         </div>
