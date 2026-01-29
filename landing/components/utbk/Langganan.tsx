@@ -1,5 +1,7 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import { cn } from 'commons/utils';
 import LanggananItem from 'landing/components/utbk/LanggananItem';
+import Link from 'next/link';
 import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
 import { useEffect, useRef } from 'react';
 
@@ -18,6 +20,7 @@ export default function Langganan({
 }: LanggananProps): JSX.Element {
     const { data } = useGetPacketOfferUTBKQuery();
     const carouselRef = useRef<HTMLDivElement | null>(null);
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         if (isVideoPaywall && carouselRef.current) {
@@ -75,11 +78,31 @@ export default function Langganan({
                         : data?.data.map((packet) => (
                               <li
                                   key={packet.id}
-                                  className="w-full max-w-[350px]">
+                                  className="w-full self-stretch max-w-[350px]">
                                   <LanggananItem packet={packet} />
                               </li>
                           ))}
                 </ol>
+            )}
+
+            {!isVideoPaywall && !isAuthenticated ? (
+                <div
+                    className={cn(
+                        'w-full max-w-[350px] mx-auto p-6 rounded-2xl space-y-4 mt-6 bg-gradient-to-br from-[#9333ea]/30 to-[#4f46e5]/20',
+                        'lg:bg-gradient-to-r lg:max-w-[878px] lg:flex lg:justify-between lg:items-center lg:space-y-0'
+                    )}>
+                    <h2 className="text-white font-semibold text-xl leading-[140%] shrink-0">
+                        Langganan Paket UTBK di sini!
+                    </h2>
+
+                    <Link
+                        href="/langganan"
+                        className="bg-white text-[#5f2bce] font-semibold text-sm leading-tight py-2 block w-full text-center rounded-full lg:max-w-[192px]">
+                        Langganan Paket UTBK
+                    </Link>
+                </div>
+            ) : (
+                <></>
             )}
         </section>
     );
