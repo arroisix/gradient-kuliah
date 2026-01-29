@@ -127,6 +127,7 @@
         "remark-rehype": "^10.1.0",
         "styled-components": "^6.1.8",
         "tailwind-merge": "^1.14.0",
+        "tailwind-scrollbar": "^4.0.2",
         "tiptap-markdown": "^0.8.8",
         "use-debounce": "^9.0.4",
         "usehooks-ts": "^2.15.1",
