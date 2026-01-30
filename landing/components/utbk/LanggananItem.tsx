@@ -40,7 +40,7 @@ export default function LanggananItem({
     return (
         <article
             className={cn(
-                'flex flex-col items-center border-2 border-solid border-[#36236A] hover:border-[#5F2BCE] rounded-2xl py-6 relative shadow-[0px_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] transition',
+                'h-full flex flex-col items-center border-2 border-solid border-[#36236A] hover:border-[#5F2BCE] rounded-2xl py-6 relative shadow-[0px_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] transition',
                 packet.order === 3 && 'bg-[#36236A] bg-opacity-50',
                 isVideoPaywall ? 'w-full justify-between' : ''
             )}>
