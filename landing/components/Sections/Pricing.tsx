@@ -3,6 +3,7 @@ import Container from './Container';
 import Paywall from 'commons/components/elements/Paywall';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
+import { UTBKSubscriptionBanner } from 'commons/components/UTBKSubscriptionBanner';
 
 const Pricing = ({
     pricingData,
@@ -24,6 +25,7 @@ const Pricing = ({
                 ctaEventName={ctaEventName}
                 isCarousel={isTabletBreakpoints}
             />
+            <UTBKSubscriptionBanner />
         </Container>
     );
 };
