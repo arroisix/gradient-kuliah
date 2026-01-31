@@ -50,6 +50,13 @@ const K12Dashboard = (): JSX.Element => {
             description: 'Perkirakan peluang masuk PTN.',
             url: '/utbk/prediksi-ptn',
             icon: 'utbk/dashboard/prediksi-ptn.svg'
+        },
+        {
+            id: 'live-class',
+            title: 'Live Class',
+            description: 'Uji kesiapan dengan simulasi UTBK.',
+            url: '/utbk/live-class',
+            icon: 'utbk/dashboard/live-class.svg'
         }
     ];
 

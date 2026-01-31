@@ -26,6 +26,7 @@ const DISPLAYED_ROUTES = [
     '/utbk/dashboard',
     '/utbk/materi',
     '/utbk/try-out',
+    '/utbk/live-class',
     '/utbk/prediksi-ptn'
 ];
 
