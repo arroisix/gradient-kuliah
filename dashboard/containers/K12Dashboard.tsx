@@ -31,6 +31,13 @@ const K12Dashboard = (): JSX.Element => {
             iconDesktop: 'utbk/dashboard/materi-desktop.svg'
         },
         {
+            id: 'live-class',
+            title: 'Live Class',
+            description: 'Ikuti kelas langsung untuk uji kesiapan UTBK.',
+            url: '/utbk/live-class',
+            icon: 'utbk/dashboard/live_class.svg'
+        },
+        {
             id: 'kuis',
             title: 'Try Out',
             description: 'Uji kesiapan dengan simulasi UTBK.',
@@ -50,13 +57,6 @@ const K12Dashboard = (): JSX.Element => {
             description: 'Perkirakan peluang masuk PTN.',
             url: '/utbk/prediksi-ptn',
             icon: 'utbk/dashboard/prediksi-ptn.svg'
-        },
-        {
-            id: 'live-class',
-            title: 'Live Class',
-            description: 'Uji kesiapan dengan simulasi UTBK.',
-            url: '/utbk/live-class',
-            icon: 'utbk/dashboard/live-class.svg'
         }
     ];
 
@@ -97,7 +97,7 @@ const K12Dashboard = (): JSX.Element => {
                                     {feature.title}
                                 </h3>
                                 {/* Show description only on xl+ */}
-                                <p className="block text-xs md:text-[10px] md:leading-[150%] leading-[160%] text-neutral-400 w-[60%] whitespace-nowrap md:whitespace-normal">
+                                <p className="block text-xs md:text-[10px] md:leading-[150%] leading-[160%] text-neutral-400 w-full max-w-[118px] whitespace-nowrap md:whitespace-normal">
                                     {feature.description}
                                 </p>
                             </div>
