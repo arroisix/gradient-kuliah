@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { chatApi } from 'copilot/redux/api/copilotApi';
 import { useTracker } from 'tracker/tracker';
 import { BookOpenIcon } from 'lucide-react';
+import { cn } from 'commons/utils';
 
 type ContentType =
     | 'course_video'
@@ -50,7 +51,11 @@ const ExamplePrompts = ({
     }
 
     return (
-        <div className="flex flex-wrap justify-center gap-3 w-full max-w-[343px] mx-auto">
+        <div
+            className={cn(
+                'flex flex-wrap justify-center gap-3 w-full max-w-[343px] mx-auto',
+                'md:max-w-[600px]'
+            )}>
             {templates.map((prompt, index) => (
                 <button
                     key={index}
