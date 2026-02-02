@@ -10,6 +10,7 @@ import { useThemeContext } from './contexts/ThemeProvider';
 import K12Paywall from './components/elements/K12Paywall';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useWindowSize } from 'usehooks-ts';
 // const AppInstallBanner = dynamic(
 //     () => import('./components/modules/Navbar/components/AppInstallBanner')
 // );
@@ -46,6 +47,7 @@ const LearnLayout = ({
     const lightMode = theme === 'light';
     // const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { width } = useWindowSize();
 
     return (
         <>
@@ -85,7 +87,7 @@ const LearnLayout = ({
                             'pb-0': noPadding
                         }
                     )}>
-                    {showSidebar && isAuthenticated && (
+                    {showSidebar && isAuthenticated && width >= 768 && (
                         <Sidebar fullHeight={fullHeightSidebar} />
                     )}
                     <div

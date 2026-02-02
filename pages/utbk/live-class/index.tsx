@@ -1,19 +1,12 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import axios from 'axios';
 import LearnLayout from 'commons/learnLayout';
 import Layout from 'commons/utbkLayout';
-import withAnon from 'commons/withAnon';
-import K12Dashboard from 'dashboard/containers/K12Dashboard';
+import { LiveClassContainer } from 'live-class/containers/LiveClassContainer';
 import type { GetStaticProps } from 'next';
-import { useRouter } from 'next/router';
-import axios from 'axios';
 import config from 'redux/api/config';
 
-const Dashboard = ({ courses }: { courses: Course[] }): JSX.Element => {
-    const router = useRouter();
-
-    // return <LoadingBackdrop />;
-
+const LiveClassPage = ({ courses }: { courses: Course[] }): JSX.Element => {
     const { isLoadingProfile, isAuthenticated } = useAuth();
 
     // it's necessary to prevent glitch
@@ -23,27 +16,34 @@ const Dashboard = ({ courses }: { courses: Course[] }): JSX.Element => {
     }
 
     if (!isAuthenticated) {
-        router.replace('/utbk');
         return (
             <Layout courses={courses}>
-                <LoadingBackdrop />
+                <div className="w-full max-w-5xl mx-auto px-6 pt-[92px]">
+                    <div className="grid place-items-center min-h-[calc(100vh-92px)]">
+                        <LiveClassContainer />
+                    </div>
+                </div>
             </Layout>
         );
     }
 
     return (
         <LearnLayout showSidebar fullHeightSidebar className="relative">
-            <K12Dashboard />
+            <div className="w-full max-w-5xl mx-auto mt-[calc(48px+32px)]">
+                <div className="grid place-items-center h-[calc(100vh-48px-32px-64px)]">
+                    <LiveClassContainer />
+                </div>
+            </div>
         </LearnLayout>
     );
 };
 
-export default withAnon(Dashboard);
+LiveClassPage.displayName = 'LiveClass';
+export default LiveClassPage;
 
 export const getStaticProps: GetStaticProps = async () => {
-    const META_TITLE = 'Materi UTBK dan Tryout Gratis UTBK 2026';
-    const META_DESCRIPTION =
-        'Persiapkan dirimu menghadapi UTBK 2026 dengan tryout UTBK gratis dari Gradient. Dapatkan pengalaman ujian sesungguhnya dan analisis hasil untuk meningkatkan performa belajarmu.';
+    const META_TITLE = '';
+    const META_DESCRIPTION = '';
 
     try {
         const { data: coursesResponse } = await axios.get<
@@ -55,12 +55,12 @@ export const getStaticProps: GetStaticProps = async () => {
                 courses: coursesResponse.data,
                 title: META_TITLE,
                 description: META_DESCRIPTION,
-                canonical: `https://gradient.academy/utbk/dashboard`,
+                canonical: `https://gradient.academy/utbk/materi`,
                 openGraph: {
                     type: 'website',
                     title: META_TITLE,
                     description: META_DESCRIPTION,
-                    url: `https://gradient.academy/utbk/dashboard`,
+                    url: `https://gradient.academy/utbk`,
                     images: [
                         {
                             url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
