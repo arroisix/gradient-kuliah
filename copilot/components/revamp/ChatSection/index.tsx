@@ -192,7 +192,7 @@ const ChatSection = ({
                 }
                 className="flex items-center gap-2 text-[#999999] text-sm ml-auto mt-2">
                 <span>{message.usedReferences.length} Referensi</span>
-                <ChevronDownIcon className="size-5" />
+                <ChevronDownIcon className="w-5 h-5" />
             </button>
         );
     };
@@ -324,7 +324,7 @@ const ChatSection = ({
                     {message.role === 'AI' ? (
                         <div className="flex gap-3">
                             <div className="shrink-0 bg-[#5F2BCE] w-7 h-7 rounded-full grid place-items-center">
-                                <CopilotIcon className="fill-white size-4" />
+                                <CopilotIcon className="fill-white w-4 h-4" />
                             </div>
                             {renderMessage(message)}
                         </div>

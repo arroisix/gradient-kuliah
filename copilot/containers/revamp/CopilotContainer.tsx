@@ -19,6 +19,8 @@ import HistorySection from 'copilot/components/revamp/HistorySection';
 import ReferenceModal from 'copilot/components/revamp/Reference/ReferenceModal';
 import ReferenceContentModal from 'copilot/components/revamp/Reference/ReferenceContentModal';
 import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
+import { cn } from 'commons/utils';
+import { FaArrowDown } from 'react-icons/fa6';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -49,12 +51,11 @@ const CopilotContainer = ({
         content: string;
         timestamp: string;
     } | null>(null);
+    console.log(pendingMessage);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
-    console.log(showScrollButton, pendingMessage, isEditorOpen);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const chatContainerRef = useRef<HTMLDivElement>(null);
     const promptBarRef = useRef<HTMLTextAreaElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -169,17 +170,10 @@ const CopilotContainer = ({
     };
 
     const scrollToBottom = () => {
-        if (isMobileBreakpoints) {
-            messagesEndRef.current?.scrollIntoView({
-                block: 'nearest',
-                behavior: 'smooth'
-            });
-        } else {
-            chatContainerRef.current?.scrollTo({
-                top: chatContainerRef.current.scrollHeight,
-                behavior: 'smooth'
-            });
-        }
+        messagesEndRef.current?.scrollIntoView({
+            block: 'nearest',
+            behavior: 'smooth'
+        });
     };
 
     const buildChatContextFromReferences = (
@@ -486,7 +480,8 @@ const CopilotContainer = ({
     };
 
     return (
-        <div className="flex flex-col h-[calc(100vh-64px)]">
+        <div
+            className={cn('flex flex-col h-[calc(100vh-64px)]', 'md:flex-row')}>
             <MobileHeader onOpenHistory={handleOpenHistory} />
             {isAuthenticated && (
                 <HistorySection
@@ -497,46 +492,70 @@ const CopilotContainer = ({
                 />
             )}
 
-            <div
-                className={`${
-                    isLoadingHistory ? 'grid place-items-center' : ''
-                } flex-grow overflow-scroll no-scrollbar p-4`}>
-                {isLoadingHistory ? (
-                    <LoadingIndicator />
-                ) : messages.length > 0 ? (
-                    <div
-                        ref={chatContainerRef}
-                        onScroll={handleScroll}
-                        className="space-y-4">
-                        <ChatSection
-                            messages={messages}
-                            setMessages={setMessages}
-                            onRetry={handleRetry}
-                            isLoading={isLoadingResponse}
-                            currentSessionId={currentSessionId}
-                            onOpenUsedReferencesModal={
-                                handleOpenUsedReferencesModal
-                            }
-                        />
-                        <div ref={messagesEndRef} />
-                    </div>
-                ) : (
-                    <MainSection onSendMessage={handleSendMessage} />
-                )}
-            </div>
+            <div className="flex-grow flex flex-col overflow-hidden">
+                <div
+                    onScroll={handleScroll}
+                    className={cn(
+                        'flex-grow overflow-scroll scrollbar-none px-4 pt-4',
+                        isLoadingHistory ? 'grid place-items-center' : '',
+                        messages.length > 0 ? '' : 'pb-4'
+                    )}>
+                    {isLoadingHistory ? (
+                        <LoadingIndicator />
+                    ) : messages.length > 0 ? (
+                        <div
+                            className={cn(
+                                'space-y-4',
+                                'md:w-full md:max-w-[720px] md:mx-auto'
+                            )}>
+                            <ChatSection
+                                messages={messages}
+                                setMessages={setMessages}
+                                onRetry={handleRetry}
+                                isLoading={isLoadingResponse}
+                                currentSessionId={currentSessionId}
+                                onOpenUsedReferencesModal={
+                                    handleOpenUsedReferencesModal
+                                }
+                            />
+                            <div ref={messagesEndRef} />
+                        </div>
+                    ) : (
+                        <MainSection onSendMessage={handleSendMessage} />
+                    )}
+                </div>
 
-            <PromptBar
-                ref={promptBarRef}
-                fileInputRef={fileInputRef}
-                onSend={handleSendMessage}
-                isLoading={isLoadingResponse}
-                onStateChange={({ isEditorOpen }) =>
-                    setIsEditorOpen(isEditorOpen)
-                }
-                onOpenReferenceModal={handleOpenReferenceModal}
-                onOpenReferenceContentModal={handleOpenReferenceContentModal}
-                referenceCount={selectedReferences.length}
-            />
+                <div className="relative">
+                    {showScrollButton && !isEditorOpen ? (
+                        <button
+                            type="button"
+                            onClick={scrollToBottom}
+                            className={cn(
+                                'bg-[#5F2BCE] hover:opacity-80 transition-all w-8 h-8 grid place-items-center rounded-full absolute -top-4 left-1/2 -translate-x-1/2'
+                            )}>
+                            <FaArrowDown className="text-white w-4 h-4" />
+                            <span className="sr-only">scroll to bottom</span>
+                        </button>
+                    ) : (
+                        <></>
+                    )}
+
+                    <PromptBar
+                        ref={promptBarRef}
+                        fileInputRef={fileInputRef}
+                        onSend={handleSendMessage}
+                        isLoading={isLoadingResponse}
+                        onStateChange={({ isEditorOpen }) =>
+                            setIsEditorOpen(isEditorOpen)
+                        }
+                        onOpenReferenceModal={handleOpenReferenceModal}
+                        onOpenReferenceContentModal={
+                            handleOpenReferenceContentModal
+                        }
+                        referenceCount={selectedReferences.length}
+                    />
+                </div>
+            </div>
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}

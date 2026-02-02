@@ -371,7 +371,7 @@ const HistorySection = ({
                                 />
                             </div>
                         ) : searchTerm ? (
-                            <div className="overflow-y-auto px-2 flex-1">
+                            <div className="overflow-y-auto scrollbar-none px-2 flex-1">
                                 {searchResults.map((result) => (
                                     <Link
                                         href={`/copilot/${result.session_id}`}
@@ -391,7 +391,7 @@ const HistorySection = ({
                                 ))}
                             </div>
                         ) : activeTab === 'bookmark' ? (
-                            <div className="overflow-y-auto px-2 flex-1">
+                            <div className="overflow-y-auto scrollbar-none px-2 flex-1">
                                 {bookmarkedChats.length > 0 ? (
                                     bookmarkedChats.map((chat) => (
                                         <Link
@@ -502,7 +502,7 @@ const HistorySection = ({
                                 )}
                             </div>
                         ) : filteredSessions.length > 0 ? (
-                            <div className="overflow-y-auto px-2 flex-1">
+                            <div className="overflow-y-auto scrollbar-none px-2 flex-1">
                                 {filteredSessions.map((session) => (
                                     <Link
                                         href={`/copilot/${session.id}`}

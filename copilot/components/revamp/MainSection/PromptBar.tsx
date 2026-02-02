@@ -430,8 +430,8 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
 
                 <p
                     className={cn(
-                        'hidden text-[#999999] font-medium text-xs leading-tight mx-auto mb-8',
-                        'md:block'
+                        'hidden justify-center items-center text-[#999999] font-medium text-xs leading-tight mb-8',
+                        'md:flex'
                     )}>
                     *Copilot bisa salah, tolong cek lagi yaa!
                 </p>
