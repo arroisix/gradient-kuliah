@@ -525,7 +525,11 @@ const CopilotContainer = ({
                     )}
                 </div>
 
-                <div className="relative">
+                <div
+                    className={cn(
+                        'relative',
+                        'md:w-full md:max-w-[720px] md:mx-auto'
+                    )}>
                     {showScrollButton && !isEditorOpen ? (
                         <button
                             type="button"

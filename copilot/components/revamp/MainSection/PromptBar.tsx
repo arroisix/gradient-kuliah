@@ -21,6 +21,7 @@ import { useTracker } from 'tracker/tracker';
 import { FaArrowUp } from 'react-icons/fa6';
 import Modal from 'commons/components/modules/Modal';
 import { TbMath } from 'react-icons/tb';
+import { useWindowSize } from 'usehooks-ts';
 
 interface PromptBarProps {
     onSend?: (prompt: string, imageUrl?: string) => void;
@@ -59,6 +60,7 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
         const [showCropModal, setShowCropModal] = useState(false);
         const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
         const tracker = useTracker();
+        const { width } = useWindowSize();
 
         useEffect(() => {
             onStateChange?.({ isEditorOpen: activeForm !== null });
@@ -195,6 +197,7 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
             } else {
                 onOpenReferenceContentModal?.();
             }
+            setIsModalOpen(false);
         };
 
         const handleAutogrowPrompt = (
@@ -207,11 +210,13 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
         const handleClickCamera = (): void => {
             tracker?.genericTrack('Click Scan Foto Soal CTA');
             fileInputRef.current?.click();
+            setIsModalOpen(false);
         };
 
         const handleClickImage = (): void => {
             tracker?.genericTrack('Click Image Attachment');
             fileInputRef.current?.click();
+            setIsModalOpen(false);
         };
 
         const handleClickSymbol = (): void => {
@@ -220,12 +225,17 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
             setIsModalOpen(false);
         };
 
+        const handleOpenModal = (): void => {
+            setIsModalOpen(!isModalOpen);
+            setActiveForm(null);
+        };
+
         return (
             <>
                 <div
                     className={cn(
                         'bg-[#101010] bg-opacity-[55%] px-6 py-4 rounded-tl-2xl rounded-tr-2xl border-t space-y-4 transition-colors',
-                        'md:w-full md:max-w-[720px] md:mx-auto md:border md:mb-4 md:rounded-2xl',
+                        'md:border md:mb-4 md:rounded-2xl',
                         prompt ? 'border-[#5F2BCE]' : 'border-[#222222]'
                     )}
                     onDragOver={handleDragOver}
@@ -283,9 +293,14 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
                         <div className="flex items-center gap-2">
                             <button
                                 disabled={isLoading}
-                                onClick={() => setIsModalOpen(true)}
+                                onClick={handleOpenModal}
                                 type="button"
-                                className="shrink-0 bg-[#191920] hover:bg-[#20222E] border border-[#333540] text-[#DEDEDE] hover:text-white transition-colors rounded-full w-8 h-8 grid place-items-center">
+                                className={cn(
+                                    'shrink-0 hover:bg-[#20222E] border border-[#333540] hover:text-white transition-colors rounded-full w-8 h-8 grid place-items-center',
+                                    isModalOpen
+                                        ? 'bg-[#282B3C] text-white'
+                                        : 'bg-[#191920] text-[#DEDEDE]'
+                                )}>
                                 <PlusIcon className="w-4 h-4" />
                                 <span className="sr-only">open modal</span>
                             </button>
@@ -304,88 +319,6 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
                                 <span className="sr-only">Rumus</span>
                             </button>
                         </div>
-
-                        {isModalOpen ? (
-                            <Modal
-                                isOpen={isModalOpen}
-                                setOpen={(value) => setIsModalOpen(value)}
-                                permanent={true}
-                                variant="dark">
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <h3 className="text-white font-semibold">
-                                            Tambahkan di chat
-                                        </h3>
-
-                                        <button
-                                            onClick={() =>
-                                                setIsModalOpen(false)
-                                            }
-                                            type="button">
-                                            <XIcon className="text-[#4D5165] w-6 h-6" />
-                                            <span className="sr-only">
-                                                close modal
-                                            </span>
-                                        </button>
-                                    </div>
-
-                                    <div className="w-full max-w-[343px] mx-auto space-y-3">
-                                        <div className="flex items-center gap-3">
-                                            <input
-                                                hidden
-                                                ref={fileInputRef}
-                                                onChange={handleImageUpload}
-                                                type="file"
-                                                accept="image/png,image/gif,image/jpeg,image/jpg,image/*"
-                                                capture="environment"
-                                            />
-
-                                            <button
-                                                onClick={handleClickCamera}
-                                                className="bg-[#282B3C] flex flex-col items-center gap-3 p-3 rounded-lg w-full">
-                                                <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
-                                                    <CameraIcon className="text-[#DEDEDE] w-5 h-5" />
-                                                </div>
-                                                <span className="text-white text-sm leading-[125%]">
-                                                    Kamera
-                                                </span>
-                                            </button>
-
-                                            <button
-                                                onClick={handleClickImage}
-                                                className="bg-[#282B3C] flex flex-col items-center gap-3 p-3 rounded-lg w-full">
-                                                <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
-                                                    <ImageIcon className="text-[#DEDEDE] w-5 h-5" />
-                                                </div>
-                                                <span className="text-white text-sm leading-[125%]">
-                                                    Gambar
-                                                </span>
-                                            </button>
-                                        </div>
-
-                                        <button
-                                            onClick={handleReferensiClick}
-                                            type="button"
-                                            className="bg-[#282B3C] flex items-center gap-3 p-3 rounded-lg w-full">
-                                            <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
-                                                <BookOpenIcon className="text-[#DEDEDE] w-5 h-5" />
-                                            </div>
-                                            <div className="flex flex-col items-start gap-1">
-                                                <span className="text-white text-sm">
-                                                    Pakai Referensi
-                                                </span>
-                                                <span className="text-[#999999] text-sm">
-                                                    Gunakan materi kelas dari
-                                                    Gradient.
-                                                </span>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
-                            </Modal>
-                        ) : (
-                            <></>
-                        )}
 
                         <button
                             onClick={handleSend}
@@ -408,24 +341,6 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
                     ) : (
                         <></>
                     )}
-
-                    {showCropModal && tempImageUrl ? (
-                        <div className="fixed z-50 inset-0 bg-[#101010] md:absolute md:z-auto">
-                            <CropModal
-                                onClose={() => {
-                                    setShowCropModal(false);
-                                    setTempImageUrl(null);
-                                    if (fileInputRef.current) {
-                                        fileInputRef.current.value = '';
-                                    }
-                                }}
-                                imageUrl={tempImageUrl}
-                                onCropComplete={handleCropComplete}
-                            />
-                        </div>
-                    ) : (
-                        <></>
-                    )}
                 </div>
 
                 <p
@@ -435,6 +350,142 @@ const PromptBar = forwardRef<HTMLTextAreaElement, PromptBarProps>(
                     )}>
                     *Copilot bisa salah, tolong cek lagi yaa!
                 </p>
+
+                {showCropModal && tempImageUrl ? (
+                    <div className="fixed z-50 inset-0 bg-[#101010] md:absolute md:z-auto">
+                        <CropModal
+                            onClose={() => {
+                                setShowCropModal(false);
+                                setTempImageUrl(null);
+                                if (fileInputRef.current) {
+                                    fileInputRef.current.value = '';
+                                }
+                            }}
+                            imageUrl={tempImageUrl}
+                            onCropComplete={handleCropComplete}
+                        />
+                    </div>
+                ) : (
+                    <></>
+                )}
+
+                {/* mobile modal */}
+                {isModalOpen && width < 768 ? (
+                    <Modal
+                        isOpen={isModalOpen}
+                        setOpen={(value) => setIsModalOpen(value)}
+                        permanent={true}
+                        variant="dark">
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-white font-semibold">
+                                    Tambahkan di chat
+                                </h3>
+
+                                <button
+                                    onClick={() => setIsModalOpen(false)}
+                                    type="button">
+                                    <XIcon className="text-[#4D5165] w-6 h-6" />
+                                    <span className="sr-only">close modal</span>
+                                </button>
+                            </div>
+
+                            <div className="w-full max-w-[343px] mx-auto space-y-3">
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        hidden
+                                        ref={fileInputRef}
+                                        onChange={handleImageUpload}
+                                        type="file"
+                                        accept="image/png,image/gif,image/jpeg,image/jpg,image/*"
+                                        capture="environment"
+                                    />
+
+                                    <button
+                                        onClick={handleClickCamera}
+                                        className="bg-[#282B3C] flex flex-col items-center gap-3 p-3 rounded-lg w-full">
+                                        <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                            <CameraIcon className="text-[#DEDEDE] w-5 h-5" />
+                                        </div>
+                                        <span className="text-white text-sm leading-[125%]">
+                                            Kamera
+                                        </span>
+                                    </button>
+
+                                    <button
+                                        onClick={handleClickImage}
+                                        className="bg-[#282B3C] flex flex-col items-center gap-3 p-3 rounded-lg w-full">
+                                        <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                            <ImageIcon className="text-[#DEDEDE] w-5 h-5" />
+                                        </div>
+                                        <span className="text-white text-sm leading-[125%]">
+                                            Gambar
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <button
+                                    onClick={handleReferensiClick}
+                                    type="button"
+                                    className="bg-[#282B3C] flex items-center gap-3 p-3 rounded-lg w-full">
+                                    <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                        <BookOpenIcon className="text-[#DEDEDE] w-5 h-5" />
+                                    </div>
+                                    <div className="flex flex-col items-start gap-1">
+                                        <span className="text-white text-sm">
+                                            Pakai Referensi
+                                        </span>
+                                        <span className="text-[#999999] text-sm">
+                                            Gunakan materi kelas dari Gradient.
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </Modal>
+                ) : (
+                    <></>
+                )}
+
+                {/* desktop modal */}
+                {isModalOpen && width >= 768 ? (
+                    <div className="bg-[#181818] w-[303px] rounded-lg p-4 absolute -top-[(calc(153px+23px))] left-6 space-y-3">
+                        <input
+                            hidden
+                            ref={fileInputRef}
+                            onChange={handleImageUpload}
+                            type="file"
+                            accept="image/png,image/gif,image/jpeg,image/jpg,image/*"
+                            capture="environment"
+                        />
+
+                        <button
+                            onClick={handleClickImage}
+                            className="bg-[#222222] hover:bg-[#333333] transition-colors w-full flex items-center gap-3 px-4 py-3 rounded-lg">
+                            <ImageIcon className="text-[#999999] w-5 h-5" />
+                            <span className="text-white text-sm font-semibold leading-tight">
+                                Gambar
+                            </span>
+                        </button>
+
+                        <button
+                            onClick={handleReferensiClick}
+                            type="button"
+                            className="bg-[#222222] hover:bg-[#333333] transition-colors w-full flex gap-3 px-4 py-3 rounded-lg">
+                            <BookOpenIcon className="text-[#999999] w-5 h-5" />
+                            <div className="flex flex-col items-start gap-1">
+                                <span className="text-white text-sm leading-tight">
+                                    Pakai Referensi
+                                </span>
+                                <span className="text-[#999999] text-xs leading-[160%]">
+                                    Gunakan materi kelas dari Gradient.
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                ) : (
+                    <></>
+                )}
             </>
         );
     }
