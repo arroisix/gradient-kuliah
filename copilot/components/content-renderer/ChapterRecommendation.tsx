@@ -10,13 +10,13 @@ interface ChapterRecommendation {
     subchapter_slug: string;
 }
 
-interface ChaptersRecommendationProps {
+interface ChapterRecommendationProps {
     data: ChapterRecommendation[];
 }
 
-function ChaptersRecommendation({
+function ChapterRecommendation({
     data
-}: ChaptersRecommendationProps): JSX.Element {
+}: ChapterRecommendationProps): JSX.Element {
     return (
         <div className="carousel flex space-x-4">
             {data.map((v) => (
@@ -46,4 +46,4 @@ function ChaptersRecommendation({
     );
 }
 
-export { ChaptersRecommendation };
+export { ChapterRecommendation };
