@@ -492,11 +492,16 @@ const CopilotContainer = ({
                 />
             )}
 
-            <div className="flex-grow flex flex-col overflow-hidden">
+            <div
+                className={cn(
+                    'flex-grow flex flex-col overflow-hidden',
+                    'md:px-4'
+                )}>
                 <div
                     onScroll={handleScroll}
                     className={cn(
                         'flex-grow overflow-scroll scrollbar-none px-4 pt-4',
+                        'md:px-0',
                         isLoadingHistory ? 'grid place-items-center' : '',
                         messages.length > 0 ? '' : 'pb-4'
                     )}>

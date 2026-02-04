@@ -95,7 +95,7 @@ const MessageObserver = ({
     };
 
     return (
-        <div ref={messageRef}>
+        <div ref={messageRef} className="min-w-0">
             {children}
             {renderLocalRecommendations()}
         </div>

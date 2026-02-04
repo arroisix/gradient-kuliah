@@ -204,7 +204,7 @@ const ChatSection = ({
                 messages.filter((m) => m.role === 'AI').slice(-1)[0]?.id;
 
         const messageContent = (
-            <div>
+            <>
                 {message.image && !imageError[message.id] ? (
                     <div className="relative aspect-video max-w-sm ml-auto rounded-lg overflow-hidden mb-2">
                         <Image
@@ -236,8 +236,18 @@ const ChatSection = ({
                             <button
                                 type="button"
                                 onClick={() => handleRetry(message)}
-                                className="text-[#999999] hover:text-white hover:bg-[#333333] transition-colors w-8 h-8 rounded-full grid place-items-center">
-                                <RefreshCwIcon className="w-5 h-5" />
+                                className={cn(
+                                    'text-[#999999] hover:text-white hover:bg-[#333333] transition-colors w-8 h-8 rounded-full flex justify-center items-center',
+                                    'md:gap-1 md:w-fit md:px-2'
+                                )}>
+                                <RefreshCwIcon className="shrink-0 w-5 h-5" />
+                                <span
+                                    className={cn(
+                                        'sr-only',
+                                        'md:not-sr-only md:capitalize md:font-semibold md:text-xs md:leading-tight'
+                                    )}>
+                                    retry
+                                </span>
                             </button>
 
                             {/* thumb-up, thumb-down, and bookmark */}
@@ -254,6 +264,7 @@ const ChatSection = ({
                                         isRating[message.id] ? 'opacity-50' : ''
                                     )}>
                                     <ThumbsUpIcon className="w-5 h-5" />
+                                    <span className="sr-only">thumbs-up</span>
                                 </button>
 
                                 <button
@@ -268,6 +279,7 @@ const ChatSection = ({
                                         isRating[message.id] ? 'opacity-50' : ''
                                     )}>
                                     <ThumbsDownIcon className="w-5 h-5" />
+                                    <span className="sr-only">thumbs-down</span>
                                 </button>
 
                                 <button
@@ -284,6 +296,7 @@ const ChatSection = ({
                                             : ''
                                     )}>
                                     <BookmarkIcon className="w-5 h-5" />
+                                    <span className="sr-only">bookmark</span>
                                 </button>
                             </div>
                         </div>
@@ -295,7 +308,7 @@ const ChatSection = ({
                         {message.content}
                     </p>
                 )}
-            </div>
+            </>
         );
 
         if (message.role === 'AI') {
@@ -320,14 +333,16 @@ const ChatSection = ({
         <>
             {/* render all messages of the current session */}
             {messages.map((message) => (
-                <div key={message.id}>
+                <div
+                    key={message.id}
+                    className={message.role === 'AI' ? 'flex gap-3' : ''}>
                     {message.role === 'AI' ? (
-                        <div className="flex gap-3">
+                        <>
                             <div className="shrink-0 bg-[#5F2BCE] w-7 h-7 rounded-full grid place-items-center">
                                 <CopilotIcon className="fill-white w-4 h-4" />
                             </div>
                             {renderMessage(message)}
-                        </div>
+                        </>
                     ) : (
                         renderMessage(message)
                     )}
