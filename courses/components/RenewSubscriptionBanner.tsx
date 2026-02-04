@@ -9,12 +9,18 @@ import { useRouter } from 'next/router';
 
 interface RenewSubscriptionBannerProps {
     product?: string;
+    k12Product?: string;
+    k12Description?: string;
     type?: 'COLLEGE_STUDENT' | 'K12' | 'K12_MOBILE';
+    className?: string;
 }
 
 export default function RenewSubscriptionBanner({
     product = 'video kelas',
-    type = 'COLLEGE_STUDENT'
+    k12Description = 'Nikmati ribuan video pembelajaran, bank soal, dan fitur eksklusif lainnya tanpa batas.',
+    k12Product = 'materi',
+    type = 'COLLEGE_STUDENT',
+    className
 }: RenewSubscriptionBannerProps): JSX.Element {
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -63,16 +69,19 @@ export default function RenewSubscriptionBanner({
 
     const k12Component = (): JSX.Element => {
         return (
-            <div className="hidden md:block fixed bottom-0 left-1/2 -translate-x-1/2 w-[60%] lg:w-fit z-40 md:translate-x-[calc(-50%+125px)]">
+            <div
+                className={cn(
+                    'hidden md:block fixed bottom-0 left-1/2 -translate-x-1/2 w-[60%] lg:w-fit z-40 md:translate-x-[calc(-50%+125px)]',
+                    className
+                )}>
                 <div className="relative rounded-t-2xl p-6 flex flex-row items-center gap-6 bg-[#5F2BCE] overflow-hidden">
                     <div className="flex flex-col gap-2 z-10">
                         <h2 className="text-white font-semibold">
-                            Langganan untuk mendapat akses penuh ke materi
+                            Langganan untuk mendapat akses penuh ke {k12Product}
                         </h2>
 
                         <span className="text-sm text-white">
-                            Nikmati ribuan video pembelajaran, bank soal, dan
-                            fitur eksklusif lainnya tanpa batas.
+                            {k12Description}
                         </span>
                     </div>
 
@@ -103,12 +112,9 @@ export default function RenewSubscriptionBanner({
             <div className="md:hidden px-6 py-4 flex flex-col gap-6 bg-[#5F2BCE] rounded-2xl relative overflow-hidden">
                 <div className="flex flex-col gap-2 z-10">
                     <h2 className="text-white font-semibold">
-                        Langganan untuk mendapat akses penuh ke materi
+                        Langganan untuk mendapat akses penuh ke {k12Product}
                     </h2>
-                    <span className="text-sm text-white">
-                        Nikmati ribuan video pembelajaran, bank soal, dan fitur
-                        eksklusif lainnya tanpa batas.
-                    </span>
+                    <span className="text-sm text-white">{k12Description}</span>
                 </div>
 
                 <Button
