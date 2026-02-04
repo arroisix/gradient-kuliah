@@ -133,6 +133,14 @@ function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
 
                         <NavigationMenuItem
                             isActive={router.pathname.includes(
+                                '/utbk/live-class'
+                            )}
+                            label="Live Class"
+                            href="/utbk/live-class"
+                        />
+
+                        <NavigationMenuItem
+                            isActive={router.pathname.includes(
                                 '/utbk/prediksi-ptn'
                             )}
                             label="Prediksi PTN"

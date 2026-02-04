@@ -12,6 +12,7 @@ import HomeIcon from '../../elements/Icons/Home';
 import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
+import { LiveClassOutline } from 'commons/components/elements/Icons/LiveClassOutline';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -25,6 +26,7 @@ const DISPLAYED_ROUTES = [
     '/utbk/dashboard',
     '/utbk/materi',
     '/utbk/try-out',
+    '/utbk/live-class',
     '/utbk/prediksi-ptn'
 ];
 
@@ -67,6 +69,11 @@ const APPBAR_NAV_K12: AppbarNav[] = [
         icon: <KelasIcon size={20} />,
         href: '/utbk/materi',
         label: 'Materi'
+    },
+    {
+        icon: <LiveClassOutline className="w-5 h-5" />,
+        href: '/utbk/live-class',
+        label: 'Live Class'
     },
     {
         icon: <PencilOnLineIcon size={20} />,

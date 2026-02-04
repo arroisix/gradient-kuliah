@@ -150,6 +150,10 @@ const UTBK_ITEMS: FooterItemProps[] = [
                 url: '/utbk/try-out'
             },
             {
+                content: 'Live Class',
+                url: '/utbk/live-class'
+            },
+            {
                 content: 'Prediksi PTN',
                 url: '/utbk/prediksi-ptn'
             }

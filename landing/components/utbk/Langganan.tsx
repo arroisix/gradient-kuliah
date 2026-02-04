@@ -29,7 +29,9 @@ export default function Langganan({
     }, [isVideoPaywall, data?.data]);
 
     return (
-        <section className={cn('flex flex-col', className)}>
+        <section
+            id="langganan"
+            className={cn('flex flex-col scroll-pt-24', className)}>
             {!isVideoPaywall ? (
                 <>
                     <h2 className="flex flex-col items-center text-center gap-3 text-white text-2xl leading-[125%] font-bold mb-3">
@@ -75,7 +77,7 @@ export default function Langganan({
                         : data?.data.map((packet) => (
                               <li
                                   key={packet.id}
-                                  className="w-full max-w-[350px]">
+                                  className="w-full self-stretch max-w-[350px]">
                                   <LanggananItem packet={packet} />
                               </li>
                           ))}

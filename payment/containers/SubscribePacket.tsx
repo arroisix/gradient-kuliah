@@ -1,5 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
+import { UTBKSubscriptionBanner } from 'commons/components/UTBKSubscriptionBanner';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn, sanitizeUrl } from 'commons/utils';
 // import { getCSChatRoom } from 'commons/utils';
@@ -237,6 +238,7 @@ const SubscribePacket = (): JSX.Element => {
                     <PacketCard data={packet} key={packet.id} />
                 ))}
             </div>
+            <UTBKSubscriptionBanner isUsedInLanding={false} />
         </section>
     );
 };

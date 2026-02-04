@@ -11,6 +11,7 @@ import K12Paywall from './components/elements/K12Paywall';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useRouter } from 'next/router';
+import { useWindowSize } from 'usehooks-ts';
 // const AppInstallBanner = dynamic(
 //     () => import('./components/modules/Navbar/components/AppInstallBanner')
 // );
@@ -48,6 +49,7 @@ const LearnLayout = ({
     // const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
+    const { width } = useWindowSize();
 
     return (
         <>
@@ -87,7 +89,7 @@ const LearnLayout = ({
                             'pb-0': noPadding
                         }
                     )}>
-                    {showSidebar && isAuthenticated && (
+                    {showSidebar && isAuthenticated && width >= 768 && (
                         <Sidebar fullHeight={fullHeightSidebar} />
                     )}
                     <div

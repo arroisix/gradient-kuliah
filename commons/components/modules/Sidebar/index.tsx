@@ -12,6 +12,8 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import RoleSwitcher from '../Navbar/RoleSwitcher';
+import { LiveClassOutline } from 'commons/components/elements/Icons/LiveClassOutline';
+import { LiveClassSolid } from 'commons/components/elements/Icons/LiveClassSolid';
 
 const Sidebar = ({
     fullHeight,
@@ -41,7 +43,7 @@ const Sidebar = ({
                             );
                         }}>
                         <span
-                            className={`flex gap-3 cursor-pointer ${
+                            className={`flex items-center gap-3 cursor-pointer ${
                                 pathname.includes('/utbk/dashboard')
                                     ? 'text-white'
                                     : 'text-[#666666]'
@@ -97,7 +99,7 @@ const Sidebar = ({
                             }}>
                             <span
                                 className={cn(
-                                    'flex gap-3 cursor-pointer font-body text-sm hover:text-[#999999]',
+                                    'flex items-center gap-3 cursor-pointer font-body text-sm hover:text-[#999999]',
                                     pathname.includes('/utbk/try-out')
                                         ? 'text-white'
                                         : 'text-[#666666]'
@@ -114,6 +116,30 @@ const Sidebar = ({
                             </span>
                         </Link>
                     )}
+
+                    <Link
+                        href={'/utbk/live-class'}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                `Click Live Class ${
+                                    !fullHeight ? 'Course ' : ''
+                                }Navigation`
+                            );
+                        }}>
+                        <span
+                            className={`flex items-center gap-3 cursor-pointer ${
+                                pathname.includes('/live-class')
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            } font-body text-sm hover:text-[#999999]`}>
+                            {pathname.includes('/live-class') ? (
+                                <LiveClassSolid className="shrink-0 w-5 h-5" />
+                            ) : (
+                                <LiveClassOutline className="shrink-0 w-5 h-5" />
+                            )}
+                            Live Class
+                        </span>
+                    </Link>
 
                     <Link
                         href={'/utbk/prediksi-ptn'}
@@ -135,7 +161,7 @@ const Sidebar = ({
                             ) : (
                                 <GraduationCapIcon size={20} />
                             )}
-                            Prediksi PTN{' '}
+                            Prediksi PTN
                         </span>
                     </Link>
                 </>
