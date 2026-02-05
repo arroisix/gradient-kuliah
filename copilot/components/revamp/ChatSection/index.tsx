@@ -14,6 +14,7 @@ import Image from 'next/image';
 import {
     ChatMessage,
     ContentRecommendation,
+    Reasoning,
     SelectedReference
 } from 'copilot/types/copilot';
 import CopilotIcon from 'copilot/assets/revamp/CopilotIcon';
@@ -26,6 +27,7 @@ import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
 import { cn } from 'commons/utils';
 
 interface ChatSectionProps {
+    reasoning: Reasoning;
     messages: ChatMessage[];
     onRetry?: (message: ChatMessage) => void;
     setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
@@ -35,6 +37,7 @@ interface ChatSectionProps {
 }
 
 const ChatSection = ({
+    reasoning,
     messages,
     setMessages,
     onRetry,
@@ -356,7 +359,7 @@ const ChatSection = ({
             ))}
 
             {/* render reasoning */}
-            {isLoading ? <ReasoningIndicator /> : <></>}
+            {isLoading ? <ReasoningIndicator reasoning={reasoning} /> : <></>}
 
             {selectedImage ? (
                 <ImageModal

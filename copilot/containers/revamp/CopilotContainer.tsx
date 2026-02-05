@@ -7,7 +7,8 @@ import {
     ChatInput,
     ChatHistoryContextItem,
     ReferenceContentType,
-    SelectedReference
+    SelectedReference,
+    Reasoning
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
@@ -47,13 +48,12 @@ const CopilotContainer = ({
     const [currentSessionId, setCurrentSessionId] = useState<
         string | undefined
     >();
-    const [pendingMessage, setPendingMessage] = useState<{
-        content: string;
-        timestamp: string;
-    } | null>(null);
-    console.log(pendingMessage);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [reasoning, setReasoning] = useState<Reasoning>({
+        thoughts: [],
+        isFinished: false
+    });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const promptBarRef = useRef<HTMLTextAreaElement>(null);
@@ -149,7 +149,6 @@ const CopilotContainer = ({
                 console.error('Error loading chat history:', error);
             } finally {
                 setIsLoadingHistory(false);
-                scrollToBottom();
             }
         };
 
@@ -161,6 +160,10 @@ const CopilotContainer = ({
             scrollToBottom();
         }
     }, [messages]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [reasoning]);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
@@ -249,7 +252,6 @@ const CopilotContainer = ({
 
         setMessages((prev) => [...prev, userMessage]);
         handleClearReferences();
-        scrollToBottom();
 
         let currentResponse = '';
         const chatInput: ChatInput = {
@@ -263,35 +265,46 @@ const CopilotContainer = ({
             await chatApi.chat(chatInput, {
                 onContent: (content) => {
                     currentResponse += content;
-                    setPendingMessage({
-                        content: currentResponse,
-                        timestamp: new Date().toISOString()
-                    });
-                    scrollToBottom();
+                },
+                onInfo: (interrupt, thought) => {
+                    if (interrupt) {
+                        // TODO
+                    }
+
+                    if (thought) {
+                        setReasoning((v) => ({
+                            ...v,
+                            thoughts: [...v.thoughts, thought]
+                        }));
+                    }
                 },
                 onComplete: (messageId, sessionId, sessionName, keyword) => {
-                    setPendingMessage(null);
-
+                    setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
-                            const aiMessage: ChatMessage = {
-                                id: messageId,
-                                role: 'AI',
-                                content: currentResponse,
-                                timestamp: new Date().toISOString(),
-                                keyword: keyword
-                            };
-                            return [...prev, aiMessage];
-                        });
+                        // use timeout to show the finished state of the reasoning
+                        setTimeout(() => {
+                            setReasoning({ thoughts: [], isFinished: false });
+                            setIsLoadingResponse(false);
+                            setMessages((prev) => {
+                                const aiMessage: ChatMessage = {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString(),
+                                    keyword: keyword
+                                };
+                                return [...prev, aiMessage];
+                            });
+                        }, 1000);
                     }
                 },
                 onError: (error) => {
+                    setReasoning({ thoughts: [], isFinished: false });
+                    setIsLoadingResponse(false);
                     console.error('Chat error:', error);
-                    setPendingMessage(null);
-
                     const errorMessage: ChatMessage = {
                         id: 'error',
                         role: 'AI',
@@ -299,13 +312,12 @@ const CopilotContainer = ({
                         timestamp: new Date().toISOString()
                     };
                     setMessages((prev) => [...prev, errorMessage]);
-                    scrollToBottom();
                 }
             });
         } catch (error) {
+            setReasoning({ thoughts: [], isFinished: false });
+            setIsLoadingResponse(false);
             console.error('Chat error:', error);
-            setPendingMessage(null);
-
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',
@@ -313,10 +325,6 @@ const CopilotContainer = ({
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
-            scrollToBottom();
-        } finally {
-            setIsLoadingResponse(false);
-            scrollToBottom();
         }
     };
 
@@ -332,8 +340,6 @@ const CopilotContainer = ({
         };
 
         setMessages((prev) => [...prev, userMessage]);
-        scrollToBottom();
-
         let currentResponse = '';
         const chatInput: ChatInput = {
             input_text: message.content,
@@ -350,36 +356,46 @@ const CopilotContainer = ({
             chatApi.chat(chatInput, {
                 onContent: (content) => {
                     currentResponse += content;
-                    setPendingMessage({
-                        content: currentResponse,
-                        timestamp: new Date().toISOString()
-                    });
-                    scrollToBottom();
+                },
+                onInfo: (interrupt, thought) => {
+                    if (interrupt) {
+                        // TODO
+                    }
+
+                    if (thought) {
+                        setReasoning((v) => ({
+                            ...v,
+                            thoughts: [...v.thoughts, thought]
+                        }));
+                    }
                 },
                 onComplete: (messageId, sessionId, sessionName, keyword) => {
-                    setPendingMessage(null);
-
+                    setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
-                            const aiMessage: ChatMessage = {
-                                id: messageId,
-                                role: 'AI',
-                                content: currentResponse,
-                                timestamp: new Date().toISOString(),
-                                keyword: keyword
-                            };
-                            return [...prev, aiMessage];
-                        });
+                        // use timeout to show the finished state of the reasoning
+                        setTimeout(() => {
+                            setReasoning({ thoughts: [], isFinished: false });
+                            setIsLoadingResponse(false);
+                            setMessages((prev) => {
+                                const aiMessage: ChatMessage = {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString(),
+                                    keyword: keyword
+                                };
+                                return [...prev, aiMessage];
+                            });
+                        }, 1000);
                     }
-                    setIsLoadingResponse(false);
                 },
                 onError: (error) => {
+                    setReasoning({ thoughts: [], isFinished: false });
+                    setIsLoadingResponse(false);
                     console.error('Chat error:', error);
-                    setPendingMessage(null);
-
                     const errorMessage: ChatMessage = {
                         id: 'error',
                         role: 'AI',
@@ -387,13 +403,12 @@ const CopilotContainer = ({
                         timestamp: new Date().toISOString()
                     };
                     setMessages((prev) => [...prev, errorMessage]);
-                    setIsLoadingResponse(false);
                 }
             });
         } catch (error) {
+            setReasoning({ thoughts: [], isFinished: false });
+            setIsLoadingResponse(false);
             console.error('Chat error:', error);
-            setPendingMessage(null);
-
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',
@@ -401,7 +416,6 @@ const CopilotContainer = ({
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
-            setIsLoadingResponse(false);
         }
     };
 
@@ -514,6 +528,7 @@ const CopilotContainer = ({
                                 'md:w-full md:max-w-[720px] md:mx-auto'
                             )}>
                             <ChatSection
+                                reasoning={reasoning}
                                 messages={messages}
                                 setMessages={setMessages}
                                 onRetry={handleRetry}

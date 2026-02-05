@@ -294,3 +294,8 @@ export interface ContentSearchItem {
 export interface ContentSearchResponse {
     data: ContentSearchItem[];
 }
+
+export interface Reasoning {
+    thoughts: string[];
+    isFinished: boolean;
+}

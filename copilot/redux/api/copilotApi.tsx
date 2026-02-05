@@ -35,11 +35,12 @@ interface ContextRecommendationParams {
 
 interface StreamCallbacks {
     onContent?: (content: string) => void;
+    onInfo?: (interrupt: any | null, thought: string | null) => void;
     onComplete?: (
         messageId: string,
         sessionId: string,
         sessionName: string | null,
-        keyword: string | null
+        keyword: string | null // deprecated
     ) => void;
     onError?: (error: any) => void;
 }
@@ -65,11 +66,16 @@ async function processStream(
                     if (jsonValue.type === 'CONTENT' && jsonValue.content) {
                         callbacks.onContent?.(jsonValue.content);
                     } else if (jsonValue.type === 'INFO') {
+                        callbacks.onInfo?.(
+                            jsonValue.interrupt,
+                            jsonValue.thought
+                        );
+                    } else if (jsonValue.type === 'FINISH') {
                         callbacks.onComplete?.(
                             jsonValue.message_id,
                             jsonValue.session_id,
                             jsonValue.session_name,
-                            jsonValue.keyword
+                            jsonValue.keyword // deprecated
                         );
                     }
                 } catch (err) {
