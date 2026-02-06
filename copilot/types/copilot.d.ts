@@ -40,6 +40,44 @@ export interface ChatHistoryContextItem {
         | 'course_video';
 }
 
+export type ContentRecommendationType =
+    | 'course'
+    | 'chapter'
+    | 'video'
+    | 'exercise'
+    | 'article'
+    | 'tryout';
+
+export interface ContentRecommendation {
+    id: string;
+    slug: string;
+    title: string;
+    type: ContentRecommendationType;
+}
+
+export interface PerformanceAnalysis {
+    tryout_title: string;
+    total_score: number;
+    passing_grade: number;
+    target_institution: string;
+    target_major: string;
+    problemset_results: {
+        problemset_title: string;
+        score: number;
+        chapter_need_to_improve: string[];
+        chapter_mastered: string[];
+    }[];
+}
+
+export interface ExerciseQuestion {
+    id: string;
+    no: number;
+    question: string;
+    options: { id: string; value: string }[];
+    answer: string;
+    explanation: string;
+}
+
 export interface ChatHistoryResponse {
     session_id: string;
     history: {
@@ -51,6 +89,11 @@ export interface ChatHistoryResponse {
         is_bookmarked: boolean;
         keyword?: string | null;
         context?: { data: ChatHistoryContextItem[] };
+        rich_content?: {
+            content_recommendations?: ContentRecommendation[];
+            performance_analysis?: PerformanceAnalysis;
+            exercise_questions?: ExerciseQuestion[];
+        };
     }[];
 }
 
@@ -70,6 +113,11 @@ export interface ChatMessage {
     image?: string | null;
     keyword?: string | null;
     usedReferences?: SelectedReference[];
+    rich_content?: {
+        content_recommendations?: ContentRecommendation[];
+        performance_analysis?: PerformanceAnalysis;
+        exercise_questions?: ExerciseQuestion[];
+    };
 }
 
 interface BookmarkedChatsResponse {
@@ -298,4 +346,26 @@ export interface ContentSearchResponse {
 export interface Reasoning {
     thoughts: string[];
     isFinished: boolean;
+}
+
+export interface GetContentRecommendation {
+    data: {
+        type: ContentRecommendationType;
+        id: string;
+        slug: string;
+        progress?: number;
+        is_free?: boolean;
+        title: string;
+        tags?: string;
+        chapter_slug: string;
+        subchapter_slug: string;
+        subchapter_name: string;
+        thumbnail?: string;
+        cover?: string;
+        total_question_count?: number;
+        total_duration?: number;
+        start_at?: string;
+        closes_at?: string;
+        video_duration?: string;
+    }[];
 }

@@ -8,7 +8,10 @@ import {
     ChatHistoryContextItem,
     ReferenceContentType,
     SelectedReference,
-    Reasoning
+    Reasoning,
+    ContentRecommendation,
+    PerformanceAnalysis,
+    ExerciseQuestion
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
@@ -56,9 +59,6 @@ const CopilotContainer = ({
     });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const promptBarRef = useRef<HTMLTextAreaElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -115,33 +115,20 @@ const CopilotContainer = ({
                 const response = await chatApi.getChatHistory(sessionId);
                 if (response.history?.length > 0) {
                     const convertedMessages: ChatMessage[] =
-                        response.history.map(
-                            (item: {
-                                role: 'AI' | 'User';
-                                message: string;
-                                message_id: string;
-                                rating: number;
-                                is_bookmarked: boolean;
-                                image?: string | null;
-                                keyword?: string | null;
-                                context?: {
-                                    data: ChatHistoryContextItem[];
-                                };
-                            }) => ({
-                                id: item.message_id,
-                                role: item.role === 'AI' ? 'AI' : 'User',
-                                content: item.message,
-                                timestamp: new Date().toISOString(),
-                                rating: item.rating,
-                                isBookmarked: item.is_bookmarked,
-                                image: item.image,
-                                keyword: item.keyword,
-                                usedReferences:
-                                    convertHistoryContextToSelectedReferences(
-                                        item.context
-                                    )
-                            })
-                        );
+                        response.history.map((item) => ({
+                            id: item.message_id,
+                            role: item.role === 'AI' ? 'AI' : 'User',
+                            content: item.message,
+                            timestamp: new Date().toISOString(),
+                            rating: item.rating,
+                            isBookmarked: item.is_bookmarked,
+                            image: item.image,
+                            usedReferences:
+                                convertHistoryContextToSelectedReferences(
+                                    item.context
+                                ),
+                            rich_content: item.rich_content
+                        }));
                     setMessages(convertedMessages);
                     setCurrentSessionId(sessionId);
                 }
@@ -261,10 +248,33 @@ const CopilotContainer = ({
             context: buildChatContextFromReferences(currentUsedReferences)
         };
 
+        let content_recommendations: ContentRecommendation[] = [];
+        let performance_analysis: PerformanceAnalysis;
+        let exercise_questions: ExerciseQuestion[] = [];
+
         try {
             await chatApi.chat(chatInput, {
-                onContent: (content) => {
+                onContent: (content, rich_content) => {
                     currentResponse += content;
+                    if (
+                        Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0
+                    ) {
+                        content_recommendations =
+                            rich_content.content_recommendations;
+                    }
+
+                    if (rich_content?.performance_analysis) {
+                        performance_analysis =
+                            rich_content.performance_analysis;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0
+                    ) {
+                        exercise_questions = rich_content.exercise_questions;
+                    }
                 },
                 onInfo: (interrupt, thought) => {
                     if (interrupt) {
@@ -278,7 +288,7 @@ const CopilotContainer = ({
                         }));
                     }
                 },
-                onComplete: (messageId, sessionId, sessionName, keyword) => {
+                onComplete: (messageId, sessionId) => {
                     setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
@@ -294,7 +304,11 @@ const CopilotContainer = ({
                                     role: 'AI',
                                     content: currentResponse,
                                     timestamp: new Date().toISOString(),
-                                    keyword: keyword
+                                    rich_content: {
+                                        content_recommendations,
+                                        performance_analysis,
+                                        exercise_questions
+                                    }
                                 };
                                 return [...prev, aiMessage];
                             });
@@ -328,7 +342,7 @@ const CopilotContainer = ({
         }
     };
 
-    const handleRetry = (message: ChatMessage) => {
+    const handleRetry = async (message: ChatMessage) => {
         const timestamp = new Date().toISOString();
         const userMessage: ChatMessage = {
             id: crypto.randomUUID(),
@@ -351,11 +365,33 @@ const CopilotContainer = ({
         };
 
         setIsLoadingResponse(true);
+        let content_recommendations: ContentRecommendation[] = [];
+        let performance_analysis: PerformanceAnalysis;
+        let exercise_questions: ExerciseQuestion[] = [];
 
         try {
-            chatApi.chat(chatInput, {
-                onContent: (content) => {
+            await chatApi.chat(chatInput, {
+                onContent: (content, rich_content) => {
                     currentResponse += content;
+                    if (
+                        Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0
+                    ) {
+                        content_recommendations =
+                            rich_content.content_recommendations;
+                    }
+
+                    if (rich_content?.performance_analysis) {
+                        performance_analysis =
+                            rich_content.performance_analysis;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0
+                    ) {
+                        exercise_questions = rich_content.exercise_questions;
+                    }
                 },
                 onInfo: (interrupt, thought) => {
                     if (interrupt) {
@@ -369,7 +405,7 @@ const CopilotContainer = ({
                         }));
                     }
                 },
-                onComplete: (messageId, sessionId, sessionName, keyword) => {
+                onComplete: (messageId, sessionId) => {
                     setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
@@ -385,7 +421,11 @@ const CopilotContainer = ({
                                     role: 'AI',
                                     content: currentResponse,
                                     timestamp: new Date().toISOString(),
-                                    keyword: keyword
+                                    rich_content: {
+                                        content_recommendations,
+                                        performance_analysis,
+                                        exercise_questions
+                                    }
                                 };
                                 return [...prev, aiMessage];
                             });
@@ -565,8 +605,6 @@ const CopilotContainer = ({
                     )}
 
                     <PromptBar
-                        ref={promptBarRef}
-                        fileInputRef={fileInputRef}
                         onSend={handleSendMessage}
                         isLoading={isLoadingResponse}
                         onStateChange={({ isEditorOpen }) =>

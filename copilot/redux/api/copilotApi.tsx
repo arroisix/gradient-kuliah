@@ -16,7 +16,9 @@ import {
     BankSoalChaptersResponse,
     BankSoalSectionsResponse,
     BankSoalProblemsResponse,
-    ContentSearchResponse
+    ContentSearchResponse,
+    ChatMessage,
+    GetContentRecommendation
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -34,7 +36,10 @@ interface ContextRecommendationParams {
 }
 
 interface StreamCallbacks {
-    onContent?: (content: string) => void;
+    onContent?: (
+        content: string,
+        rich_content: ChatMessage['rich_content']
+    ) => void;
     onInfo?: (interrupt: any | null, thought: string | null) => void;
     onComplete?: (
         messageId: string,
@@ -64,7 +69,10 @@ async function processStream(
                 try {
                     const jsonValue = JSON.parse(part);
                     if (jsonValue.type === 'CONTENT' && jsonValue.content) {
-                        callbacks.onContent?.(jsonValue.content);
+                        callbacks.onContent?.(
+                            jsonValue.content,
+                            jsonValue.rich_content
+                        );
                     } else if (jsonValue.type === 'INFO') {
                         callbacks.onInfo?.(
                             jsonValue.interrupt,
@@ -621,6 +629,16 @@ export const copilotApi = baseApi.injectEndpoints({
                 }
             }),
             providesTags: ['CONTENT_SEARCH']
+        }),
+        getContentRecommendationData: builder.query<
+            GetContentRecommendation,
+            { data: string }
+        >({
+            query: ({ data }) => ({
+                url: `${COPILOT_BASE_URL}v2/content-recommendation/`,
+                method: 'GET',
+                params: { data }
+            })
         })
     }),
     overrideExisting: false
@@ -639,5 +657,6 @@ export const {
     useGetBankSoalChaptersQuery,
     useGetBankSoalSectionsQuery,
     useGetBankSoalProblemsQuery,
-    useLazySearchContentQuery
+    useLazySearchContentQuery,
+    useGetContentRecommendationDataQuery
 } = copilotApi;
