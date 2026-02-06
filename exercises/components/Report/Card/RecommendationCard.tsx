@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { RecommendedMaterial } from '../../../types/exercises';
 import { useTracker } from '../../../../tracker/tracker';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { BookCard } from './BookCard';
 import { CourseOrVideoCard } from './CourseOrVideoCard';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 export const RecommendationCard: React.FC<{
     material: RecommendedMaterial;
@@ -13,7 +14,13 @@ export const RecommendationCard: React.FC<{
     const router = useRouter();
     const { slug, exerciseProgressId, problemId } = router.query;
     const isBook = material.type === 'Book';
-    const href = getHref(material);
+    const { profile } = useAuth();
+    const href = useMemo(() => {
+        if (profile?.current_role === 'K12') {
+            return getUTBKHref(material);
+        }
+        return getHref(material);
+    }, [material, profile]);
 
     const handleClick = () => {
         tracker?.genericTrack('Click Material Recomendation Card', {
@@ -40,6 +47,10 @@ export const RecommendationCard: React.FC<{
             </button>
         </Link>
     );
+};
+
+const getUTBKHref = (material: RecommendedMaterial): string => {
+    return `/utbk/materi/${material.course_slug}/${material.chapter_slug}/${material.slug}/`;
 };
 
 const getHref = (material: RecommendedMaterial): string => {
