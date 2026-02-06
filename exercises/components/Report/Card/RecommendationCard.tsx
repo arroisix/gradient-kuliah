@@ -50,7 +50,7 @@ export const RecommendationCard: React.FC<{
 };
 
 const getUTBKHref = (material: RecommendedMaterial): string => {
-    return `/utbk/materi/${material.course_slug}/${material.chapter_slug}/${material.subchapter_slug}/`;
+    return `/utbk/materi/${material.course_slug}/${material.chapter_slug}/${material.slug}/`;
 };
 
 const getHref = (material: RecommendedMaterial): string => {
