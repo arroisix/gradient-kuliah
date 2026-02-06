@@ -48,7 +48,7 @@ export type ContentRecommendationType =
     | 'article'
     | 'tryout';
 
-export interface ContentRecommendation {
+export interface CopilotContentRecommendation {
     id: string;
     slug: string;
     title: string;
