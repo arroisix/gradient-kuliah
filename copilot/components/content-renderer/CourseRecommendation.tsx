@@ -1,22 +1,45 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import { MateriCard } from 'courses/components/utbk/MateriCard';
 
-interface CourseRecommendationProps {
-    course: Course;
+interface ChapterRecommendationProps {
+    title: string;
+    cover: string;
+    tags: string;
+    progress: number;
+    course_slug: string;
+    chapter_slug: string;
+    subchapter_slug: string;
+    subchapter_name: string;
 }
 
 function CourseRecommendation({
-    course
-}: CourseRecommendationProps): JSX.Element {
+    title,
+    cover,
+    tags,
+    progress,
+    course_slug,
+    chapter_slug,
+    subchapter_slug,
+    subchapter_name
+}: ChapterRecommendationProps): JSX.Element {
+    const { profile } = useAuth();
+    const trimmedTags = tags ? tags.split(',') : [];
+    const href =
+        profile?.current_role === 'COLLEGE_STUDENT'
+            ? `/kelas/${course_slug}/${subchapter_slug}`
+            : `/utbk/materi/${course_slug}/${chapter_slug}/${subchapter_slug}`;
+
     return (
-        <div className="w-full max-w-[440px]">
+        <div className="carousel-item w-full max-w-[440px]">
             <MateriCard
-                href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
-                course_name={course.course_name}
-                cover={course.cover}
-                tags={course.tags}
-                latest_subchapter_name={course.latest_subchapter_name}
-                percentage_progress={course.percentage_progress}
-                is_coming_soon={course.is_coming_soon}
+                isOpenNewTab
+                href={href}
+                course_name={title}
+                cover={cover}
+                tags={trimmedTags}
+                latest_subchapter_name={subchapter_name}
+                percentage_progress={progress}
+                is_coming_soon={false}
             />
         </div>
     );

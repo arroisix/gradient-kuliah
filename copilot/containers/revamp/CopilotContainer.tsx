@@ -9,9 +9,9 @@ import {
     ReferenceContentType,
     SelectedReference,
     Reasoning,
-    ContentRecommendation,
     PerformanceAnalysis,
-    ExerciseQuestion
+    ExerciseQuestion,
+    CopilotContentRecommendation
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
@@ -248,14 +248,14 @@ const CopilotContainer = ({
             context: buildChatContextFromReferences(currentUsedReferences)
         };
 
-        let content_recommendations: ContentRecommendation[] = [];
+        let content_recommendations: CopilotContentRecommendation[] = [];
         let performance_analysis: PerformanceAnalysis;
         let exercise_questions: ExerciseQuestion[] = [];
 
         try {
             await chatApi.chat(chatInput, {
                 onContent: (content, rich_content) => {
-                    currentResponse += content;
+                    currentResponse = content;
                     if (
                         Array.isArray(rich_content?.content_recommendations) &&
                         rich_content.content_recommendations.length > 0
@@ -365,14 +365,14 @@ const CopilotContainer = ({
         };
 
         setIsLoadingResponse(true);
-        let content_recommendations: ContentRecommendation[] = [];
+        let content_recommendations: CopilotContentRecommendation[] = [];
         let performance_analysis: PerformanceAnalysis;
         let exercise_questions: ExerciseQuestion[] = [];
 
         try {
             await chatApi.chat(chatInput, {
                 onContent: (content, rich_content) => {
-                    currentResponse += content;
+                    currentResponse = content;
                     if (
                         Array.isArray(rich_content?.content_recommendations) &&
                         rich_content.content_recommendations.length > 0

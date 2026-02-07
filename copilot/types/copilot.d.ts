@@ -90,7 +90,7 @@ export interface ChatHistoryResponse {
         keyword?: string | null;
         context?: { data: ChatHistoryContextItem[] };
         rich_content?: {
-            content_recommendations?: ContentRecommendation[];
+            content_recommendations?: CopilotContentRecommendation[];
             performance_analysis?: PerformanceAnalysis;
             exercise_questions?: ExerciseQuestion[];
         };
@@ -114,7 +114,7 @@ export interface ChatMessage {
     keyword?: string | null;
     usedReferences?: SelectedReference[];
     rich_content?: {
-        content_recommendations?: ContentRecommendation[];
+        content_recommendations?: CopilotContentRecommendation[];
         performance_analysis?: PerformanceAnalysis;
         exercise_questions?: ExerciseQuestion[];
     };
@@ -357,15 +357,26 @@ export interface GetContentRecommendation {
         is_free?: boolean;
         title: string;
         tags?: string;
-        chapter_slug: string;
-        subchapter_slug: string;
-        subchapter_name: string;
+        course_slug?: string;
+        chapter_slug?: string;
+        subchapter_slug?: string;
+        subchapter_name?: string;
         thumbnail?: string;
         cover?: string;
-        total_question_count?: number;
-        total_duration?: number;
-        start_at?: string;
-        closes_at?: string;
         video_duration?: string;
+        total_questions?: number;
+        duration?: number;
+        opens_at?: string;
+        closes_at?: string;
+        tryout_type?: 'UAS' | 'UTS' | 'UTBK' | 'TKA' | 'MATERI';
+        status?: 'IN_PROGRESS' | 'PENDING_SCORING' | 'COMPLETED';
+        progress_percentage?: number;
+        score?: number;
+        exercise_code?: string;
+        university_name?: string;
+        university_color?: string;
+        score_published_at?: string;
+        is_time_expired?: boolean;
+        is_auto_irt_scoring_enable?: boolean;
     }[];
 }

@@ -1,28 +1,29 @@
 import { cn, formatDuration } from 'commons/utils';
+import { ContentRecommendationType } from 'copilot/types/copilot';
 import { BadgeQuestionMarkIcon, BookOpenIcon, VideoIcon } from 'lucide-react';
 import Link from 'next/link';
 
 interface SubchapterRecommendationProps {
-    type: 'video' | 'article' | 'quiz';
+    type: ContentRecommendationType;
+    title: string;
     course_slug: string;
     chapter_slug: string;
     subchapter_slug: string;
-    subchapter_name: string;
-    duration?: string;
+    video_duration?: string;
 }
 
 function SubchapterRecommendation({
     type,
+    title,
     course_slug,
     chapter_slug,
     subchapter_slug,
-    subchapter_name,
-    duration
+    video_duration
 }: SubchapterRecommendationProps): JSX.Element {
     return (
         <div
             className={cn(
-                'bg-[#222222] p-3 rounded-xl flex flex-col w-full',
+                'carousel-item bg-[#222222] p-3 rounded-xl flex flex-col w-full',
                 'md:flex-row md:justify-between md:items-center md:max-w-[527px]'
             )}>
             <div
@@ -40,12 +41,12 @@ function SubchapterRecommendation({
 
                 <div className="flex flex-col gap-1">
                     <h3 className="text-white text-sm leading-[160%]">
-                        {subchapter_name}
+                        {title}
                     </h3>
 
                     {type === 'video' ? (
                         <span className="text-[#999999] text-sm leading-[160%]">
-                            {formatDuration(duration)}
+                            {formatDuration(video_duration)}
                         </span>
                     ) : (
                         <></>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
     BookmarkIcon,
     ChevronDownIcon,
@@ -13,18 +13,16 @@ import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
 import {
     ChatMessage,
-    ContentRecommendation,
     Reasoning,
     SelectedReference
 } from 'copilot/types/copilot';
 import CopilotIcon from 'copilot/assets/revamp/CopilotIcon';
 import { chatApi } from 'copilot/redux/api/copilotApi';
-import ImageModal from '../ImageModal';
-import MessageObserver from './MessageObserver';
-import ContentRecommendations from './ContentRecommendations';
+import ImageModal from './ImageModal';
 import { useTracker } from 'tracker/tracker';
 import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
 import { cn } from 'commons/utils';
+import { ContentRecommendations } from 'copilot/components/content-renderer/ContentRecommendations';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -51,11 +49,6 @@ const ChatSection = ({
     );
     const [imageError, setImageError] = useState<Record<string, boolean>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [recommendations, setRecommendations] = useState<
-        ContentRecommendation[]
-    >([]);
-    const [isLoadingRecommendations, setIsLoadingRecommendations] =
-        useState(false);
     const tracker = useTracker();
 
     const handleOpenImage = (imageUrl: string | null | undefined) => {
@@ -145,44 +138,6 @@ const ChatSection = ({
         onOpenUsedReferencesModal?.(references);
     };
 
-    useEffect(() => {
-        const fetchRecommendations = async (keyword: string) => {
-            setIsLoadingRecommendations(true);
-            try {
-                const response = await chatApi.getContentRecommendation(
-                    keyword
-                );
-                setRecommendations(response.recommendation);
-            } catch (error) {
-                console.error('Failed to fetch recommendations:', error);
-                setRecommendations([]);
-            } finally {
-                setIsLoadingRecommendations(false);
-            }
-        };
-
-        const lastMessage = messages[messages.length - 1];
-        if (lastMessage?.role === 'AI' && lastMessage.keyword) {
-            fetchRecommendations(lastMessage.keyword);
-        } else {
-            setRecommendations([]);
-        }
-    }, [messages]);
-
-    const renderRecommendations = (message: ChatMessage) => {
-        if (!message.keyword) {
-            return <></>;
-        }
-
-        return (
-            <ContentRecommendations
-                keyword={message.keyword}
-                recommendations={recommendations}
-                isLoading={isLoadingRecommendations}
-            />
-        );
-    };
-
     const renderReferenceIndicator = (message: ChatMessage) => {
         if (!message.usedReferences || message.usedReferences.length === 0) {
             return <></>;
@@ -201,11 +156,7 @@ const ChatSection = ({
     };
 
     const renderMessage = (message: ChatMessage) => {
-        const isLatestAIMessage =
-            message.role === 'AI' &&
-            message.id ===
-                messages.filter((m) => m.role === 'AI').slice(-1)[0]?.id;
-
+        const rich_content = message.rich_content;
         const messageContent = (
             <>
                 {message.image && !imageError[message.id] ? (
@@ -233,6 +184,19 @@ const ChatSection = ({
                             rehypePlugins={[rehypeKatex]}>
                             {message.content}
                         </ReactMarkdown>
+
+                        {Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0 ? (
+                            <div className="carousel flex space-x-4">
+                                <ContentRecommendations
+                                    content_recommendations={
+                                        rich_content.content_recommendations
+                                    }
+                                />
+                            </div>
+                        ) : (
+                            <></>
+                        )}
 
                         <div className="flex justify-between items-center gap-4">
                             {/* retry */}
@@ -303,8 +267,6 @@ const ChatSection = ({
                                 </button>
                             </div>
                         </div>
-
-                        {isLatestAIMessage && renderRecommendations(message)}
                     </div>
                 ) : (
                     <p className="bg-[#363488] text-white text-sm p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl w-[275px] ml-auto">
@@ -315,18 +277,7 @@ const ChatSection = ({
         );
 
         if (message.role === 'AI') {
-            return (
-                <MessageObserver
-                    message={message}
-                    onRecommendationsUpdate={(recommendations) => {
-                        if (isLatestAIMessage) {
-                            setRecommendations(recommendations);
-                        }
-                    }}
-                    isLatest={isLatestAIMessage}>
-                    {messageContent}
-                </MessageObserver>
-            );
+            return <div className="min-w-0">{messageContent}</div>;
         }
 
         return messageContent;
