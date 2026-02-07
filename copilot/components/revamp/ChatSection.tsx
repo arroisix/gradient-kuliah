@@ -187,7 +187,7 @@ const ChatSection = ({
 
                         {Array.isArray(rich_content?.content_recommendations) &&
                         rich_content.content_recommendations.length > 0 ? (
-                            <div className="carousel flex space-x-4">
+                            <div className="carousel flex space-x-4 p-1">
                                 <ContentRecommendations
                                     content_recommendations={
                                         rich_content.content_recommendations
@@ -210,8 +210,8 @@ const ChatSection = ({
                                 <RefreshCwIcon className="shrink-0 w-5 h-5" />
                                 <span
                                     className={cn(
-                                        'sr-only',
-                                        'md:not-sr-only md:capitalize md:font-semibold md:text-xs md:leading-tight'
+                                        'hidden',
+                                        'md:block md:capitalize md:font-semibold md:text-xs md:leading-tight'
                                     )}>
                                     retry
                                 </span>
@@ -231,7 +231,6 @@ const ChatSection = ({
                                         isRating[message.id] ? 'opacity-50' : ''
                                     )}>
                                     <ThumbsUpIcon className="w-5 h-5" />
-                                    <span className="sr-only">thumbs-up</span>
                                 </button>
 
                                 <button
@@ -246,7 +245,6 @@ const ChatSection = ({
                                         isRating[message.id] ? 'opacity-50' : ''
                                     )}>
                                     <ThumbsDownIcon className="w-5 h-5" />
-                                    <span className="sr-only">thumbs-down</span>
                                 </button>
 
                                 <button
@@ -263,7 +261,6 @@ const ChatSection = ({
                                             : ''
                                     )}>
                                     <BookmarkIcon className="w-5 h-5" />
-                                    <span className="sr-only">bookmark</span>
                                 </button>
                             </div>
                         </div>

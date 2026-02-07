@@ -20,6 +20,7 @@ interface LatihanCardProps {
     className?: string;
     cardType: 'myExercises' | 'allExercises';
     onClick?: () => void;
+    isOpenNewTab?: boolean;
 }
 
 type ExerciseState = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
@@ -98,7 +99,8 @@ const STATE_COLORS = {
 const LatihanCard: React.FC<LatihanCardProps> = ({
     exercise,
     className,
-    onClick
+    onClick,
+    isOpenNewTab = false
 }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -434,6 +436,8 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
             onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            target={isOpenNewTab ? '_blank' : '_self'}
+            rel={isOpenNewTab ? 'noopener noreferrer' : ''}
             className={cn(
                 'flex flex-col gap-1 h-full w-full relative overflow-hidden justify-between',
                 'bg-violet-2 rounded-2xl p-5',

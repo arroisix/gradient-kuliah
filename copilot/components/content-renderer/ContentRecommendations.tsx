@@ -45,6 +45,8 @@ function ContentRecommendations({
                         key={v.id}
                         className="carousel-item self-stretch w-full max-w-[328px]">
                         <LatihanCard
+                            isOpenNewTab
+                            cardType="allExercises"
                             exercise={{
                                 icon: '',
                                 id: v.id,
@@ -70,7 +72,6 @@ function ContentRecommendations({
                                 university_color: v.university_color,
                                 university_name: v.university_name
                             }}
-                            cardType="allExercises"
                         />
                     </div>
                 ))}
