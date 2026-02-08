@@ -37,7 +37,6 @@ interface ChatSectionProps {
     isLoadingResponse: boolean;
     sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
-    scrollToBottom: () => void;
 }
 
 const ChatSection = ({
@@ -49,8 +48,7 @@ const ChatSection = ({
     currentSessionId,
     isLoadingResponse,
     sendMessage,
-    onOpenUsedReferencesModal,
-    scrollToBottom
+    onOpenUsedReferencesModal
 }: ChatSectionProps): JSX.Element => {
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
     const [isBookmarking, setIsBookmarking] = useState<Record<string, boolean>>(
@@ -198,7 +196,6 @@ const ChatSection = ({
                         {Array.isArray(rich_content?.exercise_questions) &&
                         rich_content.exercise_questions.length > 0 ? (
                             <ExerciseQuestionList
-                                scrollToBottom={scrollToBottom}
                                 currentSessionId={currentSessionId ?? ''}
                                 message_id={message.id}
                                 exercise_questions={

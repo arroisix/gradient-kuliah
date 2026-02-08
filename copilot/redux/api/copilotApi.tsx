@@ -658,24 +658,7 @@ export const copilotApi = baseApi.injectEndpoints({
                 url: `${COPILOT_BASE_URL}update-exercise-answer/`,
                 method: 'POST',
                 body: { message_id, answer, question_id }
-            }),
-            invalidatesTags: (_result, _error, arg) => [
-                { type: 'COPILOT_SESSION_HISTORY', id: arg.session_id }
-            ]
-        }),
-        getChatHistory: builder.query<
-            ChatHistoryResponse,
-            { sessionId: string }
-        >({
-            query: ({ sessionId }) => ({
-                url: sessionId
-                    ? `${COPILOT_BASE_URL}chat/history/${sessionId}/`
-                    : `${COPILOT_BASE_URL}chat/history/single/`,
-                method: 'GET'
-            }),
-            providesTags: (result) => [
-                { type: 'COPILOT_SESSION_HISTORY', id: result?.session_id }
-            ]
+            })
         })
     }),
     overrideExisting: false
@@ -696,6 +679,5 @@ export const {
     useGetBankSoalProblemsQuery,
     useLazySearchContentQuery,
     useGetContentRecommendationDataQuery,
-    useUpdateExerciseAnswerMutation,
-    useGetChatHistoryQuery
+    useUpdateExerciseAnswerMutation
 } = copilotApi;
