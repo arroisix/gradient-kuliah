@@ -76,6 +76,7 @@ export interface ExerciseQuestion {
     options: { id: string; value: string }[];
     answer: string;
     explanation: string;
+    user_answer?: string;
 }
 
 export interface ChatHistoryResponse {
@@ -390,4 +391,8 @@ export interface GetContentRecommendation {
         is_time_expired?: boolean;
         is_auto_irt_scoring_enable?: boolean;
     }[];
+}
+
+export interface UpdateExerciseAnswer {
+    message_id: string;
 }

@@ -15,7 +15,7 @@ import {
     CopilotInterrupt
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
-import { chatApi } from 'copilot/redux/api/copilotApi';
+import { chatApi, useGetChatHistoryQuery } from 'copilot/redux/api/copilotApi';
 import MobileHeader from 'copilot/components/revamp/MobileHeader';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useSelector } from 'react-redux';
@@ -46,7 +46,6 @@ const CopilotContainer = ({
     const [viewingUsedReferences, setViewingUsedReferences] = useState<
         SelectedReference[]
     >([]);
-    const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState<
@@ -62,6 +61,12 @@ const CopilotContainer = ({
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+
+    const { data: chatHistory, isLoading: isLoadingHistory } =
+        useGetChatHistoryQuery(
+            { sessionId: currentSessionId ?? '' },
+            { skip: !sessionId }
+        );
 
     useEffect(() => {
         if (isReferenceModalOpen) {
@@ -106,42 +111,29 @@ const CopilotContainer = ({
     };
 
     useEffect(() => {
-        const loadChatHistory = async () => {
-            if (!sessionId) {
-                setIsLoadingHistory(false);
-                return;
-            }
-
-            try {
-                const response = await chatApi.getChatHistory(sessionId);
-                if (response.history?.length > 0) {
-                    const convertedMessages: ChatMessage[] =
-                        response.history.map((item) => ({
-                            id: item.message_id,
-                            role: item.role === 'AI' ? 'AI' : 'User',
-                            content: item.message,
-                            timestamp: new Date().toISOString(),
-                            rating: item.rating,
-                            isBookmarked: item.is_bookmarked,
-                            image: item.image,
-                            usedReferences:
-                                convertHistoryContextToSelectedReferences(
-                                    item.context
-                                ),
-                            rich_content: item.rich_content
-                        }));
-                    setMessages(convertedMessages);
-                    setCurrentSessionId(sessionId);
-                }
-            } catch (error) {
-                console.error('Error loading chat history:', error);
-            } finally {
-                setIsLoadingHistory(false);
-            }
-        };
-
-        loadChatHistory();
-    }, [sessionId]);
+        if (
+            Array.isArray(chatHistory?.history) &&
+            chatHistory.history.length > 0
+        ) {
+            const convertedMessages: ChatMessage[] = chatHistory.history.map(
+                (item) => ({
+                    id: item.message_id,
+                    role: item.role === 'AI' ? 'AI' : 'User',
+                    content: item.message,
+                    timestamp: new Date().toISOString(),
+                    rating: item.rating,
+                    isBookmarked: item.is_bookmarked,
+                    image: item.image,
+                    usedReferences: convertHistoryContextToSelectedReferences(
+                        item.context
+                    ),
+                    rich_content: item.rich_content
+                })
+            );
+            setMessages(convertedMessages);
+            setCurrentSessionId(sessionId);
+        }
+    }, [chatHistory, sessionId]);
 
     useEffect(() => {
         if (messages.length > 0) {
@@ -583,6 +575,7 @@ const CopilotContainer = ({
                                 currentSessionId={currentSessionId}
                                 isLoadingResponse={isLoadingResponse}
                                 sendMessage={handleSendMessage}
+                                scrollToBottom={scrollToBottom}
                                 onOpenUsedReferencesModal={
                                     handleOpenUsedReferencesModal
                                 }

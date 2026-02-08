@@ -25,6 +25,7 @@ import { cn } from 'commons/utils';
 import { ContentRecommendations } from 'copilot/components/content-renderer/ContentRecommendations';
 import { InterruptInput } from '../content-renderer/InterruptInput';
 import { InterruptOptions } from '../content-renderer/InterruptOptions';
+import { ExerciseQuestionList } from '../content-renderer/ExerciseQuestionList';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -36,6 +37,7 @@ interface ChatSectionProps {
     isLoadingResponse: boolean;
     sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
+    scrollToBottom: () => void;
 }
 
 const ChatSection = ({
@@ -47,7 +49,8 @@ const ChatSection = ({
     currentSessionId,
     isLoadingResponse,
     sendMessage,
-    onOpenUsedReferencesModal
+    onOpenUsedReferencesModal,
+    scrollToBottom
 }: ChatSectionProps): JSX.Element => {
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
     const [isBookmarking, setIsBookmarking] = useState<Record<string, boolean>>(
@@ -191,6 +194,22 @@ const ChatSection = ({
                             {message.content}
                         </ReactMarkdown>
 
+                        {/* exercise questions */}
+                        {Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0 ? (
+                            <ExerciseQuestionList
+                                scrollToBottom={scrollToBottom}
+                                currentSessionId={currentSessionId ?? ''}
+                                message_id={message.id}
+                                exercise_questions={
+                                    rich_content.exercise_questions
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+
+                        {/* content recommendations */}
                         {Array.isArray(rich_content?.content_recommendations) &&
                         rich_content.content_recommendations.length > 0 ? (
                             <div className="carousel flex space-x-4 p-1">
@@ -204,6 +223,7 @@ const ChatSection = ({
                             <></>
                         )}
 
+                        {/* interrupt */}
                         {message.interrupt?.data.type === 'input' ? (
                             <InterruptInput
                                 message={message.interrupt.message}

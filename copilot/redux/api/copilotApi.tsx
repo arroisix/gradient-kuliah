@@ -19,7 +19,8 @@ import {
     ContentSearchResponse,
     ChatMessage,
     GetContentRecommendation,
-    CopilotInterrupt
+    CopilotInterrupt,
+    UpdateExerciseAnswer
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -643,6 +644,38 @@ export const copilotApi = baseApi.injectEndpoints({
                 method: 'GET',
                 params: { data }
             })
+        }),
+        updateExerciseAnswer: builder.mutation<
+            UpdateExerciseAnswer,
+            {
+                session_id: string;
+                message_id: string;
+                answer: string;
+                question_id: string;
+            }
+        >({
+            query: ({ message_id, answer, question_id }) => ({
+                url: `${COPILOT_BASE_URL}update-exercise-answer/`,
+                method: 'POST',
+                body: { message_id, answer, question_id }
+            }),
+            invalidatesTags: (_result, _error, arg) => [
+                { type: 'COPILOT_SESSION_HISTORY', id: arg.session_id }
+            ]
+        }),
+        getChatHistory: builder.query<
+            ChatHistoryResponse,
+            { sessionId: string }
+        >({
+            query: ({ sessionId }) => ({
+                url: sessionId
+                    ? `${COPILOT_BASE_URL}chat/history/${sessionId}/`
+                    : `${COPILOT_BASE_URL}chat/history/single/`,
+                method: 'GET'
+            }),
+            providesTags: (result) => [
+                { type: 'COPILOT_SESSION_HISTORY', id: result?.session_id }
+            ]
         })
     }),
     overrideExisting: false
@@ -662,5 +695,7 @@ export const {
     useGetBankSoalSectionsQuery,
     useGetBankSoalProblemsQuery,
     useLazySearchContentQuery,
-    useGetContentRecommendationDataQuery
+    useGetContentRecommendationDataQuery,
+    useUpdateExerciseAnswerMutation,
+    useGetChatHistoryQuery
 } = copilotApi;
