@@ -103,6 +103,16 @@ export interface ChangeRatingInput {
     rating: number;
 }
 
+export interface CopilotInterrupt {
+    action: 'ask_for_user_input';
+    message: string;
+    data: {
+        type: 'confirmation' | 'input' | 'options' | 'special';
+        options?: string[];
+        fields?: { name: string; label: string; type: 'text' | 'number' }[];
+    };
+}
+
 export interface ChatMessage {
     id: string;
     role: 'AI' | 'User';
@@ -118,6 +128,7 @@ export interface ChatMessage {
         performance_analysis?: PerformanceAnalysis;
         exercise_questions?: ExerciseQuestion[];
     };
+    interrupt?: CopilotInterrupt;
 }
 
 interface BookmarkedChatsResponse {

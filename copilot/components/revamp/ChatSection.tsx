@@ -23,6 +23,8 @@ import { useTracker } from 'tracker/tracker';
 import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
 import { cn } from 'commons/utils';
 import { ContentRecommendations } from 'copilot/components/content-renderer/ContentRecommendations';
+import { InterruptInput } from '../content-renderer/InterruptInput';
+import { InterruptOptions } from '../content-renderer/InterruptOptions';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -31,6 +33,8 @@ interface ChatSectionProps {
     setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
     isLoading?: boolean;
     currentSessionId?: string;
+    isLoadingResponse: boolean;
+    sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
 }
 
@@ -41,6 +45,8 @@ const ChatSection = ({
     onRetry,
     isLoading,
     currentSessionId,
+    isLoadingResponse,
+    sendMessage,
     onOpenUsedReferencesModal
 }: ChatSectionProps): JSX.Element => {
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
@@ -194,6 +200,24 @@ const ChatSection = ({
                                     }
                                 />
                             </div>
+                        ) : (
+                            <></>
+                        )}
+
+                        {message.interrupt?.data.type === 'input' ? (
+                            <InterruptInput
+                                message={message.interrupt.message}
+                                fields={message.interrupt.data.fields}
+                                isLoadingResponse={isLoadingResponse}
+                                sendMessage={sendMessage}
+                            />
+                        ) : message.interrupt?.data.type === 'options' ? (
+                            <InterruptOptions
+                                message={message.interrupt.message}
+                                fields={message.interrupt.data.fields}
+                                isLoadingResponse={isLoadingResponse}
+                                sendMessage={sendMessage}
+                            />
                         ) : (
                             <></>
                         )}

@@ -11,7 +11,8 @@ import {
     Reasoning,
     PerformanceAnalysis,
     ExerciseQuestion,
-    CopilotContentRecommendation
+    CopilotContentRecommendation,
+    CopilotInterrupt
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
@@ -251,6 +252,7 @@ const CopilotContainer = ({
         let content_recommendations: CopilotContentRecommendation[] = [];
         let performance_analysis: PerformanceAnalysis;
         let exercise_questions: ExerciseQuestion[] = [];
+        let interrupt: CopilotInterrupt;
 
         try {
             await chatApi.chat(chatInput, {
@@ -276,9 +278,10 @@ const CopilotContainer = ({
                         exercise_questions = rich_content.exercise_questions;
                     }
                 },
-                onInfo: (interrupt, thought) => {
-                    if (interrupt) {
-                        // TODO
+                onInfo: (interruptResponse, thought) => {
+                    if (interruptResponse) {
+                        currentResponse = interruptResponse.message;
+                        interrupt = interruptResponse;
                     }
 
                     if (thought) {
@@ -304,6 +307,7 @@ const CopilotContainer = ({
                                     role: 'AI',
                                     content: currentResponse,
                                     timestamp: new Date().toISOString(),
+                                    interrupt,
                                     rich_content: {
                                         content_recommendations,
                                         performance_analysis,
@@ -368,6 +372,7 @@ const CopilotContainer = ({
         let content_recommendations: CopilotContentRecommendation[] = [];
         let performance_analysis: PerformanceAnalysis;
         let exercise_questions: ExerciseQuestion[] = [];
+        let interrupt: CopilotInterrupt;
 
         try {
             await chatApi.chat(chatInput, {
@@ -393,9 +398,10 @@ const CopilotContainer = ({
                         exercise_questions = rich_content.exercise_questions;
                     }
                 },
-                onInfo: (interrupt, thought) => {
-                    if (interrupt) {
-                        // TODO
+                onInfo: (interruptResponse, thought) => {
+                    if (interruptResponse) {
+                        currentResponse = interruptResponse.message;
+                        interrupt = interruptResponse;
                     }
 
                     if (thought) {
@@ -421,6 +427,7 @@ const CopilotContainer = ({
                                     role: 'AI',
                                     content: currentResponse,
                                     timestamp: new Date().toISOString(),
+                                    interrupt,
                                     rich_content: {
                                         content_recommendations,
                                         performance_analysis,
@@ -574,6 +581,8 @@ const CopilotContainer = ({
                                 onRetry={handleRetry}
                                 isLoading={isLoadingResponse}
                                 currentSessionId={currentSessionId}
+                                isLoadingResponse={isLoadingResponse}
+                                sendMessage={handleSendMessage}
                                 onOpenUsedReferencesModal={
                                     handleOpenUsedReferencesModal
                                 }

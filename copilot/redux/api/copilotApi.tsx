@@ -18,7 +18,8 @@ import {
     BankSoalProblemsResponse,
     ContentSearchResponse,
     ChatMessage,
-    GetContentRecommendation
+    GetContentRecommendation,
+    CopilotInterrupt
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -40,7 +41,10 @@ interface StreamCallbacks {
         content: string,
         rich_content: ChatMessage['rich_content']
     ) => void;
-    onInfo?: (interrupt: any | null, thought: string | null) => void;
+    onInfo?: (
+        interrupt: CopilotInterrupt | null,
+        thought: string | null
+    ) => void;
     onComplete?: (
         messageId: string,
         sessionId: string,
