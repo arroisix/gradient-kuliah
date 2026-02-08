@@ -89,18 +89,25 @@ export default function BitmovinPlayer({
             key: playerKey,
             tweaks: {
                 max_retries: Infinity,
-                retry_delay: 1000,
+                retry_delay: 2000,
                 max_mpd_retries: Infinity,
                 chunked_cmaf_streaming: true,
-                XHR_TIMEOUT: 20
+                XHR_TIMEOUT: 60
+            },
+            buffer: {
+                video: {
+                    forwardduration: 30,
+                    backwardduration: 10
+                }
             },
             adaptation: {
+                startupBitrate: '500kbps',
                 desktop: {
                     bitrates: {
                         minSelectableAudioBitrate: '128kbps',
                         maxSelectableAudioBitrate: '320kbps',
-                        minSelectableVideoBitrate: '900kbps',
-                        maxSelectableVideoBitrate: Infinity
+                        minSelectableVideoBitrate: '300kbps',
+                        maxSelectableVideoBitrate: '4mbps'
                     }
                 },
                 mobile: {
@@ -188,6 +195,20 @@ export default function BitmovinPlayer({
                 },
                 [PlayerEvent.Destroy]: () => {
                     router.reload();
+                },
+                [PlayerEvent.Error]: (event: any) => {
+                    console.error('Player error:', event);
+                    if (event.code === 1203) {
+                        console.log(
+                            'Network segment download timeout detected'
+                        );
+                    }
+                    tracker?.genericTrack('Video Error', {
+                        'Course Slug': router.query.id,
+                        'Video Title': subchapter?.subchapter_name,
+                        'Error Code': event.code,
+                        'Error Message': event.message
+                    });
                 }
             }
         };
