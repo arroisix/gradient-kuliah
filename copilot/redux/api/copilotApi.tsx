@@ -90,6 +90,11 @@ async function processStream(
                             jsonValue.session_name,
                             jsonValue.keyword // deprecated
                         );
+                    } else if (jsonValue.error) {
+                        const error =
+                            jsonValue.error ??
+                            'Terjadi kesalahan saat mengirim prompt, mohon coba lagi';
+                        callbacks.onError?.(error);
                     }
                 } catch (err) {
                     callbacks.onError?.(err);
@@ -104,7 +109,7 @@ export const chatApi = {
     chat: async (input: ChatInput, callbacks: StreamCallbacks) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${COPILOT_BASE_URL}chat/`, {
+            const response = await fetch(`${COPILOT_BASE_URL}v2/chat/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

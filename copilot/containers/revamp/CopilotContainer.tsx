@@ -26,6 +26,7 @@ import ReferenceContentModal from 'copilot/components/revamp/Reference/Reference
 import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
 import { cn } from 'commons/utils';
 import { FaArrowDown } from 'react-icons/fa6';
+import { toast } from 'react-toastify';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -323,11 +324,15 @@ const CopilotContainer = ({
                 onError: (error) => {
                     setReasoning({ thoughts: [], isFinished: false });
                     setIsLoadingResponse(false);
-                    console.error('Chat error:', error);
+                    toast.error(`${error}.`, {
+                        position: 'top-center',
+                        theme: 'colored',
+                        hideProgressBar: true
+                    });
                     const errorMessage: ChatMessage = {
                         id: 'error',
                         role: 'AI',
-                        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                        content: `${error}.`,
                         timestamp: new Date().toISOString()
                     };
                     setMessages((prev) => [...prev, errorMessage]);

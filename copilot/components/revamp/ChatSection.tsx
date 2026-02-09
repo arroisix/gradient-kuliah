@@ -26,6 +26,8 @@ import { ContentRecommendations } from 'copilot/components/content-renderer/Cont
 import { InterruptInput } from '../content-renderer/InterruptInput';
 import { InterruptOptions } from '../content-renderer/InterruptOptions';
 import { ExerciseQuestionList } from '../content-renderer/ExerciseQuestionList';
+import { InterruptTargetInstitutions } from '../content-renderer/InterruptTargetInstitutions';
+import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -233,6 +235,13 @@ const ChatSection = ({
                                 isLoadingResponse={isLoadingResponse}
                                 sendMessage={sendMessage}
                             />
+                        ) : message.interrupt?.data.type === 'special' ? (
+                            <SetTargetDrawer>
+                                <InterruptTargetInstitutions
+                                    isLoadingResponse={isLoadingResponse}
+                                    sendMessage={sendMessage}
+                                />
+                            </SetTargetDrawer>
                         ) : (
                             <></>
                         )}

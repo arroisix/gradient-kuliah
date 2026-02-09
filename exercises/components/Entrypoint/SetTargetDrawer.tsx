@@ -21,6 +21,8 @@ const SetTargetInstitutionWall = dynamic(
 );
 
 interface SetTargetDrawerContextType {
+    targets: StudentTargetInstitution[];
+    setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
     setIsDrawerOpened: Dispatch<SetStateAction<boolean>>;
     setIsModalOpened: Dispatch<SetStateAction<boolean>>;
 }
@@ -38,8 +40,8 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
     const { data, isLoading } = useGetStudentTargetInstitutionsQuery();
 
     const value = useMemo((): SetTargetDrawerContextType => {
-        return { setIsDrawerOpened, setIsModalOpened };
-    }, []);
+        return { targets, setTargets, setIsDrawerOpened, setIsModalOpened };
+    }, [targets]);
 
     useEffect(() => {
         if (data && data.length > 0) {

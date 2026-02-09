@@ -15,19 +15,14 @@ import {
 } from 'dashboard/types/dashboard';
 import { toast } from 'react-toastify';
 import { useWindowSize } from 'usehooks-ts';
-
-interface Target {
-    id: string; // to differentiate between targets
-
-    // both types below will have format like this: "major_id:major_name"
-    institution: string;
-    major: string;
-}
+import { cn } from 'commons/utils';
+import { Target } from 'exercises/types/exercises';
 
 interface SetTargetFormProps {
+    className?: string;
     targets: StudentTargetInstitution[];
     setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
+    setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 // to check whether the old target has changed
@@ -43,6 +38,7 @@ function isTargetsChanged(oldTargets: Target[], newTargets: Target[]) {
 }
 
 function SetTargetForm({
+    className = '',
     targets,
     setTargets,
     setIsOpen
@@ -140,7 +136,7 @@ function SetTargetForm({
                         };
                     })
                 );
-                setIsOpen(false);
+                setIsOpen && setIsOpen(false);
             }
         } catch (error) {
             console.error(
@@ -191,7 +187,7 @@ function SetTargetForm({
                 <form
                     onSubmit={handleSubmit}
                     autoComplete="off"
-                    className={width < 768 ? 'mt-6' : 'mt-8'}>
+                    className={cn(width < 768 ? 'mt-6' : 'mt-8', className)}>
                     <div
                         className={`${
                             width < 768 ? 'gap-8' : 'gap-6'
