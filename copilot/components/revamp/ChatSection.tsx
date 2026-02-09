@@ -28,6 +28,7 @@ import { InterruptOptions } from '../content-renderer/InterruptOptions';
 import { ExerciseQuestionList } from '../content-renderer/ExerciseQuestionList';
 import { InterruptTargetInstitutions } from '../content-renderer/InterruptTargetInstitutions';
 import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
+import { GoArrowUpRight } from 'react-icons/go';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -194,34 +195,6 @@ const ChatSection = ({
                             {message.content}
                         </ReactMarkdown>
 
-                        {/* exercise questions */}
-                        {Array.isArray(rich_content?.exercise_questions) &&
-                        rich_content.exercise_questions.length > 0 ? (
-                            <ExerciseQuestionList
-                                currentSessionId={currentSessionId ?? ''}
-                                message_id={message.id}
-                                exercise_questions={
-                                    rich_content.exercise_questions
-                                }
-                            />
-                        ) : (
-                            <></>
-                        )}
-
-                        {/* content recommendations */}
-                        {Array.isArray(rich_content?.content_recommendations) &&
-                        rich_content.content_recommendations.length > 0 ? (
-                            <div className="carousel flex space-x-4 p-1">
-                                <ContentRecommendations
-                                    content_recommendations={
-                                        rich_content.content_recommendations
-                                    }
-                                />
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-
                         {/* interrupt */}
                         {message.interrupt?.data.type === 'input' ? (
                             <InterruptInput
@@ -242,6 +215,37 @@ const ChatSection = ({
                                     sendMessage={sendMessage}
                                 />
                             </SetTargetDrawer>
+                        ) : (
+                            <></>
+                        )}
+
+                        {/* exercise questions */}
+                        {Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0 ? (
+                            <ExerciseQuestionList
+                                currentSessionId={currentSessionId ?? ''}
+                                message_id={message.id}
+                                exercise_questions={
+                                    rich_content.exercise_questions
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+
+                        {/* performance analysis */}
+                        {rich_content?.performance_analysis ? <></> : <></>}
+
+                        {/* content recommendations */}
+                        {Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0 ? (
+                            <div className="carousel flex space-x-4 p-1">
+                                <ContentRecommendations
+                                    content_recommendations={
+                                        rich_content.content_recommendations
+                                    }
+                                />
+                            </div>
                         ) : (
                             <></>
                         )}
@@ -312,6 +316,31 @@ const ChatSection = ({
                                 </button>
                             </div>
                         </div>
+
+                        {/* question recommendation */}
+                        {Array.isArray(rich_content?.question_recommendation) &&
+                        rich_content.question_recommendation.length > 0 ? (
+                            <div className="space-y-3">
+                                <h4 className="text-[#999999] text-sm leading-[160%]">
+                                    Saran buat kamu:
+                                </h4>
+
+                                {rich_content.question_recommendation.map(
+                                    (message) => (
+                                        <button
+                                            key={message}
+                                            onClick={() => sendMessage(message)}
+                                            type="button"
+                                            className="bg-gradient-to-b from-black/10 to-[#F2F2F2]/10 text-white text-xs leading-[160%] p-3 rounded-xl border border-white/[17%] flex justify-between items-center gap-3 text-left">
+                                            {message}
+                                            <GoArrowUpRight className="shrink-0 text-[#666666] w-5 h-5" />
+                                        </button>
+                                    )
+                                )}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 ) : (
                     <p className="bg-[#363488] text-white text-sm p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl w-[275px] ml-auto">

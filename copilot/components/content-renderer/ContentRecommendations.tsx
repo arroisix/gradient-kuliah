@@ -18,7 +18,7 @@ function ContentRecommendations({
     );
 
     const query_data = content_recommendations
-        ?.map((v) => `${v.id}_${v.type}`)
+        ?.map((v) => `${v.slug}_${v.type}`)
         .join(',');
 
     const { data: contentRecommendationRes, isLoading } =
@@ -42,14 +42,14 @@ function ContentRecommendations({
             <>
                 {contentRecommendationRes?.data.map((v) => (
                     <div
-                        key={v.id}
+                        key={v.slug}
                         className="carousel-item self-stretch w-full max-w-[328px]">
                         <LatihanCard
                             isOpenNewTab
                             cardType="allExercises"
                             exercise={{
                                 icon: '',
-                                id: v.id,
+                                id: '',
                                 is_free: !!v.is_free,
                                 slug: v.slug,
                                 subject: '',
@@ -87,7 +87,7 @@ function ContentRecommendations({
             <>
                 {contentRecommendationRes?.data.map((v) => (
                     <ChapterRecommendation
-                        key={v.id}
+                        key={v.slug}
                         type={v.type}
                         title={v.title}
                         course_slug={v.course_slug ?? ''}
@@ -104,7 +104,7 @@ function ContentRecommendations({
             <>
                 {contentRecommendationRes?.data.map((v) => (
                     <CourseRecommendation
-                        key={v.id}
+                        key={v.slug}
                         title={v.title}
                         cover={v.cover ?? ''}
                         tags={v.tags ? v.tags.replace(/\s/g, '') : ''}
@@ -123,7 +123,7 @@ function ContentRecommendations({
         <>
             {contentRecommendationRes?.data.map((v) => (
                 <SubchapterRecommendation
-                    key={v.id}
+                    key={v.slug}
                     type={v.type}
                     title={v.title}
                     course_slug={v.course_slug ?? ''}

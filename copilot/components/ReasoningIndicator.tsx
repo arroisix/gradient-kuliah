@@ -54,7 +54,7 @@ function ReasoningIndicator({
             <div className="space-y-4">
                 {reasoning.thoughts.map((thought, index) => (
                     <ReasoningStep
-                        key={thought}
+                        key={`${thought}:${index}`}
                         thought={thought}
                         isFinished={
                             index < reasoning.thoughts.length - 1 ||

@@ -69,6 +69,15 @@ function SetTargetDrawer({
     }, [isDrawerOpened, isModalOpened, width]);
 
     if (isLoading) {
+        if (isForInterrupt) {
+            return (
+                <div className="carousel flex space-x-4 p-1">
+                    <div className="carousel-item animate-pulse bg-[#333333] w-[177px] h-[119px] rounded-lg"></div>
+                    <div className="carousel-item animate-pulse bg-[#333333] w-[177px] h-[119px] rounded-lg"></div>
+                    <div className="carousel-item animate-pulse bg-[#333333] w-[177px] h-[119px] rounded-lg"></div>
+                </div>
+            );
+        }
         return <></>;
     }
 

@@ -79,6 +79,11 @@ export interface ExerciseQuestion {
     user_answer?: string;
 }
 
+export interface CopilotAttachment {
+    type: 'image';
+    url: string;
+}
+
 export interface ChatHistoryResponse {
     session_id: string;
     history: {
@@ -91,9 +96,11 @@ export interface ChatHistoryResponse {
         keyword?: string | null;
         context?: { data: ChatHistoryContextItem[] };
         rich_content?: {
+            attachments?: CopilotAttachment[];
             content_recommendations?: CopilotContentRecommendation[];
             performance_analysis?: PerformanceAnalysis;
             exercise_questions?: ExerciseQuestion[];
+            question_recommendation?: string[];
         };
         interrupt?: CopilotInterrupt;
     }[];
@@ -126,9 +133,11 @@ export interface ChatMessage {
     keyword?: string | null;
     usedReferences?: SelectedReference[];
     rich_content?: {
+        attachments?: CopilotAttachment[];
         content_recommendations?: CopilotContentRecommendation[];
         performance_analysis?: PerformanceAnalysis;
         exercise_questions?: ExerciseQuestion[];
+        question_recommendation?: string[];
     };
     interrupt?: CopilotInterrupt;
 }

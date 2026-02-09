@@ -73,7 +73,7 @@ async function processStream(
             if (part.trim()) {
                 try {
                     const jsonValue = JSON.parse(part);
-                    if (jsonValue.type === 'CONTENT' && jsonValue.content) {
+                    if (jsonValue.type === 'CONTENT') {
                         callbacks.onContent?.(
                             jsonValue.content,
                             jsonValue.rich_content
