@@ -328,6 +328,7 @@ interface RecommendedMaterial {
     rating?: number;
     course_slug?: string;
     subchapter_slug?: string;
+    chapter_slug?: string;
     is_free?: boolean;
 }
 
