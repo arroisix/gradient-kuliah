@@ -67,6 +67,7 @@ export default function Langganan({
                     {removeFree
                         ? data?.data
                               .filter((packet) => !packet.is_free)
+                              .reverse()
                               .map((packet) => (
                                   <li
                                       key={packet.id}
