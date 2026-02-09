@@ -31,7 +31,14 @@ const SetTargetDrawerContext = createContext<SetTargetDrawerContextType | null>(
     null
 );
 
-function SetTargetDrawer({ children }: PropsWithChildren) {
+interface SetTargetDrawerProps extends PropsWithChildren {
+    isForInterrupt?: boolean;
+}
+
+function SetTargetDrawer({
+    children,
+    isForInterrupt = false
+}: SetTargetDrawerProps): JSX.Element {
     const [targets, setTargets] = useState<StudentTargetInstitution[]>([]);
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
     const [isModalOpened, setIsModalOpened] = useState(false);
@@ -75,7 +82,7 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
                 />
 
                 <div className="drawer-content">
-                    {targets.length === 0 ? (
+                    {targets.length === 0 && !isForInterrupt ? (
                         <SetTargetInstitutionWall />
                     ) : (
                         children

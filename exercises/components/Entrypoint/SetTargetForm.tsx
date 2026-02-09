@@ -23,6 +23,7 @@ interface SetTargetFormProps {
     targets: StudentTargetInstitution[];
     setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
     setIsOpen?: Dispatch<SetStateAction<boolean>>;
+    sendMessage?: (prompt: string, imageUrl?: string) => Promise<void>;
 }
 
 // to check whether the old target has changed
@@ -41,19 +42,22 @@ function SetTargetForm({
     className = '',
     targets,
     setTargets,
-    setIsOpen
+    setIsOpen,
+    sendMessage
 }: SetTargetFormProps): JSX.Element {
     const { width } = useWindowSize();
     const [submitTargetInstitutions, { isLoading }] =
         useSetStudentTargetInstitutionsMutation();
 
-    let formikInitialValue = [{ id: uuidv4(), institution: '', major: '' }];
-    if (formikInitialValue.length > 0) {
+    let formikInitialValue = [];
+    if (targets.length > 0) {
         formikInitialValue = targets.map((target) => ({
             id: `${target.id}:${target.major.id}`,
             institution: `${target.id}:${target.name}`,
             major: `${target.major.id}:${target.major.name}`
         }));
+    } else {
+        formikInitialValue.push({ id: uuidv4(), institution: '', major: '' });
     }
 
     const {
@@ -110,10 +114,34 @@ function SetTargetForm({
             })
         );
 
+        let prompt = '';
+        if (sendMessage) {
+            // format prompt for each target
+            if (values.length > 1) {
+                for (let i = 0; i < values.length; i++) {
+                    prompt += `Target ${i + 1}:\n`;
+                    for (const [k, v] of Object.entries(values[i])) {
+                        if (k === 'id') {
+                            continue;
+                        }
+                        prompt += `- ${k}: ${v.split(':')[1]}\n\n`;
+                    }
+                }
+            } else if (values.length === 1) {
+                for (const [k, v] of Object.entries(values[0])) {
+                    if (k === 'id') {
+                        continue;
+                    }
+                    prompt += `- ${k}: ${v.split(':')[1]}\n`;
+                }
+            }
+        }
+
         try {
-            const res = await submitTargetInstitutions(
-                setStudentTargetInstitutions
-            );
+            const [res, _] = await Promise.all([
+                submitTargetInstitutions(setStudentTargetInstitutions),
+                sendMessage && sendMessage(prompt)
+            ]);
 
             if (!Object.hasOwn(res, 'error')) {
                 toast.success(

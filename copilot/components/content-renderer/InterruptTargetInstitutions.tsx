@@ -53,11 +53,12 @@ function InterruptTargetInstitutions({
 
     if (targets.length === 0) {
         return (
-            <div className="bg-[#191920] p-6 rounded-2xl w-full max-w-[400px]">
+            <div className="bg-[#191920] p-6 rounded-2xl w-full max-w-[520px]">
                 <SetTargetForm
+                    className="mt-0"
                     targets={targets}
                     setTargets={setTargets}
-                    className="mt-0"
+                    sendMessage={sendMessage}
                 />
             </div>
         );
@@ -71,7 +72,7 @@ function InterruptTargetInstitutions({
                 const entries = Object.entries(values);
                 if (entries.length > 1) {
                     for (const [key, value] of Object.entries(values)) {
-                        prompt += `- ${key}: ${value.split(':')[1]}\n\n`;
+                        prompt += `- ${key}: ${value.split(':')[1]}\n`;
                     }
                 } else if (entries.length === 1) {
                     prompt = entries[0][1];
@@ -106,8 +107,8 @@ function InterruptTargetInstitutions({
                     onSubmit={handleSubmit}
                     action=""
                     autoComplete="off"
-                    className="bg-[#191920] p-6 rounded-2xl w-full max-w-[400px]">
-                    <div className="space-y-4">
+                    className="bg-[#191920] p-6 rounded-2xl w-full max-w-[520px]">
+                    <div className="grid grid-cols-2 gap-4">
                         <Select
                             key={institution}
                             isAsync
@@ -145,10 +146,10 @@ function InterruptTargetInstitutions({
 
                     <Button
                         disabled={!dirty || isLoadingResponse}
-                        type="submit"
                         variant="primary"
-                        className="!px-6 !py-3 mt-6 block ml-auto">
-                        Submit
+                        className="w-full max-w-[328px] block mx-auto py-2 mt-8"
+                        type="submit">
+                        Simpan Target
                     </Button>
                 </form>
             )}

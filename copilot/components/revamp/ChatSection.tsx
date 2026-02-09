@@ -236,7 +236,7 @@ const ChatSection = ({
                                 sendMessage={sendMessage}
                             />
                         ) : message.interrupt?.data.type === 'special' ? (
-                            <SetTargetDrawer>
+                            <SetTargetDrawer isForInterrupt>
                                 <InterruptTargetInstitutions
                                     isLoadingResponse={isLoadingResponse}
                                     sendMessage={sendMessage}
