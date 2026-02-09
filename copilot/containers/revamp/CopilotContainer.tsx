@@ -128,7 +128,8 @@ const CopilotContainer = ({
                                 convertHistoryContextToSelectedReferences(
                                     item.context
                                 ),
-                            rich_content: item.rich_content
+                            rich_content: item.rich_content,
+                            interrupt: item.interrupt
                         }));
                     setMessages(convertedMessages);
                     setCurrentSessionId(sessionId);

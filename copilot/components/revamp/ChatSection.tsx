@@ -223,14 +223,12 @@ const ChatSection = ({
                         {/* interrupt */}
                         {message.interrupt?.data.type === 'input' ? (
                             <InterruptInput
-                                message={message.interrupt.message}
                                 fields={message.interrupt.data.fields}
                                 isLoadingResponse={isLoadingResponse}
                                 sendMessage={sendMessage}
                             />
                         ) : message.interrupt?.data.type === 'options' ? (
                             <InterruptOptions
-                                message={message.interrupt.message}
                                 fields={message.interrupt.data.fields}
                                 isLoadingResponse={isLoadingResponse}
                                 sendMessage={sendMessage}
@@ -315,7 +313,7 @@ const ChatSection = ({
         );
 
         if (message.role === 'AI') {
-            return <div className="min-w-0">{messageContent}</div>;
+            return <div className="min-w-0 w-full">{messageContent}</div>;
         }
 
         return messageContent;

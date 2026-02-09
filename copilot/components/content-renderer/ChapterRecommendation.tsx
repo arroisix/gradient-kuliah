@@ -21,27 +21,28 @@ function ChapterRecommendation({
 }: ChapterRecommendationProps): JSX.Element {
     const { profile } = useAuth();
 
+    const key =
+        type === 'course'
+            ? `${course_slug}:${subchapter_slug}`
+            : type === 'chapter'
+            ? `${chapter_slug}:${subchapter_slug}`
+            : type === 'tryout'
+            ? course_slug
+            : subchapter_slug;
+
     const generateURL = () => {
         if (type === 'tryout') {
             return `/latihan/${course_slug}`;
         }
 
-        if (type === 'course') {
-            return profile?.current_role === 'COLLEGE_STUDENT'
-                ? `/kelas/${course_slug}/${subchapter_slug}`
-                : `/utbk/materi/${course_slug}/${chapter_slug}/${subchapter_slug}`;
-        }
-
-        return `/utbk/materi/${course_slug}/${chapter_slug}/${subchapter_slug}`;
+        return profile?.current_role === 'COLLEGE_STUDENT'
+            ? `/kelas/${course_slug}/${subchapter_slug}`
+            : `/utbk/materi/${course_slug}/${chapter_slug}/${subchapter_slug}`;
     };
 
     return (
         <Link
-            key={
-                type === 'chapter'
-                    ? `${course_slug}:${subchapter_slug}`
-                    : subchapter_slug
-            }
+            key={key}
             href={generateURL()}
             target="_blank"
             rel="noopener noreferrer"

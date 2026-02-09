@@ -54,7 +54,7 @@ function ExerciseQuestionList({
         exercise_questions[exercise_questions.length - 1].id ===
         currentQuestion?.id;
     const correctAnswer = currentQuestion?.options.find(
-        (v) => v.value === currentQuestion.answer
+        (v) => v.id === currentQuestion.answer
     );
 
     const [submitAnswer, { isLoading }] = useUpdateExerciseAnswerMutation();
@@ -112,7 +112,8 @@ function ExerciseQuestionList({
         // skip submit answer if the answer didn't changed
         if (
             selectedAnswerId ===
-            userQuestionAnswer.get(currentQuestion.id ?? '')
+                userQuestionAnswer.get(currentQuestion.id ?? '') ||
+            !selectedAnswerId
         ) {
             if (btnEl.id === PREV_QUESTION_BTN_ID) {
                 handleSetPrevQuestion();
@@ -174,7 +175,7 @@ function ExerciseQuestionList({
                             'text-[#999999] text-sm leading-[160%]',
                             isSingleQuestion ? 'hidden' : ''
                         )}>
-                        {currentQuestionId} dari {exercise_questions.length}
+                        {currentQuestion.no} dari {exercise_questions.length}
                     </span>
                 </div>
 
@@ -229,11 +230,7 @@ function ExerciseQuestionList({
                         {!isSingleQuestion ? (
                             <Button
                                 id={PREV_QUESTION_BTN_ID}
-                                disabled={
-                                    isFirstQuestion ||
-                                    !selectedAnswerId ||
-                                    isLoading
-                                }
+                                disabled={isFirstQuestion || isLoading}
                                 onClick={handleSubmitAnswer}
                                 type="button"
                                 variant="secondary"
@@ -252,7 +249,11 @@ function ExerciseQuestionList({
 
                         <Button
                             id={NEXT_QUESTION_BTN_ID}
-                            disabled={!selectedAnswerId || isLoading}
+                            disabled={
+                                !selectedAnswerId ||
+                                isLoading ||
+                                (isLastQuestion && !!selectedAnswerId)
+                            }
                             onClick={handleSubmitAnswer}
                             type="button"
                             variant="primary"
@@ -289,7 +290,7 @@ function ExerciseQuestionList({
                             className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white text-sm"
                             remarkPlugins={[remarkMath, remarkGfm]}
                             rehypePlugins={[rehypeKatex]}>
-                            {currentQuestion.question}
+                            {currentQuestion.explanation}
                         </ReactMarkdown>
                     </div>
                 ) : (

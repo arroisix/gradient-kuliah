@@ -5,14 +5,12 @@ import { Formik, FormikValues } from 'formik';
 import { toast } from 'react-toastify';
 
 interface InterruptOptionsProps {
-    message: string;
     fields: CopilotInterrupt['data']['fields'];
     isLoadingResponse: boolean;
     sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
 }
 
 function InterruptOptions({
-    message,
     fields,
     isLoadingResponse,
     sendMessage
@@ -57,12 +55,8 @@ function InterruptOptions({
                     onSubmit={handleSubmit}
                     action=""
                     autoComplete="off"
-                    className="bg-[#191920] p-6 rounded-2xl w-full max-w-[400px]">
-                    <h3 className="text-white font-semibold leading-[140%] mb-4">
-                        {message}
-                    </h3>
-
-                    <div className="flex flex-col gap-2">
+                    className="bg-[#191920] p-6 rounded-2xl w-full max-w-[680px]">
+                    <div className="grid grid-cols-2 gap-3">
                         {fields?.map((field) => (
                             <button
                                 disabled={isLoadingResponse}
@@ -72,7 +66,7 @@ function InterruptOptions({
                                 }
                                 type="button"
                                 className={cn(
-                                    'py-3 rounded-lg border border-[#7D89CC] text-center disabled:opacity-75 transition-colors',
+                                    'p-3 rounded-lg border border-[#7D89CC] text-center disabled:opacity-75 transition-colors text-sm',
                                     values[field.name] === field.label
                                         ? 'bg-[#7D89CC]'
                                         : 'bg-[#191920]'

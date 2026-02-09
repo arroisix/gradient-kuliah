@@ -1,3 +1,4 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import { cn, formatDuration } from 'commons/utils';
 import { ContentRecommendationType } from 'copilot/types/copilot';
 import { BadgeQuestionMarkIcon, BookOpenIcon, VideoIcon } from 'lucide-react';
@@ -20,6 +21,7 @@ function SubchapterRecommendation({
     subchapter_slug,
     video_duration
 }: SubchapterRecommendationProps): JSX.Element {
+    const { profile } = useAuth();
     return (
         <div
             className={cn(
@@ -60,11 +62,15 @@ function SubchapterRecommendation({
                 </div>
 
                 <Link
-                    href={`/utbk/materi/${course_slug}/${chapter_slug}/${subchapter_slug}`}
+                    href={
+                        profile?.current_role === 'COLLEGE_STUDENT'
+                            ? `/kelas/${subchapter_slug}`
+                            : `/utbk/materi/${course_slug}/${chapter_slug}/${subchapter_slug}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                        'bg-[#5F2BCE] text-white font-semibold text-sm leading-tight py-2 px-4 block w-full rounded-full text-center',
+                        'bg-[#5F2BCE] text-white font-semibold text-sm leading-tight py-2 px-4 block w-full rounded-full text-center shrink-0',
                         'md:w-fit'
                     )}>
                     {type === 'video'

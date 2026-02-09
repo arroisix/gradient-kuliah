@@ -5,14 +5,12 @@ import { Formik, FormikValues } from 'formik';
 import { toast } from 'react-toastify';
 
 interface InterruptInputProps {
-    message: string;
     fields: CopilotInterrupt['data']['fields'];
     isLoadingResponse: boolean;
     sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
 }
 
 function InterruptInput({
-    message,
     fields,
     isLoadingResponse,
     sendMessage
@@ -62,22 +60,24 @@ function InterruptInput({
                     action=""
                     autoComplete="off"
                     className="bg-[#191920] p-6 rounded-2xl w-full max-w-[400px]">
-                    <h3 className="text-white font-semibold leading-[140%] mb-4">
-                        {message}
-                    </h3>
-
                     <div className="space-y-4">
                         {fields?.map((v) => (
-                            <Input
-                                disabled={isLoadingResponse}
-                                key={v.name}
-                                type={v.type}
-                                name={v.name}
-                                value={values[v.name]}
-                                placeholder={v.label}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                            />
+                            <div key={v.name} className="space-y-2">
+                                <label
+                                    htmlFor={v.name}
+                                    className="text-white font-semibold leading-[140%] mb-4">
+                                    {v.label}
+                                </label>
+
+                                <Input
+                                    disabled={isLoadingResponse}
+                                    type={v.type}
+                                    name={v.name}
+                                    value={values[v.name]}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                            </div>
                         ))}
                     </div>
 

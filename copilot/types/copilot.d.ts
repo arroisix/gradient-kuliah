@@ -95,6 +95,7 @@ export interface ChatHistoryResponse {
             performance_analysis?: PerformanceAnalysis;
             exercise_questions?: ExerciseQuestion[];
         };
+        interrupt?: CopilotInterrupt;
     }[];
 }
 
