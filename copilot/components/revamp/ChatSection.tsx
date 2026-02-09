@@ -219,6 +219,29 @@ const ChatSection = ({
                             <></>
                         )}
 
+                        {/* attachments */}
+                        {Array.isArray(rich_content?.attachments) &&
+                        rich_content.attachments.length > 0 ? (
+                            <div className="carousel flex space-x-4 p-1">
+                                {rich_content.attachments.map((v) => (
+                                    <button
+                                        key={v.url}
+                                        onClick={() => handleOpenImage(v.url)}
+                                        className="carousel-item relative aspect-video w-[320px] rounded-lg overflow-hidden"
+                                        type="button">
+                                        <Image
+                                            src={v.url}
+                                            alt=""
+                                            layout="fill"
+                                            className="object-cover object-center"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
                         {/* exercise questions */}
                         {Array.isArray(rich_content?.exercise_questions) &&
                         rich_content.exercise_questions.length > 0 ? (
