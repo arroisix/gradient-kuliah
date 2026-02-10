@@ -20,7 +20,7 @@ const ImageModal = ({ isOpen, onClose, imageUrl }: ImageModalProps) => {
                     src={imageUrl}
                     alt="embedded image"
                     layout="fill"
-                    className="object-cover object-center"
+                    className="object-contain object-center"
                     priority
                 />
             </div>
