@@ -29,7 +29,7 @@ import { ExerciseQuestionList } from '../content-renderer/ExerciseQuestionList';
 import { InterruptTargetInstitutions } from '../content-renderer/InterruptTargetInstitutions';
 import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { GoArrowUpRight } from 'react-icons/go';
-import { PerformanceAnalysis } from '../content-renderer/PerformanceAnalysis';
+// import { PerformanceAnalysis } from '../content-renderer/PerformanceAnalysis';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -258,7 +258,7 @@ const ChatSection = ({
                         )}
 
                         {/* performance analysis */}
-                        {rich_content?.performance_analysis ? (
+                        {/* {rich_content?.performance_analysis ? (
                             <PerformanceAnalysis
                                 performance_analysis={
                                     rich_content.performance_analysis
@@ -266,7 +266,7 @@ const ChatSection = ({
                             />
                         ) : (
                             <></>
-                        )}
+                        )} */}
 
                         {/* content recommendations */}
                         {Array.isArray(rich_content?.content_recommendations) &&
