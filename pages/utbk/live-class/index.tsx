@@ -2,7 +2,7 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import axios from 'axios';
 import LearnLayout from 'commons/learnLayout';
 import Layout from 'commons/utbkLayout';
-import { LiveClassContainer } from 'live-class/containers/LiveClassContainer';
+import { LiveClassEntrypointContainer } from 'liveClasses/containers/LiveClassEntrpoint';
 import type { GetStaticProps } from 'next';
 import config from 'redux/api/config';
 
@@ -19,8 +19,8 @@ const LiveClassPage = ({ courses }: { courses: Course[] }): JSX.Element => {
         return (
             <Layout courses={courses}>
                 <div className="w-full max-w-5xl mx-auto px-6 pt-[92px]">
-                    <div className="grid place-items-center min-h-[calc(100vh-92px)]">
-                        <LiveClassContainer />
+                    <div className="min-h-[calc(100vh-92px)] flex flex-col">
+                        <LiveClassEntrypointContainer />
                     </div>
                 </div>
             </Layout>
@@ -30,8 +30,8 @@ const LiveClassPage = ({ courses }: { courses: Course[] }): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar className="relative">
             <div className="w-full max-w-5xl mx-auto mt-[calc(48px+32px)]">
-                <div className="grid place-items-center h-[calc(100vh-48px-32px-64px)]">
-                    <LiveClassContainer />
+                <div className="min-h-[calc(100vh-92px-32px-32px-28px)] flex flex-col">
+                    <LiveClassEntrypointContainer />
                 </div>
             </div>
         </LearnLayout>
