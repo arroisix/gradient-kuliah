@@ -328,6 +328,7 @@ interface RecommendedMaterial {
     rating?: number;
     course_slug?: string;
     subchapter_slug?: string;
+    chapter_slug?: string;
     is_free?: boolean;
 }
 
@@ -440,4 +441,12 @@ export interface ExerciseLeaderboard {
     score: number;
     rank: number;
     is_current_user: boolean;
+}
+
+export interface Target {
+    id: string; // to differentiate between targets
+
+    // both types below will have format like this: "major_id:major_name"
+    institution: string;
+    major: string;
 }

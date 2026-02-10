@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
     BookmarkIcon,
     ChevronDownIcon,
@@ -13,33 +13,45 @@ import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
 import {
     ChatMessage,
-    ContentRecommendation,
+    Reasoning,
     SelectedReference
 } from 'copilot/types/copilot';
 import CopilotIcon from 'copilot/assets/revamp/CopilotIcon';
 import { chatApi } from 'copilot/redux/api/copilotApi';
-import ImageModal from '../ImageModal';
-import MessageObserver from './MessageObserver';
-import ContentRecommendations from './ContentRecommendations';
+import ImageModal from './ImageModal';
 import { useTracker } from 'tracker/tracker';
 import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
 import { cn } from 'commons/utils';
+import { ContentRecommendations } from 'copilot/components/content-renderer/ContentRecommendations';
+import { InterruptInput } from '../content-renderer/InterruptInput';
+import { InterruptOptions } from '../content-renderer/InterruptOptions';
+import { ExerciseQuestionList } from '../content-renderer/ExerciseQuestionList';
+import { InterruptTargetInstitutions } from '../content-renderer/InterruptTargetInstitutions';
+import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
+import { GoArrowUpRight } from 'react-icons/go';
+// import { PerformanceAnalysis } from '../content-renderer/PerformanceAnalysis';
 
 interface ChatSectionProps {
+    reasoning: Reasoning;
     messages: ChatMessage[];
     onRetry?: (message: ChatMessage) => void;
     setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
     isLoading?: boolean;
     currentSessionId?: string;
+    isLoadingResponse: boolean;
+    sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
 }
 
 const ChatSection = ({
+    reasoning,
     messages,
     setMessages,
     onRetry,
     isLoading,
     currentSessionId,
+    isLoadingResponse,
+    sendMessage,
     onOpenUsedReferencesModal
 }: ChatSectionProps): JSX.Element => {
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
@@ -48,11 +60,6 @@ const ChatSection = ({
     );
     const [imageError, setImageError] = useState<Record<string, boolean>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [recommendations, setRecommendations] = useState<
-        ContentRecommendation[]
-    >([]);
-    const [isLoadingRecommendations, setIsLoadingRecommendations] =
-        useState(false);
     const tracker = useTracker();
 
     const handleOpenImage = (imageUrl: string | null | undefined) => {
@@ -142,44 +149,6 @@ const ChatSection = ({
         onOpenUsedReferencesModal?.(references);
     };
 
-    useEffect(() => {
-        const fetchRecommendations = async (keyword: string) => {
-            setIsLoadingRecommendations(true);
-            try {
-                const response = await chatApi.getContentRecommendation(
-                    keyword
-                );
-                setRecommendations(response.recommendation);
-            } catch (error) {
-                console.error('Failed to fetch recommendations:', error);
-                setRecommendations([]);
-            } finally {
-                setIsLoadingRecommendations(false);
-            }
-        };
-
-        const lastMessage = messages[messages.length - 1];
-        if (lastMessage?.role === 'AI' && lastMessage.keyword) {
-            fetchRecommendations(lastMessage.keyword);
-        } else {
-            setRecommendations([]);
-        }
-    }, [messages]);
-
-    const renderRecommendations = (message: ChatMessage) => {
-        if (!message.keyword) {
-            return <></>;
-        }
-
-        return (
-            <ContentRecommendations
-                keyword={message.keyword}
-                recommendations={recommendations}
-                isLoading={isLoadingRecommendations}
-            />
-        );
-    };
-
     const renderReferenceIndicator = (message: ChatMessage) => {
         if (!message.usedReferences || message.usedReferences.length === 0) {
             return <></>;
@@ -198,13 +167,9 @@ const ChatSection = ({
     };
 
     const renderMessage = (message: ChatMessage) => {
-        const isLatestAIMessage =
-            message.role === 'AI' &&
-            message.id ===
-                messages.filter((m) => m.role === 'AI').slice(-1)[0]?.id;
-
+        const rich_content = message.rich_content;
         const messageContent = (
-            <div>
+            <>
                 {message.image && !imageError[message.id] ? (
                     <div className="relative aspect-video max-w-sm ml-auto rounded-lg overflow-hidden mb-2">
                         <Image
@@ -231,13 +196,109 @@ const ChatSection = ({
                             {message.content}
                         </ReactMarkdown>
 
+                        {/* interrupt */}
+                        {message.interrupt?.data.type === 'input' ? (
+                            <InterruptInput
+                                fields={message.interrupt.data.fields}
+                                isLoadingResponse={isLoadingResponse}
+                                sendMessage={sendMessage}
+                            />
+                        ) : message.interrupt?.data.type === 'options' ? (
+                            <InterruptOptions
+                                fields={message.interrupt.data.fields}
+                                isLoadingResponse={isLoadingResponse}
+                                sendMessage={sendMessage}
+                            />
+                        ) : message.interrupt?.data.type === 'special' ? (
+                            <SetTargetDrawer isForInterrupt>
+                                <InterruptTargetInstitutions
+                                    isLoadingResponse={isLoadingResponse}
+                                    sendMessage={sendMessage}
+                                />
+                            </SetTargetDrawer>
+                        ) : (
+                            <></>
+                        )}
+
+                        {/* attachments */}
+                        {Array.isArray(rich_content?.attachments) &&
+                        rich_content.attachments.length > 0 ? (
+                            <div className="carousel flex space-x-4 p-1">
+                                {rich_content.attachments.map((v) => (
+                                    <button
+                                        key={v.url}
+                                        onClick={() => handleOpenImage(v.url)}
+                                        className="carousel-item relative aspect-video w-[320px] rounded-lg overflow-hidden"
+                                        type="button">
+                                        <Image
+                                            src={v.url}
+                                            alt=""
+                                            layout="fill"
+                                            className="object-cover object-center"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
+                        {/* exercise questions */}
+                        {Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0 ? (
+                            <ExerciseQuestionList
+                                currentSessionId={currentSessionId ?? ''}
+                                message_id={message.id}
+                                exercise_questions={
+                                    rich_content.exercise_questions
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )}
+
+                        {/* performance analysis */}
+                        {/* {rich_content?.performance_analysis ? (
+                            <PerformanceAnalysis
+                                performance_analysis={
+                                    rich_content.performance_analysis
+                                }
+                            />
+                        ) : (
+                            <></>
+                        )} */}
+
+                        {/* content recommendations */}
+                        {Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0 ? (
+                            <div className="carousel flex space-x-4 p-1">
+                                <ContentRecommendations
+                                    content_recommendations={
+                                        rich_content.content_recommendations
+                                    }
+                                />
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
                         <div className="flex justify-between items-center gap-4">
                             {/* retry */}
                             <button
                                 type="button"
                                 onClick={() => handleRetry(message)}
-                                className="text-[#999999] hover:text-white hover:bg-[#333333] transition-colors w-8 h-8 rounded-full grid place-items-center">
-                                <RefreshCwIcon className="w-5 h-5" />
+                                className={cn(
+                                    'text-[#999999] hover:text-white hover:bg-[#333333] transition-colors w-8 h-8 rounded-full flex justify-center items-center',
+                                    'md:gap-1 md:w-fit md:px-2'
+                                )}>
+                                <RefreshCwIcon className="shrink-0 w-5 h-5" />
+                                <span
+                                    className={cn(
+                                        'hidden',
+                                        'md:block md:capitalize md:font-semibold md:text-xs md:leading-tight'
+                                    )}>
+                                    retry
+                                </span>
                             </button>
 
                             {/* thumb-up, thumb-down, and bookmark */}
@@ -288,29 +349,41 @@ const ChatSection = ({
                             </div>
                         </div>
 
-                        {isLatestAIMessage && renderRecommendations(message)}
+                        {/* question recommendation */}
+                        {Array.isArray(rich_content?.question_recommendation) &&
+                        rich_content.question_recommendation.length > 0 ? (
+                            <div className="space-y-3">
+                                <h4 className="text-[#999999] text-sm leading-[160%]">
+                                    Saran buat kamu:
+                                </h4>
+
+                                {rich_content.question_recommendation.map(
+                                    (message) => (
+                                        <button
+                                            key={message}
+                                            onClick={() => sendMessage(message)}
+                                            type="button"
+                                            className="bg-gradient-to-b from-black/10 to-[#F2F2F2]/10 text-white text-xs leading-[160%] p-3 rounded-xl border border-white/[17%] flex justify-between items-center gap-3 text-left">
+                                            {message}
+                                            <GoArrowUpRight className="shrink-0 text-[#666666] w-5 h-5" />
+                                        </button>
+                                    )
+                                )}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 ) : (
                     <p className="bg-[#363488] text-white text-sm p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl w-[275px] ml-auto">
                         {message.content}
                     </p>
                 )}
-            </div>
+            </>
         );
 
         if (message.role === 'AI') {
-            return (
-                <MessageObserver
-                    message={message}
-                    onRecommendationsUpdate={(recommendations) => {
-                        if (isLatestAIMessage) {
-                            setRecommendations(recommendations);
-                        }
-                    }}
-                    isLatest={isLatestAIMessage}>
-                    {messageContent}
-                </MessageObserver>
-            );
+            return <div className="min-w-0 w-full">{messageContent}</div>;
         }
 
         return messageContent;
@@ -320,14 +393,16 @@ const ChatSection = ({
         <>
             {/* render all messages of the current session */}
             {messages.map((message) => (
-                <div key={message.id}>
+                <div
+                    key={message.id}
+                    className={message.role === 'AI' ? 'flex gap-3' : ''}>
                     {message.role === 'AI' ? (
-                        <div className="flex gap-3">
+                        <>
                             <div className="shrink-0 bg-[#5F2BCE] w-7 h-7 rounded-full grid place-items-center">
                                 <CopilotIcon className="fill-white w-4 h-4" />
                             </div>
                             {renderMessage(message)}
-                        </div>
+                        </>
                     ) : (
                         renderMessage(message)
                     )}
@@ -341,7 +416,7 @@ const ChatSection = ({
             ))}
 
             {/* render reasoning */}
-            {isLoading ? <ReasoningIndicator /> : <></>}
+            {isLoading ? <ReasoningIndicator reasoning={reasoning} /> : <></>}
 
             {selectedImage ? (
                 <ImageModal

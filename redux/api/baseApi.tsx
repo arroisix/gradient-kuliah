@@ -138,7 +138,8 @@ export const baseApi = createApi({
         'CONTENT_SEARCH',
         'USER_CARDS',
         'ANNOUNCEMENTS',
-        'EXERCISES'
+        'EXERCISES',
+        'COPILOT_SESSION_HISTORY'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

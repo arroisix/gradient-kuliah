@@ -7,7 +7,13 @@ import {
     ChatInput,
     ChatHistoryContextItem,
     ReferenceContentType,
-    SelectedReference
+    SelectedReference,
+    Reasoning,
+    PerformanceAnalysis,
+    ExerciseQuestion,
+    CopilotContentRecommendation,
+    CopilotInterrupt,
+    CopilotAttachment
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
@@ -21,6 +27,8 @@ import ReferenceContentModal from 'copilot/components/revamp/Reference/Reference
 import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
 import { cn } from 'commons/utils';
 import { FaArrowDown } from 'react-icons/fa6';
+import { toast } from 'react-toastify';
+import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -47,18 +55,14 @@ const CopilotContainer = ({
     const [currentSessionId, setCurrentSessionId] = useState<
         string | undefined
     >();
-    const [pendingMessage, setPendingMessage] = useState<{
-        content: string;
-        timestamp: string;
-    } | null>(null);
-    console.log(pendingMessage);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [reasoning, setReasoning] = useState<Reasoning>({
+        thoughts: [],
+        isFinished: false
+    });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const promptBarRef = useRef<HTMLTextAreaElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -115,33 +119,21 @@ const CopilotContainer = ({
                 const response = await chatApi.getChatHistory(sessionId);
                 if (response.history?.length > 0) {
                     const convertedMessages: ChatMessage[] =
-                        response.history.map(
-                            (item: {
-                                role: 'AI' | 'User';
-                                message: string;
-                                message_id: string;
-                                rating: number;
-                                is_bookmarked: boolean;
-                                image?: string | null;
-                                keyword?: string | null;
-                                context?: {
-                                    data: ChatHistoryContextItem[];
-                                };
-                            }) => ({
-                                id: item.message_id,
-                                role: item.role === 'AI' ? 'AI' : 'User',
-                                content: item.message,
-                                timestamp: new Date().toISOString(),
-                                rating: item.rating,
-                                isBookmarked: item.is_bookmarked,
-                                image: item.image,
-                                keyword: item.keyword,
-                                usedReferences:
-                                    convertHistoryContextToSelectedReferences(
-                                        item.context
-                                    )
-                            })
-                        );
+                        response.history.map((item) => ({
+                            id: item.message_id,
+                            role: item.role === 'AI' ? 'AI' : 'User',
+                            content: item.message,
+                            timestamp: new Date().toISOString(),
+                            rating: item.rating,
+                            isBookmarked: item.is_bookmarked,
+                            image: item.image,
+                            usedReferences:
+                                convertHistoryContextToSelectedReferences(
+                                    item.context
+                                ),
+                            rich_content: item.rich_content,
+                            interrupt: item.interrupt
+                        }));
                     setMessages(convertedMessages);
                     setCurrentSessionId(sessionId);
                 }
@@ -149,7 +141,6 @@ const CopilotContainer = ({
                 console.error('Error loading chat history:', error);
             } finally {
                 setIsLoadingHistory(false);
-                scrollToBottom();
             }
         };
 
@@ -161,6 +152,10 @@ const CopilotContainer = ({
             scrollToBottom();
         }
     }, [messages]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [reasoning]);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
@@ -249,7 +244,6 @@ const CopilotContainer = ({
 
         setMessages((prev) => [...prev, userMessage]);
         handleClearReferences();
-        scrollToBottom();
 
         let currentResponse = '';
         const chatInput: ChatInput = {
@@ -259,53 +253,119 @@ const CopilotContainer = ({
             context: buildChatContextFromReferences(currentUsedReferences)
         };
 
+        let content_recommendations: CopilotContentRecommendation[] = [];
+        let performance_analysis: PerformanceAnalysis;
+        let exercise_questions: ExerciseQuestion[] = [];
+        let interrupt: CopilotInterrupt;
+        let attachments: CopilotAttachment[] = [];
+        let question_recommendation: string[] = [];
+
         try {
             await chatApi.chat(chatInput, {
-                onContent: (content) => {
-                    currentResponse += content;
-                    setPendingMessage({
-                        content: currentResponse,
-                        timestamp: new Date().toISOString()
-                    });
-                    scrollToBottom();
-                },
-                onComplete: (messageId, sessionId, sessionName, keyword) => {
-                    setPendingMessage(null);
+                onContent: (content, rich_content) => {
+                    if (content) {
+                        currentResponse = content;
+                    }
 
+                    if (
+                        Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0
+                    ) {
+                        content_recommendations =
+                            rich_content.content_recommendations;
+                    }
+
+                    if (rich_content?.performance_analysis) {
+                        performance_analysis =
+                            rich_content.performance_analysis;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0
+                    ) {
+                        exercise_questions = rich_content.exercise_questions;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.attachments) &&
+                        rich_content.attachments.length > 0
+                    ) {
+                        attachments = rich_content.attachments;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.question_recommendation) &&
+                        rich_content.question_recommendation.length > 0
+                    ) {
+                        question_recommendation =
+                            rich_content.question_recommendation;
+                    }
+                },
+                onInfo: (interruptResponse, thought) => {
+                    if (interruptResponse) {
+                        currentResponse = interruptResponse.message;
+                        interrupt = interruptResponse;
+                    }
+
+                    if (thought) {
+                        setReasoning((v) => ({
+                            ...v,
+                            thoughts: [...v.thoughts, thought]
+                        }));
+                    }
+                },
+                onComplete: (messageId, sessionId) => {
+                    setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
-                            const aiMessage: ChatMessage = {
-                                id: messageId,
-                                role: 'AI',
-                                content: currentResponse,
-                                timestamp: new Date().toISOString(),
-                                keyword: keyword
-                            };
-                            return [...prev, aiMessage];
-                        });
+                        // use timeout to show the finished state of the reasoning
+                        setTimeout(() => {
+                            setReasoning({ thoughts: [], isFinished: false });
+                            setIsLoadingResponse(false);
+                            setMessages((prev) => {
+                                const aiMessage: ChatMessage = {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString(),
+                                    interrupt,
+                                    rich_content: {
+                                        content_recommendations,
+                                        performance_analysis,
+                                        exercise_questions,
+                                        attachments,
+                                        question_recommendation
+                                    }
+                                };
+                                return [...prev, aiMessage];
+                            });
+                        }, 1000);
                     }
                 },
                 onError: (error) => {
-                    console.error('Chat error:', error);
-                    setPendingMessage(null);
-
+                    setReasoning({ thoughts: [], isFinished: false });
+                    setIsLoadingResponse(false);
+                    toast.error(`${error}.`, {
+                        position: 'top-center',
+                        theme: 'colored',
+                        hideProgressBar: true
+                    });
                     const errorMessage: ChatMessage = {
                         id: 'error',
                         role: 'AI',
-                        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                        content: `${error}.`,
                         timestamp: new Date().toISOString()
                     };
                     setMessages((prev) => [...prev, errorMessage]);
-                    scrollToBottom();
                 }
             });
         } catch (error) {
+            setReasoning({ thoughts: [], isFinished: false });
+            setIsLoadingResponse(false);
             console.error('Chat error:', error);
-            setPendingMessage(null);
-
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',
@@ -313,14 +373,10 @@ const CopilotContainer = ({
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
-            scrollToBottom();
-        } finally {
-            setIsLoadingResponse(false);
-            scrollToBottom();
         }
     };
 
-    const handleRetry = (message: ChatMessage) => {
+    const handleRetry = async (message: ChatMessage) => {
         const timestamp = new Date().toISOString();
         const userMessage: ChatMessage = {
             id: crypto.randomUUID(),
@@ -332,8 +388,6 @@ const CopilotContainer = ({
         };
 
         setMessages((prev) => [...prev, userMessage]);
-        scrollToBottom();
-
         let currentResponse = '';
         const chatInput: ChatInput = {
             input_text: message.content,
@@ -345,41 +399,102 @@ const CopilotContainer = ({
         };
 
         setIsLoadingResponse(true);
+        let content_recommendations: CopilotContentRecommendation[] = [];
+        let performance_analysis: PerformanceAnalysis;
+        let exercise_questions: ExerciseQuestion[] = [];
+        let interrupt: CopilotInterrupt;
+        let attachments: CopilotAttachment[] = [];
+        let question_recommendation: string[] = [];
 
         try {
-            chatApi.chat(chatInput, {
-                onContent: (content) => {
-                    currentResponse += content;
-                    setPendingMessage({
-                        content: currentResponse,
-                        timestamp: new Date().toISOString()
-                    });
-                    scrollToBottom();
-                },
-                onComplete: (messageId, sessionId, sessionName, keyword) => {
-                    setPendingMessage(null);
+            await chatApi.chat(chatInput, {
+                onContent: (content, rich_content) => {
+                    if (content) {
+                        currentResponse = content;
+                    }
 
+                    if (
+                        Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0
+                    ) {
+                        content_recommendations =
+                            rich_content.content_recommendations;
+                    }
+
+                    if (rich_content?.performance_analysis) {
+                        performance_analysis =
+                            rich_content.performance_analysis;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0
+                    ) {
+                        exercise_questions = rich_content.exercise_questions;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.attachments) &&
+                        rich_content.attachments.length > 0
+                    ) {
+                        attachments = rich_content.attachments;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.question_recommendation) &&
+                        rich_content.question_recommendation.length > 0
+                    ) {
+                        question_recommendation =
+                            rich_content.question_recommendation;
+                    }
+                },
+                onInfo: (interruptResponse, thought) => {
+                    if (interruptResponse) {
+                        currentResponse = interruptResponse.message;
+                        interrupt = interruptResponse;
+                    }
+
+                    if (thought) {
+                        setReasoning((v) => ({
+                            ...v,
+                            thoughts: [...v.thoughts, thought]
+                        }));
+                    }
+                },
+                onComplete: (messageId, sessionId) => {
+                    setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
-                            const aiMessage: ChatMessage = {
-                                id: messageId,
-                                role: 'AI',
-                                content: currentResponse,
-                                timestamp: new Date().toISOString(),
-                                keyword: keyword
-                            };
-                            return [...prev, aiMessage];
-                        });
+                        // use timeout to show the finished state of the reasoning
+                        setTimeout(() => {
+                            setReasoning({ thoughts: [], isFinished: false });
+                            setIsLoadingResponse(false);
+                            setMessages((prev) => {
+                                const aiMessage: ChatMessage = {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString(),
+                                    interrupt,
+                                    rich_content: {
+                                        content_recommendations,
+                                        performance_analysis,
+                                        exercise_questions,
+                                        attachments,
+                                        question_recommendation
+                                    }
+                                };
+                                return [...prev, aiMessage];
+                            });
+                        }, 1000);
                     }
-                    setIsLoadingResponse(false);
                 },
                 onError: (error) => {
+                    setReasoning({ thoughts: [], isFinished: false });
+                    setIsLoadingResponse(false);
                     console.error('Chat error:', error);
-                    setPendingMessage(null);
-
                     const errorMessage: ChatMessage = {
                         id: 'error',
                         role: 'AI',
@@ -387,13 +502,12 @@ const CopilotContainer = ({
                         timestamp: new Date().toISOString()
                     };
                     setMessages((prev) => [...prev, errorMessage]);
-                    setIsLoadingResponse(false);
                 }
             });
         } catch (error) {
+            setReasoning({ thoughts: [], isFinished: false });
+            setIsLoadingResponse(false);
             console.error('Chat error:', error);
-            setPendingMessage(null);
-
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',
@@ -401,7 +515,6 @@ const CopilotContainer = ({
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
-            setIsLoadingResponse(false);
         }
     };
 
@@ -492,11 +605,16 @@ const CopilotContainer = ({
                 />
             )}
 
-            <div className="flex-grow flex flex-col overflow-hidden">
+            <div
+                className={cn(
+                    'flex-grow flex flex-col overflow-hidden',
+                    'md:px-4'
+                )}>
                 <div
                     onScroll={handleScroll}
                     className={cn(
                         'flex-grow overflow-scroll scrollbar-none px-4 pt-4',
+                        'md:px-0',
                         isLoadingHistory ? 'grid place-items-center' : '',
                         messages.length > 0 ? '' : 'pb-4'
                     )}>
@@ -509,11 +627,14 @@ const CopilotContainer = ({
                                 'md:w-full md:max-w-[720px] md:mx-auto'
                             )}>
                             <ChatSection
+                                reasoning={reasoning}
                                 messages={messages}
                                 setMessages={setMessages}
                                 onRetry={handleRetry}
                                 isLoading={isLoadingResponse}
                                 currentSessionId={currentSessionId}
+                                isLoadingResponse={isLoadingResponse}
+                                sendMessage={handleSendMessage}
                                 onOpenUsedReferencesModal={
                                     handleOpenUsedReferencesModal
                                 }
@@ -545,8 +666,6 @@ const CopilotContainer = ({
                     )}
 
                     <PromptBar
-                        ref={promptBarRef}
-                        fileInputRef={fileInputRef}
                         onSend={handleSendMessage}
                         isLoading={isLoadingResponse}
                         onStateChange={({ isEditorOpen }) =>
@@ -560,6 +679,8 @@ const CopilotContainer = ({
                     />
                 </div>
             </div>
+
+            {!isAuthenticated ? <CopilotAuthPrompt /> : <></>}
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}

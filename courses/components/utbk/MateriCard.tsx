@@ -13,6 +13,7 @@ interface MateriCardProps
         | 'is_coming_soon'
     > {
     href: string;
+    isOpenNewTab?: boolean;
 }
 
 function MateriCard({
@@ -22,7 +23,8 @@ function MateriCard({
     latest_subchapter_name,
     percentage_progress,
     href,
-    is_coming_soon
+    is_coming_soon,
+    isOpenNewTab = false
 }: MateriCardProps): JSX.Element {
     const progress = Math.min(
         Math.max(((percentage_progress ?? 0) / 100) * 100, 0),
@@ -32,6 +34,8 @@ function MateriCard({
     return (
         <Link
             href={href}
+            target={isOpenNewTab ? '_blank' : '_self'}
+            rel={isOpenNewTab ? 'noopener noreferrer' : ''}
             className={`${
                 is_coming_soon ? 'pointer-events-none' : ''
             } bg-[#222222] hover:bg-[#2C2C2C] transition-all duration-300 w-full rounded-lg p-4 flex gap-4 items-center`}>
