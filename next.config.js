@@ -54,7 +54,7 @@ module.exports = {
             },
             {
                 source: '/utbk/early-bird-marathon-liveclass',
-                destination: 'https://forms.gle/mu9nHWUwmERoUMB4A',
+                destination: '/utbk/langganan',
                 permanent: true,
                 basePath: false
             },
