@@ -19,7 +19,7 @@ const LiveClassPage = ({ courses }: { courses: Course[] }): JSX.Element => {
         return (
             <Layout courses={courses}>
                 <div className="w-full max-w-5xl mx-auto px-6 pt-[92px]">
-                    <div className="min-h-[calc(100vh-92px)]">
+                    <div className="min-h-[calc(100vh-92px)] flex flex-col">
                         <LiveClassEntrypointContainer />
                     </div>
                 </div>
@@ -30,7 +30,7 @@ const LiveClassPage = ({ courses }: { courses: Course[] }): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar className="relative">
             <div className="w-full max-w-5xl mx-auto mt-[calc(48px+32px)]">
-                <div className="min-h-[calc(100vh-92px-32px-32px-28px)]">
+                <div className="min-h-[calc(100vh-92px-32px-32px-28px)] flex flex-col">
                     <LiveClassEntrypointContainer />
                 </div>
             </div>

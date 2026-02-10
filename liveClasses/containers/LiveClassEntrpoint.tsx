@@ -119,16 +119,19 @@ function LiveClassEntrypointContainer(): JSX.Element {
 
     return (
         <>
-            <h1 className="text-white font-bold text-2xl leading-tight mb-6">
-                Live Class
-            </h1>
+            {!isLoading && liveClass && liveClass.count_items > 0 && (
+                <h1 className="text-white font-bold text-2xl leading-tight mb-6">
+                    Live Class
+                </h1>
+            )}
 
             <OngoingLiveClass />
 
             <div
                 className={cn(
                     'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 grid-rows-2 gap-4',
-                    !isAuthenticated && 'md:grid-cols-2 lg:grid-cols-3'
+                    !isAuthenticated && 'md:grid-cols-2 lg:grid-cols-3',
+                    !isLoading && liveClass && liveClass.count_items === 0 && 'flex flex-1'
                 )}>
                 {isLoading || !liveClass ? (
                     <>
