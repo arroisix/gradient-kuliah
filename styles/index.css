@@ -1125,6 +1125,25 @@ input[type='number']::-webkit-outer-spin-button {
     overflow-y: clip;
 }
 
+/* below katex override are used to prevent unwanted scrolling */
+.katex .katex-mathml {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+
+    top: 0;
+    left: 0;
+}
+
+/* .katex .katex-mathml {
+    display: none !important;
+} */
+
 .markdown-body table th {
     font-weight: 600;
 }

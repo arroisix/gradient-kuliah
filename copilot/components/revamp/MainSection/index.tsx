@@ -1,7 +1,7 @@
-import { PencilLineIcon, XIcon } from 'lucide-react';
+// import { PencilLineIcon, XIcon } from 'lucide-react';
 import ExamplePrompts from './ExamplePrompts';
-import Link from 'next/link';
-import { useState } from 'react';
+// import Link from 'next/link';
+// import { useState } from 'react';
 import { cn } from 'commons/utils';
 
 type ContentType =
@@ -20,7 +20,7 @@ const MainSection = ({
     contentType,
     onSendMessage
 }: MainSectionProps): JSX.Element => {
-    const [isShowBanner, setIsShowBanner] = useState(true);
+    // const [isShowBanner, setIsShowBanner] = useState(true);
 
     return (
         <div>
@@ -32,7 +32,7 @@ const MainSection = ({
                 Lagi butuh bantuan apa?
             </h2>
 
-            {isShowBanner ? (
+            {/* {isShowBanner ? (
                 <div
                     className={cn(
                         'bg-gradient-to-br from-[#2C2C2C] to-[#f2c04c]/20 relative space-y-3 p-3 rounded-lg w-full max-w-[343px] mx-auto mb-4',
@@ -66,7 +66,7 @@ const MainSection = ({
                 </div>
             ) : (
                 <></>
-            )}
+            )} */}
 
             <ExamplePrompts
                 onPromptClick={onSendMessage}
