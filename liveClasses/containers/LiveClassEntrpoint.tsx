@@ -131,7 +131,10 @@ function LiveClassEntrypointContainer(): JSX.Element {
                 className={cn(
                     'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 grid-rows-2 gap-4',
                     !isAuthenticated && 'md:grid-cols-2 lg:grid-cols-3',
-                    !isLoading && liveClass && liveClass.count_items === 0 && 'flex flex-1'
+                    !isLoading &&
+                        liveClass &&
+                        liveClass.count_items === 0 &&
+                        'flex flex-1'
                 )}>
                 {isLoading || !liveClass ? (
                     <>
