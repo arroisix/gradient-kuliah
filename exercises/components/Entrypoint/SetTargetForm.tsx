@@ -15,19 +15,15 @@ import {
 } from 'dashboard/types/dashboard';
 import { toast } from 'react-toastify';
 import { useWindowSize } from 'usehooks-ts';
-
-interface Target {
-    id: string; // to differentiate between targets
-
-    // both types below will have format like this: "major_id:major_name"
-    institution: string;
-    major: string;
-}
+import { cn } from 'commons/utils';
+import { Target } from 'exercises/types/exercises';
 
 interface SetTargetFormProps {
+    className?: string;
     targets: StudentTargetInstitution[];
     setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
+    setIsOpen?: Dispatch<SetStateAction<boolean>>;
+    sendMessage?: (prompt: string, imageUrl?: string) => Promise<void>;
 }
 
 // to check whether the old target has changed
@@ -43,21 +39,25 @@ function isTargetsChanged(oldTargets: Target[], newTargets: Target[]) {
 }
 
 function SetTargetForm({
+    className = '',
     targets,
     setTargets,
-    setIsOpen
+    setIsOpen,
+    sendMessage
 }: SetTargetFormProps): JSX.Element {
     const { width } = useWindowSize();
     const [submitTargetInstitutions, { isLoading }] =
         useSetStudentTargetInstitutionsMutation();
 
-    let formikInitialValue = [{ id: uuidv4(), institution: '', major: '' }];
-    if (formikInitialValue.length > 0) {
+    let formikInitialValue = [];
+    if (targets.length > 0) {
         formikInitialValue = targets.map((target) => ({
             id: `${target.id}:${target.major.id}`,
             institution: `${target.id}:${target.name}`,
             major: `${target.major.id}:${target.major.name}`
         }));
+    } else {
+        formikInitialValue.push({ id: uuidv4(), institution: '', major: '' });
     }
 
     const {
@@ -114,10 +114,34 @@ function SetTargetForm({
             })
         );
 
+        let prompt = '';
+        if (sendMessage) {
+            // format prompt for each target
+            if (values.length > 1) {
+                for (let i = 0; i < values.length; i++) {
+                    prompt += `Target ${i + 1}:\n`;
+                    for (const [k, v] of Object.entries(values[i])) {
+                        if (k === 'id') {
+                            continue;
+                        }
+                        prompt += `- ${k}: ${v.split(':')[1]}\n\n`;
+                    }
+                }
+            } else if (values.length === 1) {
+                for (const [k, v] of Object.entries(values[0])) {
+                    if (k === 'id') {
+                        continue;
+                    }
+                    prompt += `- ${k}: ${v.split(':')[1]}\n`;
+                }
+            }
+        }
+
         try {
-            const res = await submitTargetInstitutions(
-                setStudentTargetInstitutions
-            );
+            const [res, _] = await Promise.all([
+                submitTargetInstitutions(setStudentTargetInstitutions),
+                sendMessage && sendMessage(prompt)
+            ]);
 
             if (!Object.hasOwn(res, 'error')) {
                 toast.success(
@@ -140,7 +164,7 @@ function SetTargetForm({
                         };
                     })
                 );
-                setIsOpen(false);
+                setIsOpen && setIsOpen(false);
             }
         } catch (error) {
             console.error(
@@ -191,7 +215,7 @@ function SetTargetForm({
                 <form
                     onSubmit={handleSubmit}
                     autoComplete="off"
-                    className={width < 768 ? 'mt-6' : 'mt-8'}>
+                    className={cn(width < 768 ? 'mt-6' : 'mt-8', className)}>
                     <div
                         className={`${
                             width < 768 ? 'gap-8' : 'gap-6'

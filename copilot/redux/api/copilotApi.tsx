@@ -16,7 +16,12 @@ import {
     BankSoalChaptersResponse,
     BankSoalSectionsResponse,
     BankSoalProblemsResponse,
-    ContentSearchResponse
+    ContentSearchResponse,
+    ChatMessage,
+    GetContentRecommendation,
+    CopilotInterrupt,
+    UpdateExerciseAnswer,
+    GetProblemsetLearningPath
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -34,12 +39,19 @@ interface ContextRecommendationParams {
 }
 
 interface StreamCallbacks {
-    onContent?: (content: string) => void;
+    onContent?: (
+        content: string,
+        rich_content: ChatMessage['rich_content']
+    ) => void;
+    onInfo?: (
+        interrupt: CopilotInterrupt | null,
+        thought: string | null
+    ) => void;
     onComplete?: (
         messageId: string,
         sessionId: string,
         sessionName: string | null,
-        keyword: string | null
+        keyword: string | null // deprecated
     ) => void;
     onError?: (error: any) => void;
 }
@@ -62,15 +74,28 @@ async function processStream(
             if (part.trim()) {
                 try {
                     const jsonValue = JSON.parse(part);
-                    if (jsonValue.type === 'CONTENT' && jsonValue.content) {
-                        callbacks.onContent?.(jsonValue.content);
+                    if (jsonValue.type === 'CONTENT') {
+                        callbacks.onContent?.(
+                            jsonValue.content,
+                            jsonValue.rich_content
+                        );
                     } else if (jsonValue.type === 'INFO') {
+                        callbacks.onInfo?.(
+                            jsonValue.interrupt,
+                            jsonValue.thought
+                        );
+                    } else if (jsonValue.type === 'FINISH') {
                         callbacks.onComplete?.(
                             jsonValue.message_id,
                             jsonValue.session_id,
                             jsonValue.session_name,
-                            jsonValue.keyword
+                            jsonValue.keyword // deprecated
                         );
+                    } else if (jsonValue.error) {
+                        const error =
+                            jsonValue.error ??
+                            'Terjadi kesalahan saat mengirim prompt, mohon coba lagi';
+                        callbacks.onError?.(error);
                     }
                 } catch (err) {
                     callbacks.onError?.(err);
@@ -85,7 +110,7 @@ export const chatApi = {
     chat: async (input: ChatInput, callbacks: StreamCallbacks) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${COPILOT_BASE_URL}chat/`, {
+            const response = await fetch(`${COPILOT_BASE_URL}v2/chat/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -615,6 +640,40 @@ export const copilotApi = baseApi.injectEndpoints({
                 }
             }),
             providesTags: ['CONTENT_SEARCH']
+        }),
+        getContentRecommendationData: builder.query<
+            GetContentRecommendation,
+            { data: string }
+        >({
+            query: ({ data }) => ({
+                url: `${COPILOT_BASE_URL}v2/content-recommendation/`,
+                method: 'GET',
+                params: { data }
+            })
+        }),
+        updateExerciseAnswer: builder.mutation<
+            UpdateExerciseAnswer,
+            {
+                session_id: string;
+                message_id: string;
+                answer: string;
+                question_id: string;
+            }
+        >({
+            query: ({ message_id, answer, question_id }) => ({
+                url: `${COPILOT_BASE_URL}update-exercise-answer/`,
+                method: 'POST',
+                body: { message_id, answer, question_id }
+            })
+        }),
+        getProblemsetLearningPath: builder.query<
+            GetProblemsetLearningPath,
+            { problemset_progress_id: string }
+        >({
+            query: ({ problemset_progress_id }) => ({
+                url: `${COPILOT_BASE_URL}v2/problemset-learning-path/${problemset_progress_id}/`,
+                method: 'GET'
+            })
         })
     }),
     overrideExisting: false
@@ -633,5 +692,8 @@ export const {
     useGetBankSoalChaptersQuery,
     useGetBankSoalSectionsQuery,
     useGetBankSoalProblemsQuery,
-    useLazySearchContentQuery
+    useLazySearchContentQuery,
+    useGetContentRecommendationDataQuery,
+    useUpdateExerciseAnswerMutation,
+    useGetProblemsetLearningPathQuery
 } = copilotApi;

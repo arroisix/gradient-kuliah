@@ -442,3 +442,11 @@ export interface ExerciseLeaderboard {
     rank: number;
     is_current_user: boolean;
 }
+
+export interface Target {
+    id: string; // to differentiate between targets
+
+    // both types below will have format like this: "major_id:major_name"
+    institution: string;
+    major: string;
+}
