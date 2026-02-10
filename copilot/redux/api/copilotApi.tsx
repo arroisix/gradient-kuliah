@@ -20,7 +20,8 @@ import {
     ChatMessage,
     GetContentRecommendation,
     CopilotInterrupt,
-    UpdateExerciseAnswer
+    UpdateExerciseAnswer,
+    GetProblemsetLearningPath
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -664,6 +665,15 @@ export const copilotApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: { message_id, answer, question_id }
             })
+        }),
+        getProblemsetLearningPath: builder.query<
+            GetProblemsetLearningPath,
+            { problemset_progress_id: string }
+        >({
+            query: ({ problemset_progress_id }) => ({
+                url: `${COPILOT_BASE_URL}v2/problemset-learning-path/${problemset_progress_id}/`,
+                method: 'GET'
+            })
         })
     }),
     overrideExisting: false
@@ -684,5 +694,6 @@ export const {
     useGetBankSoalProblemsQuery,
     useLazySearchContentQuery,
     useGetContentRecommendationDataQuery,
-    useUpdateExerciseAnswerMutation
+    useUpdateExerciseAnswerMutation,
+    useGetProblemsetLearningPathQuery
 } = copilotApi;

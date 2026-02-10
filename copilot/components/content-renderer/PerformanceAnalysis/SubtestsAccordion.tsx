@@ -1,6 +1,6 @@
 import { Accordion } from 'radix-ui';
 import { PerformanceAnalysis } from 'copilot/types/copilot';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { cn } from 'commons/utils';
 import { ChevronDownIcon } from 'lucide-react';
 import { FaCircleCheck, FaCircleInfo } from 'react-icons/fa6';
@@ -16,38 +16,54 @@ function generateHexTextColor(score: number): string {
         : 'text-[#03AC5C]';
 }
 
+interface SubtestsAccordionProps
+    extends Pick<PerformanceAnalysis, 'problemset_results'> {
+    openedSubtest: string;
+    setOpenedSubtest: Dispatch<SetStateAction<string>>;
+    setOpenedLearningPath: Dispatch<
+        SetStateAction<PerformanceAnalysis['problemset_results'][number] | null>
+    >;
+}
+
 function SubtestsAccordion({
-    problemset_results
-}: Pick<PerformanceAnalysis, 'problemset_results'>): JSX.Element {
-    const [openedSubtest, setOpenedSubtest] = useState(
-        problemset_results[0].problemset_title
-    );
+    problemset_results,
+    openedSubtest,
+    setOpenedSubtest,
+    setOpenedLearningPath
+}: SubtestsAccordionProps): JSX.Element {
+    useEffect(() => {
+        setOpenedSubtest(
+            openedSubtest
+                ? openedSubtest
+                : problemset_results[0].problemset_progress_id
+        );
+    }, []);
 
     return (
         <Accordion.Root
             collapsible
-            type="single"
             value={openedSubtest}
-            onValueChange={(v) => setOpenedSubtest(v)}>
+            onValueChange={(v) => setOpenedSubtest(v)}
+            type="single"
+            className="flex flex-col gap-4">
             {problemset_results.map((v) => (
                 <Accordion.Item
-                    key={v.problemset_title}
-                    value={v.problemset_title}>
+                    key={v.problemset_progress_id}
+                    value={v.problemset_progress_id}>
                     <Accordion.Header>
                         <Accordion.Trigger
                             type="button"
                             className={cn(
-                                'bg-gradient-to-br from-[#9CA3AF]/[8%] to-[#6B7280]/[4%] py-2 px-3 rounded-xl border flex justify-between items-center w-full transition-colors',
-                                openedSubtest === v.problemset_title
+                                'bg-gradient-to-br from-[#9CA3AF]/[8%] to-[#6B7280]/[4%] py-2 px-3 rounded-xl border flex justify-between items-center gap-4 w-full transition-colors',
+                                openedSubtest === v.problemset_progress_id
                                     ? 'border-[#B6A6F3]'
                                     : 'border-[#9CA3AF]/[20%]'
                             )}>
                             <span
                                 className={cn(
-                                    'text-sm leading-[160%] flex items-center gap-1',
+                                    'text-left text-sm leading-[160%] flex items-center gap-2',
                                     generateHexTextColor(v.score)
                                 )}>
-                                {v.problemset_title}{' '}
                                 {v.score >= 550 ? (
                                     <></>
                                 ) : (
@@ -58,7 +74,9 @@ function SubtestsAccordion({
                                         )}
                                     />
                                 )}
+                                {v.problemset_title}{' '}
                             </span>
+
                             <span
                                 className={cn(
                                     'text-sm font-semibold leading-tight flex items-center gap-3',
@@ -68,7 +86,8 @@ function SubtestsAccordion({
                                 <ChevronDownIcon
                                     className={cn(
                                         'shrink-0 text-[#666666] w-4 h-4 transition-all',
-                                        openedSubtest === v.problemset_title
+                                        openedSubtest ===
+                                            v.problemset_progress_id
                                             ? '-rotate-180'
                                             : ''
                                     )}
@@ -136,6 +155,7 @@ function SubtestsAccordion({
                                     </div>
 
                                     <Button
+                                        onClick={() => setOpenedLearningPath(v)}
                                         type="button"
                                         variant="primary"
                                         className="!py-2 !px-4 text-sm flex justify-center items-center gap-2 w-full">

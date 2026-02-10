@@ -4,6 +4,17 @@ import { PerformanceAnalysis as PerformanceAnalysisType } from 'copilot/types/co
 import { TargetIcon } from 'lucide-react';
 import { CopilotSolidIcon } from '../../../assets/CopilotSolidIcon';
 import { SubtestsAccordion } from './SubtestsAccordion';
+import { useState } from 'react';
+import { LearningPath } from './LearningPath';
+
+function formatDate(isoStr: string): string {
+    const date = new Date(isoStr);
+    return date.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
+}
 
 interface PerformanceAnalysisProps {
     performance_analysis: PerformanceAnalysisType;
@@ -12,6 +23,11 @@ interface PerformanceAnalysisProps {
 function PerformanceAnalysis({
     performance_analysis
 }: PerformanceAnalysisProps): JSX.Element {
+    const [openedSubtest, setOpenedSubtest] = useState(''); // problemset_progress_id
+    const [openedLearningPath, setOpenedLearningPath] = useState<
+        PerformanceAnalysisType['problemset_results'][number] | null
+    >(null);
+
     const now = new Date();
     const utbkDay = new Date(now.getFullYear(), 3, 21);
     const remainingUTBKDays = Math.round(
@@ -22,6 +38,15 @@ function PerformanceAnalysis({
         (performance_analysis.total_score /
             performance_analysis.passing_grade) *
         100;
+
+    if (openedLearningPath) {
+        return (
+            <LearningPath
+                problemset_result={openedLearningPath}
+                setOpenedLearningPath={setOpenedLearningPath}
+            />
+        );
+    }
 
     return (
         <div className="bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[680px]">
@@ -36,9 +61,13 @@ function PerformanceAnalysis({
                     <h3 className="text-white font-semibold leading-[140%]">
                         Hasil Try Out
                     </h3>
-                    <span className="text-[#999999] text-xs leading-[160%]">
-                        12 Jan 2025
-                    </span>
+                    {performance_analysis.completed_at ? (
+                        <span className="text-[#999999] text-xs leading-[160%]">
+                            {formatDate(performance_analysis.completed_at)}
+                        </span>
+                    ) : (
+                        <></>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -90,8 +119,10 @@ function PerformanceAnalysis({
                                     Butuh{' '}
                                     <span className="text-[#03AC5C] font-bold">
                                         +
-                                        {performance_analysis.passing_grade -
-                                            performance_analysis.total_score}{' '}
+                                        {(
+                                            performance_analysis.passing_grade -
+                                            performance_analysis.total_score
+                                        ).toFixed(2)}{' '}
                                         poin
                                     </span>{' '}
                                     lagi menuju target
@@ -126,13 +157,14 @@ function PerformanceAnalysis({
                     </h4>
 
                     {performance_analysis.problemset_results.length > 0 ? (
-                        <div className="flex flex-col gap-4">
-                            <SubtestsAccordion
-                                problemset_results={
-                                    performance_analysis.problemset_results
-                                }
-                            />
-                        </div>
+                        <SubtestsAccordion
+                            openedSubtest={openedSubtest}
+                            problemset_results={
+                                performance_analysis.problemset_results
+                            }
+                            setOpenedLearningPath={setOpenedLearningPath}
+                            setOpenedSubtest={setOpenedSubtest}
+                        />
                     ) : (
                         <></>
                     )}

@@ -57,11 +57,14 @@ export interface CopilotContentRecommendation {
 
 export interface PerformanceAnalysis {
     tryout_title: string;
+    completed_at?: string;
     total_score: number;
     passing_grade: number;
     target_institution: string;
     target_major: string;
     problemset_results: {
+        problemset_id: string;
+        problemset_progress_id: string;
         problemset_title: string;
         score: number;
         chapter_need_to_improve: string[];
@@ -405,4 +408,25 @@ export interface GetContentRecommendation {
 
 export interface UpdateExerciseAnswer {
     message_id: string;
+}
+
+export interface GetProblemsetLearningPath {
+    problemset_progress_id: string;
+    problemset_id: string;
+    problemset_score: string;
+    chapters: {
+        chapter_title: string;
+        slug: string;
+        subchapters: {
+            type: string;
+            id: string;
+            slug: string;
+            is_finished: boolean;
+            is_free: boolean;
+            title: string;
+            course_slug: string;
+            chapter_slug: string;
+            video_duration?: string;
+        }[];
+    }[];
 }
