@@ -40,6 +40,53 @@ export interface ChatHistoryContextItem {
         | 'course_video';
 }
 
+export type ContentRecommendationType =
+    | 'course'
+    | 'chapter'
+    | 'video'
+    | 'exercise'
+    | 'article'
+    | 'tryout';
+
+export interface CopilotContentRecommendation {
+    id: string;
+    slug: string;
+    title: string;
+    type: ContentRecommendationType;
+}
+
+export interface PerformanceAnalysis {
+    tryout_title: string;
+    completed_at?: string;
+    total_score: number;
+    passing_grade: number;
+    target_institution: string;
+    target_major: string;
+    problemset_results: {
+        problemset_id: string;
+        problemset_progress_id: string;
+        problemset_title: string;
+        score: number;
+        chapter_need_to_improve: string[];
+        chapter_mastered: string[];
+    }[];
+}
+
+export interface ExerciseQuestion {
+    id: string;
+    no: number;
+    question: string;
+    options: { id: string; value: string }[];
+    answer: string;
+    explanation: string;
+    user_answer?: string;
+}
+
+export interface CopilotAttachment {
+    type: 'image';
+    url: string;
+}
+
 export interface ChatHistoryResponse {
     session_id: string;
     history: {
@@ -51,6 +98,14 @@ export interface ChatHistoryResponse {
         is_bookmarked: boolean;
         keyword?: string | null;
         context?: { data: ChatHistoryContextItem[] };
+        rich_content?: {
+            attachments?: CopilotAttachment[];
+            content_recommendations?: CopilotContentRecommendation[];
+            performance_analysis?: PerformanceAnalysis;
+            exercise_questions?: ExerciseQuestion[];
+            question_recommendation?: string[];
+        };
+        interrupt?: CopilotInterrupt;
     }[];
 }
 
@@ -58,6 +113,16 @@ export interface ChangeRatingInput {
     session_id: string;
     message_id: string;
     rating: number;
+}
+
+export interface CopilotInterrupt {
+    action: 'ask_for_user_input';
+    message: string;
+    data: {
+        type: 'confirmation' | 'input' | 'options' | 'special';
+        options?: string[];
+        fields?: { name: string; label: string; type: 'text' | 'number' }[];
+    };
 }
 
 export interface ChatMessage {
@@ -70,6 +135,14 @@ export interface ChatMessage {
     image?: string | null;
     keyword?: string | null;
     usedReferences?: SelectedReference[];
+    rich_content?: {
+        attachments?: CopilotAttachment[];
+        content_recommendations?: CopilotContentRecommendation[];
+        performance_analysis?: PerformanceAnalysis;
+        exercise_questions?: ExerciseQuestion[];
+        question_recommendation?: string[];
+    };
+    interrupt?: CopilotInterrupt;
 }
 
 interface BookmarkedChatsResponse {
@@ -293,4 +366,67 @@ export interface ContentSearchItem {
 
 export interface ContentSearchResponse {
     data: ContentSearchItem[];
+}
+
+export interface Reasoning {
+    thoughts: string[];
+    isFinished: boolean;
+}
+
+export interface GetContentRecommendation {
+    data: {
+        type: ContentRecommendationType;
+        id: string;
+        slug: string;
+        progress?: number;
+        is_free?: boolean;
+        title: string;
+        tags?: string;
+        course_slug?: string;
+        chapter_slug?: string;
+        subchapter_slug?: string;
+        subchapter_name?: string;
+        thumbnail?: string;
+        cover?: string;
+        video_duration?: string;
+        total_questions?: number;
+        duration?: number;
+        opens_at?: string;
+        closes_at?: string;
+        tryout_type?: 'UAS' | 'UTS' | 'UTBK' | 'TKA' | 'MATERI';
+        status?: 'IN_PROGRESS' | 'PENDING_SCORING' | 'COMPLETED';
+        progress_percentage?: number;
+        score?: number;
+        exercise_code?: string;
+        university_name?: string;
+        university_color?: string;
+        score_published_at?: string;
+        is_time_expired?: boolean;
+        is_auto_irt_scoring_enable?: boolean;
+    }[];
+}
+
+export interface UpdateExerciseAnswer {
+    message_id: string;
+}
+
+export interface GetProblemsetLearningPath {
+    problemset_progress_id: string;
+    problemset_id: string;
+    problemset_score: string;
+    chapters: {
+        chapter_title: string;
+        slug: string;
+        subchapters: {
+            type: string;
+            id: string;
+            slug: string;
+            is_finished: boolean;
+            is_free: boolean;
+            title: string;
+            course_slug: string;
+            chapter_slug: string;
+            video_duration?: string;
+        }[];
+    }[];
 }

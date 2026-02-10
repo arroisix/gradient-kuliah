@@ -179,7 +179,10 @@ const Appbar = (): JSX.Element | null => {
                     'btm-nav md:hidden',
                     profile?.current_role === 'COLLEGE_STUDENT'
                         ? 'bg-[#121212]'
-                        : 'bg-[#000000] border-t border-[#222222]'
+                        : 'bg-[#000000] border-t border-[#222222]',
+                    router.pathname.includes('/copilot')
+                        ? 'bg-black border-none'
+                        : ''
                 )}
                 style={{ zIndex: 11 }}>
                 {APPBAR_NAV.map((menu, index) => (

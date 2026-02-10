@@ -21,6 +21,8 @@ const SetTargetInstitutionWall = dynamic(
 );
 
 interface SetTargetDrawerContextType {
+    targets: StudentTargetInstitution[];
+    setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
     setIsDrawerOpened: Dispatch<SetStateAction<boolean>>;
     setIsModalOpened: Dispatch<SetStateAction<boolean>>;
 }
@@ -29,7 +31,14 @@ const SetTargetDrawerContext = createContext<SetTargetDrawerContextType | null>(
     null
 );
 
-function SetTargetDrawer({ children }: PropsWithChildren) {
+interface SetTargetDrawerProps extends PropsWithChildren {
+    isForInterrupt?: boolean;
+}
+
+function SetTargetDrawer({
+    children,
+    isForInterrupt = false
+}: SetTargetDrawerProps): JSX.Element {
     const [targets, setTargets] = useState<StudentTargetInstitution[]>([]);
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
     const [isModalOpened, setIsModalOpened] = useState(false);
@@ -38,8 +47,8 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
     const { data, isLoading } = useGetStudentTargetInstitutionsQuery();
 
     const value = useMemo((): SetTargetDrawerContextType => {
-        return { setIsDrawerOpened, setIsModalOpened };
-    }, []);
+        return { targets, setTargets, setIsDrawerOpened, setIsModalOpened };
+    }, [targets]);
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -60,6 +69,15 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
     }, [isDrawerOpened, isModalOpened, width]);
 
     if (isLoading) {
+        if (isForInterrupt) {
+            return (
+                <div className="carousel flex space-x-4 p-1">
+                    <div className="carousel-item animate-pulse bg-[#333333] w-[177px] h-[119px] rounded-lg"></div>
+                    <div className="carousel-item animate-pulse bg-[#333333] w-[177px] h-[119px] rounded-lg"></div>
+                    <div className="carousel-item animate-pulse bg-[#333333] w-[177px] h-[119px] rounded-lg"></div>
+                </div>
+            );
+        }
         return <></>;
     }
 
@@ -73,7 +91,7 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
                 />
 
                 <div className="drawer-content">
-                    {targets.length === 0 ? (
+                    {targets.length === 0 && !isForInterrupt ? (
                         <SetTargetInstitutionWall />
                     ) : (
                         children

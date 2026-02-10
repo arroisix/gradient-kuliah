@@ -321,7 +321,11 @@ function LiveClassDetailModal({
                             variant="primary"
                             size="large"
                             className="flex flex-row gap-3 items-center justify-center w-full"
-                            disabled={isRegistering}
+                            disabled={
+                                isRegistering ||
+                                !is_subscribed ||
+                                !subscribedFeatures?.includes('live_class')
+                            }
                             onClick={handleRegister}>
                             {isRegistering ? (
                                 <Spinner size="small" />
