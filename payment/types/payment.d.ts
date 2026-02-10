@@ -39,7 +39,8 @@ type SubscriptionFeature =
     | 'video'
     | 'astronotes'
     | 'bank_soal'
-    | 'textbook';
+    | 'textbook'
+    | 'live_class';
 
 type ActivePacket = {
     packet_id: string;
