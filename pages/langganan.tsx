@@ -1,4 +1,3 @@
-import withAuth from 'commons/withAuth';
 import Layout from 'commons/layout';
 import SubscribePacket from 'payment/containers/SubscribePacket';
 import { useAuth } from 'authentication/contexts/AuthProvider';
@@ -25,4 +24,4 @@ const Subscribe = (): JSX.Element => {
 };
 
 Subscribe.displayName = 'Subscribe';
-export default withAuth(Subscribe);
+export default Subscribe;
