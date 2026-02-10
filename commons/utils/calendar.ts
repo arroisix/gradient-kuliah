@@ -106,7 +106,7 @@ export const generateICSFile = (event: CalendarEvent): string => {
  */
 export const downloadICSFile = (
     event: CalendarEvent,
-    filename: string = 'event.ics'
+    filename = 'event.ics'
 ): void => {
     const icsContent = generateICSFile(event);
     const blob = new Blob([icsContent], {
