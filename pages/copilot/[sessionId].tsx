@@ -1,6 +1,6 @@
 import LearnLayout from 'commons/learnLayout';
-import CopilotContainer from 'copilot/containers/CopilotContainer';
-import { GetServerSideProps } from 'next';
+import CopilotContainer from 'copilot/containers/revamp/CopilotContainer';
+import type { GetServerSideProps } from 'next';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';

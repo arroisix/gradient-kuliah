@@ -20,6 +20,7 @@ interface LatihanCardProps {
     className?: string;
     cardType: 'myExercises' | 'allExercises';
     onClick?: () => void;
+    isOpenNewTab?: boolean;
 }
 
 type ExerciseState = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
@@ -98,7 +99,8 @@ const STATE_COLORS = {
 const LatihanCard: React.FC<LatihanCardProps> = ({
     exercise,
     className,
-    onClick
+    onClick,
+    isOpenNewTab = false
 }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -287,23 +289,21 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
 
     const renderNotStarted = (): JSX.Element => {
         return (
-            <div className="items-end mt-4 flex w-full h-full">
-                <div
+            <div
+                className={cn(
+                    'flex items-center gap-6 w-full',
+                    isAuthenticated ? 'justify-between' : 'justify-end'
+                )}>
+                {isAuthenticated && renderProgressBar(0, 'IN_PROGRESS')}
+                <Button
+                    variant="primary"
+                    size="small"
                     className={cn(
-                        'space-y-2 mt-4 flex flex-row items-center gap-6 w-full',
-                        isAuthenticated ? '' : 'justify-end'
+                        '!px-6 !py-2 !text-sm !font-semibold',
+                        isAuthenticated ? '' : 'w-full'
                     )}>
-                    {isAuthenticated && renderProgressBar(0, 'IN_PROGRESS')}
-                    <Button
-                        variant="primary"
-                        size="small"
-                        className={cn(
-                            '!px-6 !py-2 !text-sm !font-semibold',
-                            isAuthenticated ? '' : 'w-full'
-                        )}>
-                        Mulai
-                    </Button>
-                </div>
+                    Mulai
+                </Button>
             </div>
         );
     };
@@ -312,44 +312,40 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         const progress = getProgressData();
 
         return (
-            <div className="items-end mt-4 flex w-full h-full">
-                <div className="space-y-2 mt-4 flex flex-row items-center gap-6 w-full">
-                    {renderProgressBar(progress.percentage, 'IN_PROGRESS')}
-                    <Button
-                        variant="primary"
-                        size="small"
-                        className="!px-6 !py-2 !text-sm !font-semibold">
-                        Lanjut
-                    </Button>
-                </div>
+            <div className="flex items-center justify-between gap-6 w-full">
+                {renderProgressBar(progress.percentage, 'IN_PROGRESS')}
+                <Button
+                    variant="primary"
+                    size="small"
+                    className="!px-6 !py-2 !text-sm !font-semibold">
+                    Lanjut
+                </Button>
             </div>
         );
     };
 
     const renderCompleted = (): JSX.Element => {
         return (
-            <div className="items-end mt-4 flex w-full h-full">
-                <div className="flex items-center justify-between w-full">
-                    <div className="flex flex-col">
-                        <span className="text-xs text-graphite-400">Skor</span>
-                        <span
-                            className={cn('text-sm font-medium')}
-                            style={{ color: getExerciseColorResult() }}>
-                            {exercise.score?.toFixed(0) ?? 0}{' '}
-                            {exercise.tryout_type !== 'UTBK' && (
-                                <span className="text-graphite-400">/ 100</span>
-                            )}
-                        </span>
-                    </div>
+            <div className="flex items-center justify-between w-full">
+                <div className="flex flex-col">
+                    <span className="text-xs text-graphite-400">Skor</span>
                     <span
-                        className={cn(
-                            'text-sm font-medium flex items-center gap-1',
-                            STATE_COLORS.COMPLETED.link,
-                            'hover:underline cursor-pointer'
-                        )}>
-                        Lihat Hasil →
+                        className={cn('text-sm font-medium')}
+                        style={{ color: getExerciseColorResult() }}>
+                        {exercise.score?.toFixed(0) ?? 0}{' '}
+                        {exercise.tryout_type !== 'UTBK' && (
+                            <span className="text-graphite-400">/ 100</span>
+                        )}
                     </span>
                 </div>
+                <span
+                    className={cn(
+                        'text-sm font-medium flex items-center gap-1',
+                        STATE_COLORS.COMPLETED.link,
+                        'hover:underline cursor-pointer'
+                    )}>
+                    Lihat Hasil →
+                </span>
             </div>
         );
     };
@@ -358,7 +354,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         const progress = getProgressData();
 
         return (
-            <div className="items-center mt-4 flex w-full flex-row gap-4">
+            <div className="items-center flex justify-between gap-4">
                 <div className="flex-1">
                     {renderProgressBar(progress.percentage, 'IN_PROGRESS')}
                 </div>
@@ -376,26 +372,22 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
 
     const renderWorkingDateNotStarted = (): JSX.Element | null => {
         return (
-            <div className="flex flex-col h-full justify-end">
-                <div className="flex flex-row items-center gap-2 bg-[#2A225F] py-2 px-4 rounded-lg w-fit">
-                    <FaLock size={12} color="#B6A6F3" />
-                    <span className="text-[#B6A6F3] text-xs font-regular">
-                        Belum Dibuka
-                    </span>
-                </div>
+            <div className="flex items-center gap-2 bg-[#2A225F] py-2 px-4 rounded-lg w-fit">
+                <FaLock size={12} color="#B6A6F3" />
+                <span className="text-[#B6A6F3] text-xs font-regular">
+                    Belum Dibuka
+                </span>
             </div>
         );
     };
 
     const renderWorkingDateHasEnded = (): JSX.Element | null => {
         return (
-            <div className="flex flex-col h-full justify-end">
-                <div className="flex flex-row items-center gap-2 bg-[#FF3B3026] py-2 px-4 rounded-lg w-fit">
-                    <FaRegClock size={12} color="#E56052" />
-                    <span className="text-[#E56052] text-xs font-regular">
-                        Waktu Habis
-                    </span>
-                </div>
+            <div className="flex items-center gap-2 bg-[#FF3B3026] py-2 px-4 rounded-lg w-fit">
+                <FaRegClock size={12} color="#E56052" />
+                <span className="text-[#E56052] text-xs font-regular">
+                    Waktu Habis
+                </span>
             </div>
         );
     };
@@ -444,6 +436,8 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
             onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            target={isOpenNewTab ? '_blank' : '_self'}
+            rel={isOpenNewTab ? 'noopener noreferrer' : ''}
             className={cn(
                 'flex flex-col gap-1 h-full w-full relative overflow-hidden justify-between',
                 'bg-violet-2 rounded-2xl p-5',
@@ -502,7 +496,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
             )}
 
             {exercise.tryout_type === 'UTBK' ? (
-                <div className="flex flex-col h-full relative gap-4">
+                <div className="flex flex-col justify-between gap-4 h-full relative">
                     <div className="flex flex-col">
                         <div className="flex flex-col gap-1">
                             {renderBadges()}
@@ -513,12 +507,14 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                     {renderActionSection()}
                 </div>
             ) : (
-                <div className="flex flex-col h-full relative">
-                    <div className="flex flex-col gap-1">
-                        {renderBadges()}
-                        {renderWorkingDate()}
+                <div className="flex flex-col justify-between gap-4 h-full relative">
+                    <div className="flex flex-col">
+                        <div className="flex flex-col gap-1">
+                            {renderBadges()}
+                            {renderWorkingDate()}
+                        </div>
+                        <div className="mt-3">{renderMetadata()}</div>
                     </div>
-                    <div className="mt-3">{renderMetadata()}</div>
                     {renderActionSection()}
                 </div>
             )}
