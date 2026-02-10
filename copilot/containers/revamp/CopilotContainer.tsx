@@ -28,6 +28,7 @@ import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
 import { cn } from 'commons/utils';
 import { FaArrowDown } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
+import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -678,6 +679,8 @@ const CopilotContainer = ({
                     />
                 </div>
             </div>
+
+            {!isAuthenticated ? <CopilotAuthPrompt /> : <></>}
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}
