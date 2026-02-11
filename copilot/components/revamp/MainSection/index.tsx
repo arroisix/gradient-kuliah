@@ -1,8 +1,10 @@
-// import { PencilLineIcon, XIcon } from 'lucide-react';
+import { PencilLineIcon, XIcon } from 'lucide-react';
+import { useGetStudentTryoutLatestResultQuery } from 'exercises/redux/api/exercisesApi';
 import ExamplePrompts from './ExamplePrompts';
-// import Link from 'next/link';
-// import { useState } from 'react';
-import { cn } from 'commons/utils';
+import { cn, formatDate } from 'commons/utils';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 type ContentType =
     | 'course_video'
@@ -20,7 +22,22 @@ const MainSection = ({
     contentType,
     onSendMessage
 }: MainSectionProps): JSX.Element => {
-    // const [isShowBanner, setIsShowBanner] = useState(true);
+    const [isShowBanner, setIsShowBanner] = useState(false);
+    const { data, isLoading } = useGetStudentTryoutLatestResultQuery();
+    const { profile } = useAuth();
+
+    const handleClick = () => {
+        const prompt = data?.is_has_latest_result
+            ? 'Lihat Analisa Try Out Terakhir'
+            : 'Minta Panduan Belajar UTBK';
+        onSendMessage(prompt);
+    };
+
+    useEffect(() => {
+        if (!isLoading) {
+            setIsShowBanner(true);
+        }
+    }, [data, isLoading]);
 
     return (
         <div>
@@ -32,7 +49,9 @@ const MainSection = ({
                 Lagi butuh bantuan apa?
             </h2>
 
-            {/* {isShowBanner ? (
+            {isLoading ? (
+                <div className="animate-pulse bg-[#333333] w-full max-w-[600px] h-20 mx-auto rounded-lg mb-4"></div>
+            ) : isShowBanner ? (
                 <div
                     className={cn(
                         'bg-gradient-to-br from-[#2C2C2C] to-[#f2c04c]/20 relative space-y-3 p-3 rounded-lg w-full max-w-[343px] mx-auto mb-4',
@@ -45,28 +64,58 @@ const MainSection = ({
                         <XIcon className="text-[#B6A6F3] w-4 h-4" />
                     </button>
 
-                    <PencilLineIcon className="text-[#F2C04C] w-6 h-6" />
+                    <div className="flex items-center gap-3">
+                        <PencilLineIcon className="text-[#F2C04C] w-6 h-6" />
 
-                    <div className="space-y-1">
-                        <h3 className="text-white font-semibold text-sm">
-                            Hai! Kamu belum pernah ikut Try Out ya
-                        </h3>
+                        <div className="space-y-1">
+                            <h3 className="text-white font-semibold text-sm">
+                                {data?.is_has_latest_result
+                                    ? `TO Terakhir: ${formatDate(
+                                          data.latest_result_date ??
+                                              new Date().toISOString()
+                                      )} - Skor: ${
+                                          data.latest_result_score ?? 0
+                                      }`
+                                    : data?.is_has_ongoing_tryout
+                                    ? `TO Berlangsung: ${data.latest_result_tryout_title}`
+                                    : 'Hai! Kamu belum pernah ikut Try Out ya'}
+                            </h3>
 
-                        <p className="text-white text-xs">
-                            Yuk coba Try out biar Copilot bisa kasih rekomendasi
-                            yang lebih pas
-                        </p>
+                            <p className="text-white text-xs">
+                                {data?.is_has_latest_result
+                                    ? 'Coba Try Out dulu untuk lihat kelebihan dan kekuranganmu.'
+                                    : data?.is_has_ongoing_tryout
+                                    ? 'Yuk, lihat kelebihan dan kekuranganmu dengan menyelesaikan Try Out.'
+                                    : 'Yuk coba Try out biar Copilot bisa kasih rekomendasi yang lebih pas.'}
+                            </p>
+                        </div>
                     </div>
 
-                    <Link
-                        href="/utbk/try-out"
-                        className="w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
-                        Coba Try Out
-                    </Link>
+                    {data?.is_has_ongoing_tryout ? (
+                        <Link
+                            href={
+                                profile?.current_role === 'COLLEGE_STUDENT'
+                                    ? '/latihan'
+                                    : '/utbk/try-out'
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
+                            Lihat Try Out
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={handleClick}
+                            className="shrink-0 w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
+                            {data?.is_has_latest_result
+                                ? 'Lihat Analisa'
+                                : 'Coba Try Out'}
+                        </button>
+                    )}
                 </div>
             ) : (
                 <></>
-            )} */}
+            )}
 
             <ExamplePrompts
                 onPromptClick={onSendMessage}

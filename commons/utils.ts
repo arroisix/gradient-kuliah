@@ -291,3 +291,13 @@ export const sanitizeUrl = (url: string): string => {
         return '/';
     }
 };
+
+// format date into `12 Jan 2026` format
+export function formatDate(isoStr: string): string {
+    const date = new Date(isoStr);
+    return date.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
+}
