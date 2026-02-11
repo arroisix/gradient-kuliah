@@ -1,5 +1,5 @@
 import { ExerciseQuestion } from 'copilot/types/copilot';
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -14,9 +14,6 @@ import Button from 'commons/components/elements/Button';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { useUpdateExerciseAnswerMutation } from 'copilot/redux/api/copilotApi';
 import { toast } from 'react-toastify';
-
-const PREV_QUESTION_BTN_ID = 'prev_question';
-const NEXT_QUESTION_BTN_ID = 'next_question';
 
 function initUserQuestionAnswer() {
     return new Map<string, string>();
@@ -95,52 +92,33 @@ function ExerciseQuestionList({
         return <></>;
     }
 
-    const handleSetPrevQuestion = () => {
+    const handleClickPrev = () => {
         const currentQuestionIdx = exercise_questions.indexOf(currentQuestion);
         const prevQuestion = exercise_questions[currentQuestionIdx - 1];
         setCurrentQuestionId(prevQuestion.id);
+        setIsOpenExplanation(false);
     };
 
-    const handleSetNextQuestion = () => {
+    const handleClickNext = () => {
         const currentQuestionIdx = exercise_questions.indexOf(currentQuestion);
         const nextQuestion = exercise_questions[currentQuestionIdx + 1];
         setCurrentQuestionId(nextQuestion.id);
+        setIsOpenExplanation(false);
     };
 
-    const handleSubmitAnswer = async (event: MouseEvent<HTMLButtonElement>) => {
-        const btnEl = event.currentTarget;
-        // skip submit answer if the answer didn't changed
-        if (
-            selectedAnswerId ===
-                userQuestionAnswer.get(currentQuestion.id ?? '') ||
-            !selectedAnswerId
-        ) {
-            if (btnEl.id === PREV_QUESTION_BTN_ID) {
-                handleSetPrevQuestion();
-            } else if (btnEl.id === NEXT_QUESTION_BTN_ID && !isLastQuestion) {
-                handleSetNextQuestion();
-            }
-            return;
-        }
-
+    const handleSelectAnswer = async (answerId: string) => {
         try {
             await submitAnswer({
                 session_id: currentSessionId,
                 message_id,
-                answer: selectedAnswerId,
+                answer: answerId,
                 question_id: currentQuestion.id
             });
 
             setUserQuestionAnswer((value) => {
-                value.set(currentQuestion.id, selectedAnswerId);
+                value.set(currentQuestion.id, answerId);
                 return new Map(value);
             });
-
-            if (btnEl.id === PREV_QUESTION_BTN_ID) {
-                handleSetPrevQuestion();
-            } else if (btnEl.id === NEXT_QUESTION_BTN_ID && !isLastQuestion) {
-                handleSetNextQuestion();
-            }
         } catch (error) {
             console.error(
                 new Error('failed to submit user answer', { cause: error })
@@ -164,20 +142,21 @@ function ExerciseQuestionList({
                     'bg-[#191920] p-6 rounded-2xl w-full',
                     'md:max-w-[680px]'
                 )}>
-                <div
-                    className={cn(
-                        'flex flex-col-reverse mb-4 gap-1',
-                        'md:flex-row md:justify-between md:items-center'
-                    )}>
-                    <span></span>
-                    <span
+                {!isSingleQuestion ? (
+                    <div
                         className={cn(
-                            'text-[#999999] text-sm leading-[160%]',
-                            isSingleQuestion ? 'hidden' : ''
+                            'flex flex-col-reverse mb-4 gap-1',
+                            'md:flex-row md:justify-between md:items-center'
                         )}>
-                        {currentQuestion.no} dari {exercise_questions.length}
-                    </span>
-                </div>
+                        <span></span>
+                        <span className="text-[#999999] text-sm leading-[160%]">
+                            {currentQuestion.no} dari{' '}
+                            {exercise_questions.length}
+                        </span>
+                    </div>
+                ) : (
+                    <></>
+                )}
 
                 <ReactMarkdown
                     className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white text-sm"
@@ -193,11 +172,13 @@ function ExerciseQuestionList({
                     )}>
                     {currentQuestion.options.map((option) => (
                         <button
+                            disabled={isLoading}
                             key={option.id}
-                            onClick={() => setSelectedAnswerId(option.id)}
+                            onClick={() => handleSelectAnswer(option.id)}
                             type="button"
                             className={cn(
                                 'py-3 rounded-lg border border-[#7D89CC] text-center disabled:opacity-75 transition-colors',
+                                isLoading ? 'bg-opacity-75' : '',
                                 selectedAnswerId === option.id
                                     ? 'bg-[#7D89CC]'
                                     : 'bg-[#191920]'
@@ -229,14 +210,13 @@ function ExerciseQuestionList({
                     <div className="flex justify-between items-center gap-3 w-full md:w-fit">
                         {!isSingleQuestion ? (
                             <Button
-                                id={PREV_QUESTION_BTN_ID}
                                 disabled={isFirstQuestion || isLoading}
-                                onClick={handleSubmitAnswer}
+                                onClick={handleClickPrev}
                                 type="button"
                                 variant="secondary"
                                 className={cn(
                                     '!p-0 w-[46px] h-[46px] grid place-items-center',
-                                    'md:w-fit md:h-fit md:!px-4 md:!py-3 md:flex md:items-center md:gap-2'
+                                    'md:w-fit md:h-fit md:!px-4 md:!py-2 md:flex md:items-center md:gap-2'
                                 )}>
                                 <ChevronLeftIcon className="shrink-0 w-5 h-5" />
                                 <span className="hidden md:block">
@@ -247,27 +227,28 @@ function ExerciseQuestionList({
                             <></>
                         )}
 
-                        <Button
-                            id={NEXT_QUESTION_BTN_ID}
-                            disabled={
-                                !selectedAnswerId ||
-                                isLoading ||
-                                (isLastQuestion && !!selectedAnswerId)
-                            }
-                            onClick={handleSubmitAnswer}
-                            type="button"
-                            variant="primary"
-                            className={cn(
-                                '!px-4 !py-3 flex items-center gap-2',
-                                isSingleQuestion ? 'w-full justify-center' : ''
-                            )}>
-                            {isSingleQuestion
-                                ? 'Jawab'
-                                : isLastQuestion
-                                ? 'Selesai'
-                                : 'Lanjut'}
-                            <ChevronRightIcon className="shrink-0 w-5 h-5" />
-                        </Button>
+                        {!isLastQuestion && !isSingleQuestion ? (
+                            <Button
+                                disabled={!selectedAnswerId || isLoading}
+                                onClick={handleClickNext}
+                                type="button"
+                                variant="primary"
+                                className={cn(
+                                    '!px-4 !py-2 flex items-center gap-2',
+                                    isSingleQuestion
+                                        ? 'w-full justify-center'
+                                        : ''
+                                )}>
+                                {isSingleQuestion
+                                    ? 'Jawab'
+                                    : isLastQuestion
+                                    ? 'Selesai'
+                                    : 'Lanjut'}
+                                <ChevronRightIcon className="shrink-0 w-5 h-5" />
+                            </Button>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
 
