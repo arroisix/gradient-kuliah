@@ -6,15 +6,7 @@ import { CopilotSolidIcon } from '../../../assets/CopilotSolidIcon';
 import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
-
-function formatDate(isoStr: string): string {
-    const date = new Date(isoStr);
-    return date.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-    });
-}
+import { formatDate } from 'commons/utils';
 
 interface PerformanceAnalysisProps {
     performance_analysis: PerformanceAnalysisType;

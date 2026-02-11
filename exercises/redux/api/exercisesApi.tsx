@@ -14,6 +14,7 @@ import {
     ExerciseProblemSolution,
     ExerciseProgress,
     ExerciseReportSummary,
+    GetStudentTryoutLatestResult,
     ProblemInProblemSet,
     ProblemNavigationItem,
     ProblemNavigationVerboseItem,
@@ -476,7 +477,8 @@ export const exerciseApi = baseApi.injectEndpoints({
                 {
                     type: 'COURSE_SUBCHAPTERS',
                     id: arg.subchapter_slug
-                }
+                },
+                { type: 'LATEST_TRYOUT_RESULT' }
             ]
         }),
         getProblemsetDetailInterstitial: builder.query<
@@ -526,6 +528,16 @@ export const exerciseApi = baseApi.injectEndpoints({
             query: ({ exercise_slug }) => ({
                 url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/leaderboard/`
             })
+        }),
+        getStudentTryoutLatestResult: builder.query<
+            GetStudentTryoutLatestResult,
+            void
+        >({
+            query: () => ({
+                url: `${EXERCISE_BASE_URL}latest-tryout-result/`,
+                method: 'GET'
+            }),
+            providesTags: [{ type: 'LATEST_TRYOUT_RESULT' }]
         })
     })
 });
@@ -563,7 +575,8 @@ export const {
     useGetCheckProblemsetCompletenessQuery,
     useGetAllProblemInProblemSetViaExerciseProgressQuery,
     useGetRecommendationMaterialFromProblemQuery,
-    useGetExerciseLeaderboardQuery
+    useGetExerciseLeaderboardQuery,
+    useGetStudentTryoutLatestResultQuery
 } = exerciseApi;
 
 export const {

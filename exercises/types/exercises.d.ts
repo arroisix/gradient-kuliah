@@ -450,3 +450,11 @@ export interface Target {
     institution: string;
     major: string;
 }
+
+export interface GetStudentTryoutLatestResult {
+    is_has_latest_result: boolean;
+    is_has_ongoing_tryout: boolean;
+    latest_result_score?: number;
+    latest_result_date?: string;
+    latest_result_tryout_title?: string;
+}

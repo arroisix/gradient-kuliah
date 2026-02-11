@@ -139,7 +139,8 @@ export const baseApi = createApi({
         'USER_CARDS',
         'ANNOUNCEMENTS',
         'EXERCISES',
-        'COPILOT_SESSION_HISTORY'
+        'COPILOT_SESSION_HISTORY',
+        'LATEST_TRYOUT_RESULT'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

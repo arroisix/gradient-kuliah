@@ -9,6 +9,7 @@ import { XIcon } from 'lucide-react';
 import { BiSolidUpArrow } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
 import { useGetStudentTargetInstitutionsQuery } from 'dashboard/redux/api/dashboardApi';
+import { useGetStudentTryoutLatestResultQuery } from 'exercises/redux/api/exercisesApi';
 
 type Feature = {
     id: string;
@@ -70,6 +71,7 @@ const K12Dashboard = (): JSX.Element => {
         'relative group rounded-lg md:rounded-2xl transition-colors bg-[#222222] hover:bg-neutral-800 p-3 min-h-[65px]';
 
     const { data: targetInstitutions } = useGetStudentTargetInstitutionsQuery();
+    const { data: tryoutLatestResult } = useGetStudentTryoutLatestResultQuery();
 
     useEffect(() => {
         // show tooltip if target institutions are empty
@@ -79,8 +81,10 @@ const K12Dashboard = (): JSX.Element => {
         ) {
             setIsTooltipClosed(false);
             setTooltipText('Bingung mulai darimana?');
+        } else if (tryoutLatestResult?.is_has_latest_result) {
+            setTooltipText('Habis TO? Liat kelebihan dan kekuranganmu disini!');
         }
-    }, [targetInstitutions]);
+    }, [targetInstitutions, tryoutLatestResult]);
 
     return (
         <section className="flex flex-col w-full gap-12 pb-12 mx-auto sm:overflow-x-clip overflow-x-visible max-w-[520px] lg:max-w-screen-md xl:max-w-[896px] md:h-[calc(100vh-128px)] justify-center">
