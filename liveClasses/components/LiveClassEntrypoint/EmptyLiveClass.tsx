@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaInstagram, FaTiktok, FaXTwitter } from 'react-icons/fa6';
 
-function LiveClassContainer(): JSX.Element {
+function EmptyLiveClass(): JSX.Element {
     return (
         <div className="w-full max-w-[472px] mx-auto">
             <div
@@ -68,4 +68,4 @@ function LiveClassContainer(): JSX.Element {
     );
 }
 
-export { LiveClassContainer };
+export { EmptyLiveClass };
