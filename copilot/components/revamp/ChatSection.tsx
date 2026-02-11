@@ -170,17 +170,25 @@ const ChatSection = ({
         const rich_content = message.rich_content;
         const messageContent = (
             <>
-                {message.image && !imageError[message.id] ? (
-                    <div className="relative aspect-video max-w-sm ml-auto rounded-lg overflow-hidden mb-2">
-                        <Image
-                            src={message.image}
-                            alt="embedded image"
-                            onClick={() => handleOpenImage(message.image)}
-                            onError={() => handleImageError(message.id)}
-                            layout="fill"
-                            className="object-cover object-center cursor-pointer"
-                            priority
-                        />
+                {Array.isArray(message.images) &&
+                message.images.length > 0 &&
+                !imageError[message.id] ? (
+                    <div className="carousel flex space-x-4 p-1">
+                        {message.images.map((image) => (
+                            <div
+                                key={image}
+                                className="carousel-item relative aspect-video w-[320px] ml-auto rounded-lg overflow-hidden mb-2">
+                                <Image
+                                    src={image}
+                                    alt="embedded image"
+                                    onClick={() => handleOpenImage(image)}
+                                    onError={() => handleImageError(message.id)}
+                                    layout="fill"
+                                    className="object-cover object-center cursor-pointer"
+                                    priority
+                                />
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <></>
