@@ -126,7 +126,7 @@ const CopilotContainer = ({
                             timestamp: new Date().toISOString(),
                             rating: item.rating,
                             isBookmarked: item.is_bookmarked,
-                            image: item.image,
+                            images: item.images,
                             usedReferences:
                                 convertHistoryContextToSelectedReferences(
                                     item.context
@@ -229,13 +229,17 @@ const CopilotContainer = ({
         const timestamp = new Date().toISOString();
 
         const currentUsedReferences = [...selectedReferences];
+        const images = [];
+        if (imageUrl) {
+            images.push(imageUrl);
+        }
 
         const userMessage: ChatMessage = {
             id: crypto.randomUUID(),
             role: 'User',
             content: prompt,
             timestamp,
-            image: imageUrl || null,
+            images,
             usedReferences:
                 currentUsedReferences.length > 0
                     ? currentUsedReferences
@@ -383,16 +387,21 @@ const CopilotContainer = ({
             role: 'User',
             content: message.content,
             timestamp,
-            image: message.image,
+            images: message.images,
             usedReferences: message.usedReferences
         };
+
+        const imageUrl =
+            Array.isArray(message.images) && message.images.length > 0
+                ? message.images[0]
+                : undefined;
 
         setMessages((prev) => [...prev, userMessage]);
         let currentResponse = '';
         const chatInput: ChatInput = {
             input_text: message.content,
             session_id: currentSessionId,
-            image_url: message.image || undefined,
+            image_url: imageUrl,
             context: message.usedReferences
                 ? buildChatContextFromReferences(message.usedReferences)
                 : undefined

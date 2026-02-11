@@ -93,6 +93,7 @@ export interface ChatHistoryResponse {
         role: 'AI' | 'User';
         message: string;
         image?: string | null;
+        images?: string[];
         message_id: string;
         rating: number;
         is_bookmarked: boolean;
@@ -133,6 +134,7 @@ export interface ChatMessage {
     rating?: number;
     isBookmarked?: boolean;
     image?: string | null;
+    images?: string[];
     keyword?: string | null;
     usedReferences?: SelectedReference[];
     rich_content?: {
