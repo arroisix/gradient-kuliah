@@ -45,7 +45,7 @@ function SubtestsAccordion({
             value={openedSubtest}
             onValueChange={(v) => setOpenedSubtest(v)}
             type="single"
-            className="flex flex-col gap-4">
+            className="space-y-4">
             {problemset_results.map((v) => (
                 <Accordion.Item
                     key={v.problemset_progress_id}

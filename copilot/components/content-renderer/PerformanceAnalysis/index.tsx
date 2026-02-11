@@ -6,14 +6,18 @@ import { CopilotSolidIcon } from '../../../assets/CopilotSolidIcon';
 import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
-import { formatDate } from 'commons/utils';
+import { cn, formatDate } from 'commons/utils';
 
 interface PerformanceAnalysisProps {
     performance_analysis: PerformanceAnalysisType;
+    isLoadingResponse: boolean;
+    sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
 }
 
 function PerformanceAnalysis({
-    performance_analysis
+    isLoadingResponse,
+    performance_analysis,
+    sendMessage
 }: PerformanceAnalysisProps): JSX.Element {
     const [openedSubtest, setOpenedSubtest] = useState(''); // problemset_progress_id
     const [openedLearningPath, setOpenedLearningPath] = useState<
@@ -31,6 +35,12 @@ function PerformanceAnalysis({
             performance_analysis.passing_grade) *
         100;
 
+    const handleClickPromptBtn = () => {
+        sendMessage(
+            'Jelaskan secara rinci dan mudah dipahami berdasarkan data analisis tersebut.'
+        );
+    };
+
     if (openedLearningPath) {
         return (
             <LearningPath
@@ -41,14 +51,22 @@ function PerformanceAnalysis({
     }
 
     return (
-        <div className="bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[680px]">
+        <div
+            className={cn(
+                'bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
+                'md:max-w-[680px]'
+            )}>
             {/* utbk countdown */}
             <div className="bg-[#282B3C] text-[#E9D5FF] font-bold text-xs leading-tight px-6 py-2 text-center uppercase tracking-[1.1px]">
                 UTBK {remainingUTBKDays} hari lagi
             </div>
 
             {/* header */}
-            <div className="bg-[#20222E] px-6 py-4 flex justify-between text-center gap-8">
+            <div
+                className={cn(
+                    'bg-[#20222E] p-4 flex flex-col justify-between gap-4',
+                    'md:px-6 md:flex-row md:gap-8'
+                )}>
                 <div className="flex flex-col items-start gap-1">
                     <h3 className="text-white font-semibold leading-[140%]">
                         Hasil Try Out
@@ -64,7 +82,7 @@ function PerformanceAnalysis({
 
                 <div className="flex items-center gap-2">
                     <GraduateIcon className="shrink-0 fill-[#999999] w-4 h-4" />
-                    <span className="shrink-0">
+                    <span className="text-sm font-semibold leading-tight">
                         {performance_analysis.target_major} -{' '}
                         {performance_analysis.target_institution}
                     </span>
@@ -72,35 +90,51 @@ function PerformanceAnalysis({
             </div>
 
             {/* main */}
-            <div className="grid grid-cols-2 mt-6 mb-4">
+            <div
+                className={cn(
+                    'grid gap-4 m-4',
+                    'md:gap-0 md:mt-6 md:grid-cols-2'
+                )}>
                 {/* left side */}
-                <div className="flex flex-col px-6">
-                    <div>
-                        <div className="text-[#999999] text-sm leading-[160%]">
-                            Skor
-                        </div>
+                <div className={cn('flex flex-col gap-6', 'md:px-6')}>
+                    <div className="flex flex-col">
+                        <div
+                            className={cn(
+                                'flex justify-between items-center gap-4',
+                                'md:flex-col md:items-start md:gap-2'
+                            )}>
+                            <div>
+                                <div className="text-[#999999] text-sm leading-[160%]">
+                                    Skor
+                                </div>
+                                <div className="text-white text-[32px] font-bold leading-[120%]">
+                                    {performance_analysis.total_score}
+                                </div>
+                            </div>
 
-                        <div className="text-white text-[32px] font-bold leading-[120%]">
-                            {performance_analysis.total_score}
-                        </div>
+                            <div className="space-y-2">
+                                <div className="bg-[#282B3C] rounded-full overflow-hidden w-full max-w-[119px] h-2">
+                                    <div
+                                        className="bg-[#03AC5C] rounded-full transition-all duration-500 ease-out h-full"
+                                        style={{
+                                            width: `${percentage_progress}%`
+                                        }}
+                                        role="progressbar"
+                                        aria-valuenow={
+                                            performance_analysis.total_score ??
+                                            0
+                                        }
+                                        aria-valuemin={0}
+                                        aria-valuemax={
+                                            performance_analysis.passing_grade
+                                        }
+                                    />
+                                </div>
 
-                        <div className="bg-[#282B3C] rounded-full overflow-hidden w-full max-w-[119px] h-2 my-2">
-                            <div
-                                className="bg-[#03AC5C] rounded-full transition-all duration-500 ease-out h-full"
-                                style={{ width: `${percentage_progress}%` }}
-                                role="progressbar"
-                                aria-valuenow={
-                                    performance_analysis.total_score ?? 0
-                                }
-                                aria-valuemin={0}
-                                aria-valuemax={
-                                    performance_analysis.passing_grade
-                                }
-                            />
-                        </div>
-
-                        <div className="text-[#B6A6F3] font-semibold text-sm leading-tight">
-                            Target: {performance_analysis.passing_grade}
+                                <div className="text-[#B6A6F3] font-semibold text-sm leading-tight">
+                                    Target: {performance_analysis.passing_grade}
+                                </div>
+                            </div>
                         </div>
 
                         {performance_analysis.total_score <
@@ -123,16 +157,22 @@ function PerformanceAnalysis({
                         ) : (
                             <></>
                         )}
-                    </div>
 
-                    <div className="flex-grow flex flex-col justify-between mt-10">
-                        <div>
+                        {/* <div className="mt-10">
                             <h3 className="text-white font-semibold text-center leading-[140%] mb-6">
                                 Subtes Mana yang Paling Kuat?
                             </h3>
-                        </div>
+                        </div> */}
+                    </div>
 
+                    <div
+                        className={cn(
+                            'hidden flex-grow justify-center items-end',
+                            'md:flex'
+                        )}>
                         <Button
+                            disabled={isLoadingResponse}
+                            onClick={handleClickPromptBtn}
                             type="button"
                             variant="primary"
                             className="!py-2 !px-4 text-sm flex items-center gap-2 mx-auto">
@@ -143,7 +183,7 @@ function PerformanceAnalysis({
                 </div>
 
                 {/* right side */}
-                <div className="px-6">
+                <div className="md:px-6">
                     <h4 className="text-white font-semibold text-sm leading-tight mb-4">
                         Analisa per Subtest
                     </h4>
@@ -161,6 +201,19 @@ function PerformanceAnalysis({
                         <></>
                     )}
                 </div>
+
+                <Button
+                    disabled={isLoadingResponse}
+                    onClick={handleClickPromptBtn}
+                    type="button"
+                    variant="primary"
+                    className={cn(
+                        '!py-2 !px-4 text-sm flex items-center gap-2 mx-auto',
+                        'md:hidden'
+                    )}>
+                    <CopilotSolidIcon className="shrink-0 fill-white w-4 h-4" />
+                    Bantu Jelaskan
+                </Button>
             </div>
         </div>
     );
