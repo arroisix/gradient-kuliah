@@ -88,7 +88,7 @@ function InterruptOptions({
                         disabled={!dirty || isLoadingResponse}
                         type="submit"
                         variant="primary"
-                        className="!px-5 !py-3 mt-6 block ml-auto">
+                        className="!px-5 !py-2 mt-6 block ml-auto">
                         Submit
                     </Button>
                 </form>
