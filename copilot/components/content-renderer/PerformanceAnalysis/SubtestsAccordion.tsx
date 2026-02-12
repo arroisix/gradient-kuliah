@@ -1,6 +1,6 @@
 import { Accordion } from 'radix-ui';
 import { PerformanceAnalysis } from 'copilot/types/copilot';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { cn } from 'commons/utils';
 import { ChevronDownIcon } from 'lucide-react';
 import { FaCircleCheck, FaCircleInfo } from 'react-icons/fa6';
@@ -18,8 +18,6 @@ function generateHexTextColor(score: number): string {
 
 interface SubtestsAccordionProps
     extends Pick<PerformanceAnalysis, 'problemset_results'> {
-    openedSubtest: string;
-    setOpenedSubtest: Dispatch<SetStateAction<string>>;
     setOpenedLearningPath: Dispatch<
         SetStateAction<PerformanceAnalysis['problemset_results'][number] | null>
     >;
@@ -27,18 +25,9 @@ interface SubtestsAccordionProps
 
 function SubtestsAccordion({
     problemset_results,
-    openedSubtest,
-    setOpenedSubtest,
     setOpenedLearningPath
 }: SubtestsAccordionProps): JSX.Element {
-    useEffect(() => {
-        setOpenedSubtest(
-            openedSubtest
-                ? openedSubtest
-                : problemset_results[0].problemset_progress_id
-        );
-    }, []);
-
+    const [openedSubtest, setOpenedSubtest] = useState(''); // problemset_progress_id
     return (
         <Accordion.Root
             collapsible

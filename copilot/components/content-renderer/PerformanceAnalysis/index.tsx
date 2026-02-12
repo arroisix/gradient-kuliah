@@ -20,7 +20,6 @@ function PerformanceAnalysis({
     performance_analysis,
     sendMessage
 }: PerformanceAnalysisProps): JSX.Element {
-    const [openedSubtest, setOpenedSubtest] = useState(''); // problemset_progress_id
     const [openedLearningPath, setOpenedLearningPath] = useState<
         PerformanceAnalysisType['problemset_results'][number] | null
     >(null);
@@ -197,12 +196,10 @@ function PerformanceAnalysis({
 
                     {performance_analysis.problemset_results.length > 0 ? (
                         <SubtestsAccordion
-                            openedSubtest={openedSubtest}
                             problemset_results={
                                 performance_analysis.problemset_results
                             }
                             setOpenedLearningPath={setOpenedLearningPath}
-                            setOpenedSubtest={setOpenedSubtest}
                         />
                     ) : (
                         <></>
