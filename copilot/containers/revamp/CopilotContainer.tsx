@@ -157,6 +157,14 @@ const CopilotContainer = ({
         scrollToBottom();
     }, [reasoning]);
 
+    useEffect(() => {
+        if (currentSessionId) {
+            window.history.pushState('', '', `/copilot/${currentSessionId}`);
+        } else {
+            setMessages([]);
+        }
+    }, [currentSessionId]);
+
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         const isNearBottom =
@@ -611,6 +619,7 @@ const CopilotContainer = ({
                     onClose={handleCloseHistory}
                     onOpen={handleOpenHistory}
                     isMobile={isMobileBreakpoints}
+                    setCurrentSessionId={setCurrentSessionId}
                 />
             )}
 

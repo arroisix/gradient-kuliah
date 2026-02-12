@@ -7,6 +7,7 @@ import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
 import { cn, formatDate } from 'commons/utils';
+import { SpiderChart } from './SpiderChart';
 
 interface PerformanceAnalysisProps {
     performance_analysis: PerformanceAnalysisType;
@@ -92,8 +93,8 @@ function PerformanceAnalysis({
             {/* main */}
             <div
                 className={cn(
-                    'grid gap-4 m-4',
-                    'md:gap-0 md:mt-6 md:grid-cols-2'
+                    'space-y-8 m-4',
+                    'md:space-y-0 md:grid md:grid-cols-2 md:mt-6'
                 )}>
                 {/* left side */}
                 <div className={cn('flex flex-col gap-6', 'md:px-6')}>
@@ -158,11 +159,17 @@ function PerformanceAnalysis({
                             <></>
                         )}
 
-                        {/* <div className="mt-10">
+                        <div className="mt-10">
                             <h3 className="text-white font-semibold text-center leading-[140%] mb-6">
                                 Subtes Mana yang Paling Kuat?
                             </h3>
-                        </div> */}
+
+                            <SpiderChart
+                                problemset_results={
+                                    performance_analysis.problemset_results
+                                }
+                            />
+                        </div>
                     </div>
 
                     <div

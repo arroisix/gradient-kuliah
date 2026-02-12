@@ -3,7 +3,14 @@ import {
     SessionHistoryResponse
 } from 'copilot/types/copilot';
 import Link from 'next/link';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import {
+    useState,
+    useEffect,
+    useMemo,
+    useRef,
+    Dispatch,
+    SetStateAction
+} from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BiCopy, BiSearch } from 'react-icons/bi';
 import { FiEdit } from 'react-icons/fi';
@@ -27,13 +34,15 @@ interface HistorySectionProps {
     onClose: () => void;
     onOpen: () => void;
     isMobile?: boolean;
+    setCurrentSessionId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const HistorySection = ({
     isOpen,
     onClose,
     onOpen,
-    isMobile = false
+    isMobile = false,
+    setCurrentSessionId
 }: HistorySectionProps): JSX.Element => {
     const router = useRouter();
     const [bookmarkedChats, setBookmarkedChats] = useState<
@@ -169,6 +178,7 @@ const HistorySection = ({
 
     const handleNewChat = () => {
         tracker?.genericTrack('Create Empty Copilot Session');
+        setCurrentSessionId(undefined);
         router.push('/copilot');
         onClose();
     };
