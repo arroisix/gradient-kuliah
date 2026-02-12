@@ -30,6 +30,7 @@ import { InterruptTargetInstitutions } from '../content-renderer/InterruptTarget
 import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { GoArrowUpRight } from 'react-icons/go';
 import { PerformanceAnalysis } from '../content-renderer/PerformanceAnalysis';
+import { References } from '../content-renderer/PerformanceAnalysis/References';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -359,6 +360,14 @@ const ChatSection = ({
                             </div>
                         </div>
 
+                        {/* references */}
+                        {Array.isArray(rich_content?.references) &&
+                        rich_content.references.length > 0 ? (
+                            <References references={rich_content.references} />
+                        ) : (
+                            <></>
+                        )}
+
                         {/* question recommendation */}
                         {Array.isArray(rich_content?.question_recommendation) &&
                         rich_content.question_recommendation.length > 0 ? (
@@ -373,7 +382,7 @@ const ChatSection = ({
                                             key={message}
                                             onClick={() => sendMessage(message)}
                                             type="button"
-                                            className="bg-gradient-to-b from-black/10 to-[#F2F2F2]/10 text-white text-xs leading-[160%] p-3 rounded-xl border border-white/[17%] flex justify-between items-center gap-3 text-left">
+                                            className="bg-gradient-to-b from-black/10 to-[#F2F2F2]/10 text-white text-xs leading-[160%] p-3 rounded-xl border border-[#333333] flex justify-between items-center gap-3 text-left">
                                             {message}
                                             <GoArrowUpRight className="shrink-0 text-[#666666] w-5 h-5" />
                                         </button>
