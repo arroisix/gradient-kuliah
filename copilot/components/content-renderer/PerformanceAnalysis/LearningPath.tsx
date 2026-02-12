@@ -1,5 +1,6 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { cn, formatDuration } from 'commons/utils';
+import { LearningPathIcon } from 'copilot/assets/LearningPathIcon';
 import { useGetProblemsetLearningPathQuery } from 'copilot/redux/api/copilotApi';
 import {
     GetProblemsetLearningPath,
@@ -14,6 +15,15 @@ import {
 import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { FaRegDotCircle } from 'react-icons/fa';
+
+// generate text color based on subtest score
+function generateHexTextColor(score: number): string {
+    return score < 300
+        ? 'text-[#DB4A3B]'
+        : score >= 300 && score < 550
+        ? 'text-[#F2C04C]'
+        : 'text-[#03AC5C]';
+}
 
 interface LearningPathProps {
     problemset_result: PerformanceAnalysis['problemset_results'][number];
@@ -32,18 +42,20 @@ function LearningPath({
 
     if (isLoading) {
         return (
-            <div
-                className={cn(
-                    'animate-pulse bg-[#333333] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto pb-8 h-64',
-                    'md:max-w-[680px]'
-                )}></div>
+            <div className="animate-fade">
+                <div
+                    className={cn(
+                        'animate-pulse bg-[#333333] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto pb-8 h-64',
+                        'md:max-w-[680px]'
+                    )}></div>
+            </div>
         );
     }
 
     return (
         <div
             className={cn(
-                'bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
+                'bg-[#191920] animate-fade rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto h-full max-h-[1024px] flex flex-col',
                 'md:max-w-[680px]'
             )}>
             <div
@@ -76,23 +88,39 @@ function LearningPath({
                     </div>
                 </div>
 
-                <h3 className="text-[#03AC5C] font-semibold text-xl leading-[140%]">
+                <h3
+                    className={cn(
+                        'font-semibold text-xl leading-[140%]',
+                        generateHexTextColor(problemset_result.score)
+                    )}>
                     {problemset_result.score}
                 </h3>
             </div>
 
             <div
                 className={cn(
-                    'mt-6 mb-8 mx-3 space-y-6 overflow-scroll',
+                    'flex-grow pt-6 pb-8 mx-3 space-y-6 overflow-scroll scrollbar-none',
                     'md:mx-6 md:pr-4'
                 )}>
-                {data?.chapters.map((chapter, index, chapters) => (
-                    <ChapterLearningPath
-                        key={chapter.slug}
-                        chapter={chapter}
-                        isLastChapter={index === chapters.length - 1}
-                    />
-                ))}
+                {Array.isArray(data?.chapters) && data?.chapters.length > 0 ? (
+                    data?.chapters.map((chapter, index, chapters) => (
+                        <ChapterLearningPath
+                            key={chapter.slug}
+                            chapter={chapter}
+                            isLastChapter={index === chapters.length - 1}
+                        />
+                    ))
+                ) : (
+                    <div className="flex flex-col justify-center items-center gap-2 w-full max-w-sm mx-auto">
+                        <div className="w-12 h-12 rounded-full bg-[#333333] grid place-items-center">
+                            <LearningPathIcon className="fill-white w-8 h-8" />
+                        </div>
+
+                        <p className="text-white leading-[160%]">
+                            Belum ada learning path untuk ditampilkan.
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );

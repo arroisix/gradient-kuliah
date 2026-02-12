@@ -132,6 +132,7 @@ module.exports = {
     },
     variants: {},
     plugins: [
+        require('tailwindcss-animated'),
         require('tailwind-scrollbar'),
         require('@tailwindcss/forms'),
         require('daisyui'),
