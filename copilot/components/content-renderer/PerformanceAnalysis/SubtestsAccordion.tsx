@@ -64,15 +64,15 @@ function SubtestsAccordion({
                                     'text-left text-sm leading-[160%] flex items-center gap-2',
                                     generateHexTextColor(v.score)
                                 )}>
-                                {v.score >= 550 ? (
-                                    <></>
-                                ) : (
+                                {v.score < 550 ? (
                                     <FaCircleInfo
                                         className={cn(
                                             'shrink-0 w-4 h-4',
                                             generateHexTextColor(v.score)
                                         )}
                                     />
+                                ) : (
+                                    <></>
                                 )}
                                 {v.problemset_title}{' '}
                             </span>
@@ -96,22 +96,28 @@ function SubtestsAccordion({
                         </Accordion.Trigger>
                     </Accordion.Header>
 
-                    <Accordion.Content className="mt-4 space-y-3">
+                    <Accordion.Content className="animate-fade mt-4 space-y-3">
                         <div className="bg-[#191920] p-3 rounded-lg border border-[#4B4E5F] space-y-4">
                             <h5 className="text-white font-semibold text-sm leading-tight flex items-center gap-2">
                                 <FaCircleCheck className="shrink-0 text-[#03AC5C] w-4 h-4" />{' '}
                                 Dikuasai
                             </h5>
 
-                            <div className="flex flex-wrap gap-y-3 gap-x-2">
-                                {v.chapter_mastered.map((chapter) => (
-                                    <div
-                                        key={chapter}
-                                        className="text-white font-medium text-xs leading-tight bg-[#4B4E5F] px-2 py-1 rounded-full">
-                                        {chapter}
-                                    </div>
-                                ))}
-                            </div>
+                            {v.chapter_mastered.length > 0 ? (
+                                <div className="flex flex-wrap gap-y-3 gap-x-2">
+                                    {v.chapter_mastered.map((chapter) => (
+                                        <div
+                                            key={chapter}
+                                            className="text-white font-medium text-xs leading-tight bg-[#4B4E5F] px-2 py-1 rounded-full">
+                                            {chapter}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-[#999999] text-sm leading-[160%]">
+                                    Belum ada materi yang kamu kuasai.
+                                </p>
+                            )}
                         </div>
 
                         <div className="bg-[#191920] p-3 rounded-lg border border-[#4B4E5F] space-y-4">
@@ -120,15 +126,23 @@ function SubtestsAccordion({
                                 Perlu Evaluasi
                             </h5>
 
-                            <div className="flex flex-wrap gap-y-3 gap-x-2">
-                                {v.chapter_need_to_improve.map((chapter) => (
-                                    <div
-                                        key={chapter}
-                                        className="text-white font-medium text-xs leading-tight bg-[#4B4E5F] px-2 py-1 rounded-full">
-                                        {chapter}
-                                    </div>
-                                ))}
-                            </div>
+                            {v.chapter_need_to_improve.length > 0 ? (
+                                <div className="flex flex-wrap gap-y-3 gap-x-2">
+                                    {v.chapter_need_to_improve.map(
+                                        (chapter) => (
+                                            <div
+                                                key={chapter}
+                                                className="text-white font-medium text-xs leading-tight bg-[#4B4E5F] px-2 py-1 rounded-full">
+                                                {chapter}
+                                            </div>
+                                        )
+                                    )}
+                                </div>
+                            ) : (
+                                <p className="text-[#999999] text-sm leading-[160%]">
+                                    Belum ada materi yang perlu dievaluasi.
+                                </p>
+                            )}
 
                             {v.chapter_need_to_improve.length > 0 ? (
                                 <div className="bg-[#20222E] py-3 px-4 rounded-lg border border-[#2C2C2C] text-white text-xs leading-[160%] space-y-3">

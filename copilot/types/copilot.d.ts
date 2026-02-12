@@ -87,6 +87,18 @@ export interface CopilotAttachment {
     url: string;
 }
 
+export interface CopilotReference {
+    type: 'video' | 'astronotes' | 'problem_bank' | 'textbook';
+    id: string;
+    title: string;
+    course_slug?: string;
+    chapter_slug?: string;
+    subchapter_slug?: string;
+    book_slug?: string;
+    problem_slug?: string;
+    snippet?: string;
+}
+
 export interface ChatHistoryResponse {
     session_id: string;
     history: {
@@ -100,6 +112,7 @@ export interface ChatHistoryResponse {
         keyword?: string | null;
         context?: { data: ChatHistoryContextItem[] };
         rich_content?: {
+            references?: CopilotReference[];
             attachments?: CopilotAttachment[];
             content_recommendations?: CopilotContentRecommendation[];
             performance_analysis?: PerformanceAnalysis;
@@ -138,6 +151,7 @@ export interface ChatMessage {
     keyword?: string | null;
     usedReferences?: SelectedReference[];
     rich_content?: {
+        references?: CopilotReference[];
         attachments?: CopilotAttachment[];
         content_recommendations?: CopilotContentRecommendation[];
         performance_analysis?: PerformanceAnalysis;

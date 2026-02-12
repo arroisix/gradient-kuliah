@@ -54,7 +54,7 @@ function PerformanceAnalysis({
     return (
         <div
             className={cn(
-                'bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
+                'animate-fade bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
                 'md:max-w-[680px]'
             )}>
             {/* utbk countdown */}
@@ -161,7 +161,7 @@ function PerformanceAnalysis({
 
                         <div className="mt-10">
                             <h3 className="text-white font-semibold text-center leading-[140%] mb-6">
-                                Subtes Mana yang Paling Kuat?
+                                Materi Mana yang Paling Kuat?
                             </h3>
 
                             <SpiderChart
@@ -192,7 +192,7 @@ function PerformanceAnalysis({
                 {/* right side */}
                 <div className="md:px-6">
                     <h4 className="text-white font-semibold text-sm leading-tight mb-4">
-                        Analisa per Subtest
+                        Analisa per Materi
                     </h4>
 
                     {performance_analysis.problemset_results.length > 0 ? (
