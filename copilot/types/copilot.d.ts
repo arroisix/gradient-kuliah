@@ -89,7 +89,6 @@ export interface CopilotAttachment {
 
 export interface CopilotReference {
     type: 'video' | 'astronotes' | 'problem_bank' | 'textbook';
-    id: string;
     title: string;
     course_slug?: string;
     chapter_slug?: string;
