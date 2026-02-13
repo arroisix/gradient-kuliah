@@ -117,11 +117,12 @@ function Layout({ children, isForSEO = false }: LayoutProps): JSX.Element {
     }
 
     return (
-        <div className={cn('flex flex-col h-screen', 'lg:flex-row')}>
+        <div className={cn('bg-black flex flex-col h-screen', 'lg:flex-row')}>
+            {/* sidebar */}
             <div
                 className={cn(
                     'hidden',
-                    'lg:flex w-64 bg-black border border-[#101010] flex-col justify-between'
+                    'lg:flex w-64 border-r border-r-[#333333] flex-col justify-between'
                 )}>
                 <div className="space-y-8">
                     <div className="px-6 pt-6 space-y-6">
@@ -179,13 +180,15 @@ function Layout({ children, isForSEO = false }: LayoutProps): JSX.Element {
                 </div>
             </div>
 
+            {/* main content */}
             <div className="flex-grow overflow-scroll scrollbar-none">
                 {children}
             </div>
 
+            {/* app bar */}
             <div
                 className={cn(
-                    'bg-black py-2.5 flex justify-evenly items-center',
+                    'py-2.5 flex justify-evenly items-center',
                     'lg:hidden'
                 )}>
                 {(menuItems.length > 5
