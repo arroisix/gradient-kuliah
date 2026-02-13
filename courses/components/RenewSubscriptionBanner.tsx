@@ -71,7 +71,7 @@ export default function RenewSubscriptionBanner({
         return (
             <div
                 className={cn(
-                    'hidden md:block fixed bottom-0 left-1/2 -translate-x-1/2 w-[60%] lg:w-fit z-40 md:translate-x-[calc(-50%+125px)]',
+                    'hidden lg:block fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl lg:w-fit z-40 md:translate-x-[calc(-50%+125px)]',
                     className
                 )}>
                 <div className="relative rounded-t-2xl p-6 flex flex-row items-center gap-6 bg-[#5F2BCE] overflow-hidden">
@@ -109,7 +109,7 @@ export default function RenewSubscriptionBanner({
 
     const k12MobileComponent = (): JSX.Element => {
         return (
-            <div className="md:hidden px-6 py-4 flex flex-col gap-6 bg-[#5F2BCE] rounded-2xl relative overflow-hidden">
+            <div className="lg:hidden w-full max-w-2xl mx-auto px-6 py-4 flex flex-col gap-6 bg-[#5F2BCE] rounded-2xl relative overflow-hidden">
                 <div className="flex flex-col gap-2 z-10">
                     <h2 className="text-white font-semibold">
                         Langganan untuk mendapat akses penuh ke {k12Product}

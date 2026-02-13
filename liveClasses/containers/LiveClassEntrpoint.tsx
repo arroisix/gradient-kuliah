@@ -14,10 +14,12 @@ import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { OngoingLiveClass } from 'liveClasses/components/LiveClassEntrypoint/OngoingLiveClass';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 function LiveClassEntrypointContainer(): JSX.Element {
     const MAX_ITEMS_PER_PAGE = 6;
 
+    const { profile } = useAuth();
     const router = useRouter();
     const { page } = router.query as { page: string };
     const pageInt = page ? parseInt(page, 10) : 1;
@@ -216,23 +218,16 @@ function LiveClassEntrypointContainer(): JSX.Element {
                     </div>
                 )}
 
-            {!is_subscribed ||
-            (subscribedFeatures &&
-                !subscribedFeatures.includes('live_class')) ? (
+            {profile &&
+            (!is_subscribed ||
+                (subscribedFeatures &&
+                    !subscribedFeatures.includes('live_class'))) ? (
                 <>
-                    <div className="md:hidden py-4">
-                        <RenewSubscriptionBanner
-                            type="K12_MOBILE"
-                            k12Product="Live Class"
-                            k12Description="Selain Live Class nikmati ribuan video pembelajaran, bank soal, dan fitur eksklusif lainnya tanpa batas."
-                        />
-                    </div>
-                    {isAuthenticated && (
-                        <div className="w-full h-[108px] xl:hidden" />
-                    )}
-                    {isAuthenticated && (
-                        <div className="w-full h-[64px] xl:block hidden" />
-                    )}
+                    <RenewSubscriptionBanner
+                        type="K12_MOBILE"
+                        k12Product="Live Class"
+                        k12Description="Selain Live Class nikmati ribuan video pembelajaran, bank soal, dan fitur eksklusif lainnya tanpa batas."
+                    />
                     <RenewSubscriptionBanner
                         type="K12"
                         k12Product="Live Class"

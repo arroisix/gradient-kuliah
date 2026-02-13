@@ -3,6 +3,7 @@ import { MateriCard } from './MateriCard';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { cn } from 'commons/utils';
 
 function MateriEntrypoint() {
     const { isAuthenticated } = useAuth();
@@ -23,12 +24,12 @@ function MateriEntrypoint() {
         : [];
 
     return (
-        <>
+        <div className={cn('w-full max-w-lg mx-auto', 'lg:max-w-5xl')}>
             <h1 className="text-white font-bold text-2xl leading-tight mb-6">
                 Materi
             </h1>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
                 {isPublicCoursesLoading || isPrivateCoursesLoading ? (
                     <>
                         <MateriCardSkeleton />
@@ -55,7 +56,7 @@ function MateriEntrypoint() {
                     ))
                 )}
             </div>
-        </>
+        </div>
     );
 }
 

@@ -82,7 +82,11 @@ const K12Dashboard = (): JSX.Element => {
     }, [targetInstitutions, tryoutLatestResult]);
 
     return (
-        <section className={cn('mt-4 h-full', 'lg:grid lg:place-items-center')}>
+        <section
+            className={cn(
+                'm-4 space-y-12 h-full',
+                'lg:m-0 lg:grid lg:place-items-center'
+            )}>
             <div
                 className={cn(
                     'flex flex-col justify-center items-center gap-6',
@@ -92,7 +96,11 @@ const K12Dashboard = (): JSX.Element => {
                     Mau Belajar apa Hari ini?
                 </h1>
 
-                <div className="grid gap-4 lg:grid-cols-2">
+                <div
+                    className={cn(
+                        'w-full max-w-lg mx-auto grid gap-4',
+                        'lg:w-fit lg:grid-cols-2'
+                    )}>
                     {features.map((feature) => (
                         <div key={feature.id} className="relative">
                             <Link
