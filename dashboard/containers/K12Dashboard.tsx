@@ -82,7 +82,7 @@ const K12Dashboard = (): JSX.Element => {
     }, [targetInstitutions, tryoutLatestResult]);
 
     return (
-        <section className={cn('h-full', 'lg:grid lg:place-items-center')}>
+        <section className={cn('mt-4 h-full', 'lg:grid lg:place-items-center')}>
             <div
                 className={cn(
                     'flex flex-col justify-center items-center gap-6',

@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { Dialog, Transition } from '@headlessui/react';
 import CollegeLogo from './components/CollegeLogo';
+import { cn } from 'commons/utils';
 
 interface Role {
     id: 'K12' | 'COLLEGE_STUDENT';
@@ -112,11 +113,16 @@ const RoleSwitcher = () => {
 
     return (
         <>
-            <div className="relative w-full" ref={dropdownRef}>
+            <div
+                className="relative w-full flex justify-center items-center"
+                ref={dropdownRef}>
                 {/* Selected Role Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="w-full flex items-center gap-4 bg-[#101010] border border-[#333333] rounded-lg px-4 py-3">
+                    className={cn(
+                        'flex items-center gap-4',
+                        'lg:w-full lg:bg-[#101010] lg:border lg:border-[#333333] lg:rounded-lg lg:px-4 lg:py-3'
+                    )}>
                     <div className="flex items-center gap-2">
                         <span className="text-white text-lg font-semibold font-[Urbanist]">
                             {selectedRole?.label}
@@ -132,7 +138,7 @@ const RoleSwitcher = () => {
 
                 {/* Desktop Dropdown Menu */}
                 {isOpen && !isMobileBreakpoints && (
-                    <div className="hidden lg:block absolute top-full mt-2 w-full bg-[#101010] border border-[#2a2a2a] rounded-lg shadow-xl overflow-hidden z-50">
+                    <div className="animate-fade animate-duration-500 hidden lg:block absolute top-full mt-2 w-full bg-[#101010] border border-[#2a2a2a] rounded-lg shadow-xl overflow-hidden z-50">
                         {roles.map((role) => (
                             <button
                                 key={role.id}
