@@ -47,7 +47,7 @@ function References({ references }: ReferencesProps): JSX.Element {
 
                 <Accordion.Content className="animate-fade bg-[#191920] p-3 rounded-lg border border-[#4B4E5F] space-y-3 mt-3">
                     {references.map((v) => (
-                        <ReferenceItem key={v.id} reference={v} />
+                        <ReferenceItem key={v.title} reference={v} />
                     ))}
                 </Accordion.Content>
             </Accordion.Item>
@@ -63,17 +63,27 @@ function ReferenceItem({ reference }: ReferenceItemProps): JSX.Element {
     const { profile } = useAuth();
     let url = '';
 
-    if (reference.type === 'problem_bank') {
-        url = `/perpustakaan/bank-soal/${reference.book_slug}/${reference.problem_slug}`;
-    } else if (reference.type === 'textbook') {
-        url = `/perpustakaan/textbook/${reference.book_slug}/${reference.problem_slug}`;
-    } else if (reference.type === 'astronotes') {
-        url = `/perpustakaan/astronotes/${reference.book_slug}/${reference.problem_slug}`;
-    } else {
+    if (reference.type === 'video') {
         url =
             profile?.current_role === 'COLLEGE_STUDENT'
                 ? `/kelas/${reference.subchapter_slug}`
-                : `/utbk/materi/${reference.course_slug}/${reference.chapter_slug}/${reference.subchapter_slug}`;
+                : `/utbk/materi/${reference.course_slug}/${
+                      reference.chapter_slug || '_'
+                  }/${reference.subchapter_slug}`;
+    }
+
+    if (
+        reference.type !== 'video' &&
+        reference.book_slug &&
+        reference.problem_slug
+    ) {
+        const bookType =
+            reference.type === 'problem_bank'
+                ? 'bank-soal'
+                : reference.type === 'textbook'
+                ? 'textbook'
+                : 'astronotes';
+        url = `/perpustakaan/${bookType}/${reference.book_slug}/${reference.problem_slug}`;
     }
 
     return (
@@ -81,7 +91,10 @@ function ReferenceItem({ reference }: ReferenceItemProps): JSX.Element {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex justify-between items-center">
+            className={cn(
+                'group flex justify-between items-center',
+                !url ? 'pointer-events-none' : ''
+            )}>
             <div className="flex items-center gap-2">
                 <div className="bg-[#4B4E5F] w-8 h-8 rounded-full grid place-items-center">
                     {reference.type === 'video' ? (
