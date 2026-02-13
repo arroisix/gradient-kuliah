@@ -113,26 +113,20 @@ const RoleSwitcher = () => {
     return (
         <>
             <div className="relative w-full" ref={dropdownRef}>
-                {/* Label */}
-                <div className="text-gray-400 text-xs mb-2 lg:block hidden">
-                    Ganti Mode
-                </div>
-
                 {/* Selected Role Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="flex w-full items-center gap-2 lg:bg-[#2C2C2C] lg:hover:bg-[#252525] lg:border border-[#2a2a2a] rounded-lg lg:px-4 lg:py-2.5 transition-colors font-[Urbanist]">
-                    <div className="flex items-center gap-2 flex-1">
+                    className="w-full flex items-center gap-4 bg-[#101010] border border-[#333333] rounded-lg px-4 py-3">
+                    <div className="flex items-center gap-2">
                         <span className="text-white text-lg font-semibold font-[Urbanist]">
                             {selectedRole?.label}
                         </span>
                         {selectedRole?.badge && selectedRole.badge}
                     </div>
                     <FiChevronDown
-                        className={`text-gray-400 transition-transform ${
+                        className={`shrink-0 text-white transition-transform w-5 h-5 ${
                             isOpen ? 'rotate-180' : ''
                         }`}
-                        size={20}
                     />
                 </button>
 
@@ -145,8 +139,8 @@ const RoleSwitcher = () => {
                                 onClick={() => handleRoleSelect(role)}
                                 className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${
                                     selectedRole?.id === role.id
-                                        ? 'bg-[#5b4cdb] hover:bg-[#6d5ee5]'
-                                        : 'hover:bg-[#252525]'
+                                        ? 'bg-[#5F2BCE] hover:bg-[#5F2BCE]/75'
+                                        : 'bg-[#101010] hover:bg-[#101010]/75'
                                 }`}>
                                 <div className="flex items-center gap-2">
                                     <div className="flex flex-col items-start gap-1">

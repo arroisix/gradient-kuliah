@@ -17,6 +17,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { cn } from 'commons/utils';
+import RoleSwitcher from './modules/Navbar/RoleSwitcher';
+import DashboardSearchInput from 'dashboard/components/Search/SearchSection/SearchInput';
+import LoadingBackdrop from './elements/LoadingBackdrop';
+import { ProfileMenu } from './ProfileMenu';
 
 const collegeMenuItems = [
     {
@@ -48,12 +52,6 @@ const collegeMenuItems = [
         href: '/perpustakaan',
         InactiveIcon: LibraryOutlineIcon,
         ActiveIcon: LibrarySolidIcon
-    },
-    {
-        title: 'Prediksi PTN',
-        href: '/utbk/prediksi-ptn',
-        InactiveIcon: PrediksiOutlineIcon,
-        ActiveIcon: PrediksiSolidIcon
     }
 ];
 
@@ -96,31 +94,112 @@ const utbkMenuItems = [
     }
 ];
 
-function Layout({ children }: PropsWithChildren): JSX.Element {
+interface LayoutProps extends PropsWithChildren {
+    isForSEO?: boolean;
+}
+
+function Layout({ children, isForSEO = false }: LayoutProps): JSX.Element {
     const router = useRouter();
-    const { profile } = useAuth();
+    const { profile, isLoadingProfile } = useAuth();
 
     const menuItems =
         profile?.current_role === 'COLLEGE_STUDENT'
             ? collegeMenuItems
             : utbkMenuItems;
 
+    // show non-authenticated layout while checking auth status
+    if (isForSEO && (isLoadingProfile === undefined || isLoadingProfile)) {
+        return <></>;
+    }
+
+    if (isLoadingProfile === undefined || isLoadingProfile) {
+        return <LoadingBackdrop />;
+    }
+
     return (
-        <div className="flex flex-col h-screen">
+        <div className={cn('flex flex-col h-screen', 'lg:flex-row')}>
+            <div
+                className={cn(
+                    'hidden',
+                    'lg:flex w-64 bg-black border border-[#101010] flex-col justify-between'
+                )}>
+                <div className="space-y-8">
+                    <div className="px-6 pt-6 space-y-6">
+                        <RoleSwitcher />
+
+                        {profile?.current_role === 'COLLEGE_STUDENT' ? (
+                            <DashboardSearchInput placeholder="Cari topik, materi, soal" />
+                        ) : (
+                            <></>
+                        )}
+                    </div>
+
+                    <div className="space-y-4">
+                        {menuItems.map((v) => (
+                            <Link
+                                key={v.href}
+                                href={v.href}
+                                className="group transition-colors flex items-center gap-3 py-2 px-6">
+                                {router.pathname === v.href ? (
+                                    <v.ActiveIcon
+                                        className={cn(
+                                            'shrink-0 group-hover:text-white/75 w-6 h-6',
+                                            router.pathname === v.href
+                                                ? 'text-white'
+                                                : 'text-[#4B4E5F]'
+                                        )}
+                                    />
+                                ) : (
+                                    <v.InactiveIcon
+                                        className={cn(
+                                            'shrink-0 group-hover:text-white/75 w-6 h-6',
+                                            router.pathname === v.href
+                                                ? 'text-white'
+                                                : 'text-[#4B4E5F]'
+                                        )}
+                                    />
+                                )}
+
+                                <span
+                                    className={cn(
+                                        'shrink-0 group-hover:text-white/75 leading-tight font-medium',
+                                        router.pathname === v.href
+                                            ? 'text-white'
+                                            : 'text-[#4B4E5F]'
+                                    )}>
+                                    {v.title}
+                                </span>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="px-6 pb-6">
+                    <ProfileMenu />
+                </div>
+            </div>
+
             <div className="flex-grow overflow-scroll scrollbar-none">
                 {children}
             </div>
 
-            <div className="bg-black py-2.5 flex justify-evenly items-center">
-                {menuItems.slice(0, menuItems.length - 1).map((v) => (
+            <div
+                className={cn(
+                    'bg-black py-2.5 flex justify-evenly items-center',
+                    'lg:hidden'
+                )}>
+                {(menuItems.length > 5
+                    ? menuItems.slice(0, menuItems.length - 1)
+                    : menuItems
+                ).map((v) => (
                     <Link
                         key={v.href}
                         href={v.href}
-                        className="flex-grow flex flex-col items-center gap-1 transition-all">
+                        className="group flex-grow flex flex-col items-center gap-1 transition-all">
                         {router.pathname === v.href ? (
                             <v.ActiveIcon
                                 className={cn(
-                                    'shrink-0 w-5 h-5',
+                                    'shrink-0 group-hover:text-white/75 w-5 h-5',
                                     router.pathname === v.href
                                         ? 'text-white'
                                         : 'text-[#4B4E5F]'
@@ -129,7 +208,7 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                         ) : (
                             <v.InactiveIcon
                                 className={cn(
-                                    'shrink-0 w-5 h-5',
+                                    'shrink-0 group-hover:text-white/75 w-5 h-5',
                                     router.pathname === v.href
                                         ? 'text-white'
                                         : 'text-[#4B4E5F]'
@@ -139,7 +218,7 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
 
                         <span
                             className={cn(
-                                'shrink-0 text-xs leading-tight font-medium',
+                                'shrink-0 group-hover:text-white/75 text-xs leading-tight font-medium',
                                 router.pathname === v.href
                                     ? 'text-white'
                                     : 'text-[#4B4E5F]'

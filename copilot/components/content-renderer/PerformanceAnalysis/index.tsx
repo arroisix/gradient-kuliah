@@ -54,7 +54,7 @@ function PerformanceAnalysis({
     return (
         <div
             className={cn(
-                'animate-fade bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
+                'animate-fade animate-duration-500 bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
                 'md:max-w-[680px]'
             )}>
             {/* utbk countdown */}

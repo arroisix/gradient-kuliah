@@ -8,9 +8,9 @@ const UserAvatar = ({
     profile?: UpdateUserResponseData;
 }): JSX.Element => {
     return !profile ? (
-        <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+        <div className="w-8 h-8 bg-neutral-600 animate-pulse rounded-full"></div>
     ) : !!profile.photo_profile ? (
-        <div className="w-[23px] h-[23px] relative">
+        <div className="w-8 h-8 relative">
             <Image
                 src={profile.photo_profile}
                 layout="fill"
@@ -18,7 +18,7 @@ const UserAvatar = ({
             />
         </div>
     ) : (
-        <Avatar name={profile.username} size="23" round />
+        <Avatar name={profile.username} size="32" round />
     );
 };
 

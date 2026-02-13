@@ -45,7 +45,7 @@ function References({ references }: ReferencesProps): JSX.Element {
                     </Accordion.Trigger>
                 </Accordion.Header>
 
-                <Accordion.Content className="animate-fade bg-[#191920] p-3 rounded-lg border border-[#4B4E5F] space-y-3 mt-3">
+                <Accordion.Content className="animate-fade animate-duration-500 bg-[#191920] p-3 rounded-lg border border-[#4B4E5F] space-y-3 mt-3">
                     {references.map((v) => (
                         <ReferenceItem key={v.id} reference={v} />
                     ))}
