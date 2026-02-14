@@ -2,20 +2,8 @@ import withAnon from 'commons/withAnon';
 import K12Dashboard from 'dashboard/containers/K12Dashboard';
 import type { GetStaticProps } from 'next';
 import { Layout } from 'commons/components/Layout';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const Dashboard = (): JSX.Element => {
-    const router = useRouter();
-    const { profile, isLoadingProfile } = useAuth();
-
-    useEffect(() => {
-        if (isLoadingProfile !== undefined && !isLoadingProfile && !profile) {
-            router.replace('/utbk');
-        }
-    }, [isLoadingProfile, profile, router]);
-
     return (
         <Layout>
             <K12Dashboard />

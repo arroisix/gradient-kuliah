@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, PropsWithChildren } from 'react';
+import { ComponentPropsWithoutRef, PropsWithChildren, useEffect } from 'react';
 import { CourseOutlineIcon } from '../elements/Icons/CourseOutlineIcon';
 import { HomeSolidIcon } from '../elements/Icons/HomeSolidIcon';
 import { CourseSolidIcon } from '../elements/Icons/CourseSolidIcon';
@@ -19,6 +19,7 @@ import LoadingBackdrop from '../elements/LoadingBackdrop';
 import { Sidebar } from './Sidebar';
 import { MobileNavbar } from './MobileNavbar';
 import { MobileTopbar } from './MobileTopbar';
+import { useRouter } from 'next/router';
 
 interface MenuItem {
     title: string;
@@ -99,11 +100,10 @@ const utbkMenuItems = [
     }
 ];
 
-interface LayoutProps extends PropsWithChildren {
-    isForSEO?: boolean;
-}
+const loadingBackdropPaths = ['/dashboard', '/utbk/dashboard'];
 
-function Layout({ children, isForSEO = false }: LayoutProps): JSX.Element {
+function Layout({ children }: PropsWithChildren): JSX.Element {
+    const router = useRouter();
     const { profile, isLoadingProfile } = useAuth();
 
     const menuItems =
@@ -111,12 +111,19 @@ function Layout({ children, isForSEO = false }: LayoutProps): JSX.Element {
             ? collegeMenuItems
             : utbkMenuItems;
 
-    // show non-authenticated layout while checking auth status
-    if (isForSEO && (isLoadingProfile === undefined || isLoadingProfile)) {
-        return <></>;
-    }
+    useEffect(() => {
+        if (isLoadingProfile === undefined || isLoadingProfile) {
+            return;
+        }
 
-    if (isLoadingProfile === undefined || isLoadingProfile) {
+        if (!profile && router.pathname === '/dashboard') {
+            router.push('/');
+        } else if (!profile && router.pathname === '/utbk/dashboard') {
+            router.push('/utbk');
+        }
+    }, [isLoadingProfile, profile, router]);
+
+    if (!profile && loadingBackdropPaths.includes(router.pathname)) {
         return <LoadingBackdrop />;
     }
 
