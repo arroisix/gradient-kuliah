@@ -2,7 +2,7 @@ import { Layout } from 'commons/components/Layout';
 import { cn } from 'commons/utils';
 import withAnon from 'commons/withAnon';
 import DashboardContainer from 'dashboard/containers';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 
 const Dashboard = (): JSX.Element => {
     return (

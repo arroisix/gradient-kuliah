@@ -18,6 +18,7 @@ import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
+import { cn } from 'commons/utils';
 
 // const SORT_OPTIONS = [
 //     { value: 'latest', label: 'Terakhir Rilis' },
@@ -53,7 +54,7 @@ const ClassContainer = ({
     });
 
     return (
-        <div className="pt-16">
+        <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <DownloadBanner />
@@ -61,11 +62,11 @@ const ClassContainer = ({
                 {!isCourseListRevamp && isAuthenticated && courseProgresses && (
                     <CourseProgress courseProgresses={courseProgresses} />
                 )}
-                <h1 className="text-xl font-bold md:text-2xl">
+                <h1 className="text-white text-xl font-bold md:text-2xl">
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-28">
+                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-[78px]">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"

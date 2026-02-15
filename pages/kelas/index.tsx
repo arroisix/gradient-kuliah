@@ -1,7 +1,7 @@
-import LearnLayout from 'commons/learnLayout';
+import { Layout } from 'commons/components/Layout';
 import ClassContainer from 'courses/containers';
 import { getPublicListCoursesV2 } from 'courses/redux/api/publicCourseV2Api';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { wrapper } from 'redux/store';
@@ -12,9 +12,9 @@ const ListClass = ({
     courses: ListResponseData<Course>;
 }): JSX.Element => {
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
+        <Layout>
             <ClassContainer courses={courses} />
-        </LearnLayout>
+        </Layout>
     );
 };
 
