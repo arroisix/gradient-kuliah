@@ -18,7 +18,6 @@ import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
-import { cn } from 'commons/utils';
 
 // const SORT_OPTIONS = [
 //     { value: 'latest', label: 'Terakhir Rilis' },
@@ -54,7 +53,7 @@ const ClassContainer = ({
     });
 
     return (
-        <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+        <div>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <DownloadBanner />

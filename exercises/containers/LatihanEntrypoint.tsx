@@ -42,7 +42,7 @@ const LatihanEntrypoint = (): JSX.Element => {
     });
 
     return (
-        <div className="pt-16">
+        <div>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <div className="flex flex-row justify-between">

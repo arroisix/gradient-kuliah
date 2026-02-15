@@ -1,20 +1,34 @@
-import LearnLayout from 'commons/learnLayout';
 import LatihanEntrypoint from 'exercises/containers/LatihanEntrypoint';
 import { GetStaticProps } from 'next';
 import { useTracker } from '../../tracker/tracker';
 import { useEffect } from 'react';
+import { Layout } from 'commons/components/Layout';
+import LearnLayout from 'commons/learnLayout';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { cn } from 'commons/utils';
 
 const LatihanPage = (): JSX.Element => {
+    const { profile } = useAuth();
     const tracker = useTracker();
 
     useEffect(() => {
         tracker?.genericTrack('Visit Latihan Landing Page');
     }, [tracker]);
 
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <LatihanEntrypoint />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <LatihanEntrypoint />
-        </LearnLayout>
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <LatihanEntrypoint />
+            </div>
+        </Layout>
     );
 };
 
