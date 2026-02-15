@@ -3,19 +3,37 @@ import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint
 import { GetStaticProps } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { Layout } from 'commons/components/Layout';
+import { cn } from 'commons/utils';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const PerpustakaanPage = ({
     books
 }: {
     books: ListResponseData<Astronote>;
 }): JSX.Element => {
+    const { profile } = useAuth();
+
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <AstronotesEntrypoint
+                    title="Perpustakaan Online Modul Perkuliahan"
+                    books={books}
+                />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesEntrypoint
-                title="Perpustakaan Online Modul Perkuliahan"
-                books={books}
-            />
-        </LearnLayout>
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <AstronotesEntrypoint
+                    title="Perpustakaan Online Modul Perkuliahan"
+                    books={books}
+                />
+            </div>
+        </Layout>
     );
 };
 

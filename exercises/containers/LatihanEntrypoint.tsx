@@ -46,7 +46,7 @@ const LatihanEntrypoint = (): JSX.Element => {
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <div className="flex flex-row justify-between">
-                    <h1 className="text-xl font-bold md:text-2xl text-balance">
+                    <h1 className="text-white text-xl font-bold md:text-2xl text-balance">
                         Try Out
                     </h1>
                 </div>
