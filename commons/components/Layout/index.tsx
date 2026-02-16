@@ -186,7 +186,8 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
             {/* main content */}
             <div
                 className={cn(
-                    'flex-grow overflow-x-hidden overflow-y-scroll scrollbar-none',
+                    'flex-grow overflow-x-hidden overflow-y-scroll scrollbar-none pb-[59px]',
+                    'lg:pb-0',
                     router.pathname.includes('/copilot') ? 'flex flex-col' : ''
                 )}>
                 {/* copilot sidebar trigger */}

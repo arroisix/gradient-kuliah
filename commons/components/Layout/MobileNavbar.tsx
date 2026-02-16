@@ -13,7 +13,7 @@ function MobileNavbar({ menuItems }: MobileNavbarProps): JSX.Element {
     return (
         <div
             className={cn(
-                'py-2.5 flex justify-evenly items-center',
+                'bg-black fixed z-50 bottom-0 left-0 right-0 py-2.5 flex justify-evenly items-center',
                 'lg:hidden'
             )}>
             {(menuItems.length > 5
