@@ -52,7 +52,7 @@ const AstronotesEntrypoint = ({
                     {title}
                 </h1>
                 <EntrypointTabs />
-                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-28">
+                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-[74px]">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"

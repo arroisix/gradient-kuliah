@@ -528,9 +528,8 @@ const PrivateDashboardContent = (): JSX.Element => {
     };
 
     return (
-        <div className="relative z-[1] overflow-x-visible flex flex-col min-h-screen bg-[#101010]">
-            <div className="absolute inset-y-0 -inset-x-full -z-[1] bg-[#101010] pointer-events-none"></div>
-            <div className="absolute bottom-0 -inset-x-full h-20 bg-[#101010] translate-y-full -z-[1]"></div>
+        <div className="relative z-[1] overflow-x-visible flex flex-col bg-[#101010]">
+            <div className="absolute inset-y-0 -left-4 -right-4 -z-[1] bg-[#101010] pointer-events-none"></div>
 
             <CarouselSection
                 title={`Dipelajari Mahasiswa Jurusan Kamu`}

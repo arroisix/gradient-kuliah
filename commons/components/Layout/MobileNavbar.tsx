@@ -13,7 +13,7 @@ function MobileNavbar({ menuItems }: MobileNavbarProps): JSX.Element {
     return (
         <div
             className={cn(
-                'py-2.5 flex justify-evenly items-center',
+                'bg-black fixed z-50 bottom-0 left-0 right-0 py-2.5 flex justify-evenly items-center',
                 'lg:hidden'
             )}>
             {(menuItems.length > 5
@@ -23,7 +23,7 @@ function MobileNavbar({ menuItems }: MobileNavbarProps): JSX.Element {
                 <Link
                     key={v.href}
                     href={v.href}
-                    className="group flex-grow flex flex-col items-center gap-1 transition-all">
+                    className="basis-1/5 group flex-grow flex flex-col items-center gap-1 transition-all">
                     {router.pathname.includes(v.href) ? (
                         <v.ActiveIcon
                             className={cn(
