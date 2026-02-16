@@ -29,7 +29,7 @@ function ProfileMenu(): JSX.Element {
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Portal>
-                <DropdownMenu.Content asChild loop side="top" sideOffset={8}>
+                <DropdownMenu.Content loop side="top" sideOffset={8}>
                     <ProfileMenuContent />
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
