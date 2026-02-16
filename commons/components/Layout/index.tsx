@@ -209,7 +209,7 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                         </button>
                     </div>
                 ) : (
-                    <MobileTopbar />
+                    <></>
                 )}
 
                 {children}

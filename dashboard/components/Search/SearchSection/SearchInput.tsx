@@ -33,7 +33,6 @@ const DashboardSearchInput = ({
         { setSubmitting }: FormikHelpers<{ q: string }>
     ): void => {
         if (!q) {
-            router.push('/search');
             setSubmitting(false);
             return;
         }
@@ -52,15 +51,15 @@ const DashboardSearchInput = ({
 
     return (
         <Formik
-            initialValues={{ q: value }}
+            initialValues={{ q: value || ((router.query.q as string) ?? '') }}
             onSubmit={handleSearch}
             enableReinitialize>
-            {({ values, handleSubmit, setFieldValue }) => (
+            {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
                 <form
                     onSubmit={handleSubmit}
                     autoComplete="off"
                     className="bg-[#101010] py-2 px-3 rounded-full flex items-center gap-2">
-                    <button type="submit">
+                    <button disabled={isSubmitting} type="submit">
                         <SearchIcon
                             className={cn(
                                 'shrink-0 w-5 h-5 transition-all',
@@ -72,6 +71,7 @@ const DashboardSearchInput = ({
                     </button>
 
                     <input
+                        disabled={isSubmitting}
                         onFocus={track}
                         placeholder={placeholder}
                         value={values.q}

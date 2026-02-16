@@ -1,7 +1,10 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { Layout } from 'commons/components/Layout';
 import LearnLayout from 'commons/learnLayout';
 import { search } from 'commons/redux/api/searchApi';
+import { cn } from 'commons/utils';
 import SearchResults from 'dashboard/containers/searchResults';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
@@ -12,10 +15,22 @@ const IndexedSearchResultsPage = ({
 }: {
     results: SearchResults<SearchDocument>;
 }): JSX.Element => {
+    const { profile } = useAuth();
+
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <SearchResults results={results} />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <SearchResults results={results} />
-        </LearnLayout>
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <SearchResults results={results} />
+            </div>
+        </Layout>
     );
 };
 
