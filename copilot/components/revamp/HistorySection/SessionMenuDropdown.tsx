@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, MouseEvent, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import DeleteModal from './DeleteModal';
@@ -17,8 +17,9 @@ const SessionMenuDropdown = ({
 }) => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = (event: MouseEvent<HTMLButtonElement>) => {
         if (isSpecific) {
+            event.stopPropagation();
             setShowDeleteModal(true);
         } else {
             onDelete(sessionId);
@@ -38,7 +39,13 @@ const SessionMenuDropdown = ({
     return (
         <>
             <Menu as="div" className="relative">
-                <Menu.Button className="opacity-100 group-hover:opacity-100 transition-opacity hover:bg-neutral-700 rounded">
+                <Menu.Button
+                    as="button"
+                    type="button"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                    }}
+                    className="opacity-100 group-hover:opacity-100 transition-opacity hover:bg-neutral-700 rounded">
                     <BsThreeDots className="text-neutral-400" />
                 </Menu.Button>
                 <Transition
@@ -53,7 +60,10 @@ const SessionMenuDropdown = ({
                         <Menu.Item>
                             {({ active }) => (
                                 <button
-                                    onClick={() => onRename(sessionId)}
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        onRename(sessionId);
+                                    }}
                                     className={`${
                                         active ? 'bg-neutral-700' : ''
                                     } w-full text-left px-4 py-2 text-sm text-white`}>

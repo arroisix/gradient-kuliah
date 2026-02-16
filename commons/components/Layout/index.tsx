@@ -1,4 +1,9 @@
-import { ComponentPropsWithoutRef, PropsWithChildren, useEffect } from 'react';
+import {
+    ComponentPropsWithoutRef,
+    PropsWithChildren,
+    useEffect,
+    useState
+} from 'react';
 import { CourseOutlineIcon } from '../elements/Icons/CourseOutlineIcon';
 import { HomeSolidIcon } from '../elements/Icons/HomeSolidIcon';
 import { CourseSolidIcon } from '../elements/Icons/CourseSolidIcon';
@@ -20,6 +25,11 @@ import { Sidebar } from './Sidebar';
 import { MobileNavbar } from './MobileNavbar';
 import { MobileTopbar } from './MobileTopbar';
 import { useRouter } from 'next/router';
+import HistorySection from 'copilot/components/revamp/HistorySection';
+import { useWindowSize } from 'usehooks-ts';
+import { HiOutlineMenuAlt2 } from 'react-icons/hi';
+import { FiEdit } from 'react-icons/fi';
+import { useTracker } from 'tracker/tracker';
 
 interface MenuItem {
     title: string;
@@ -103,13 +113,26 @@ const utbkMenuItems = [
 const loadingBackdropPaths = ['/dashboard', '/utbk/dashboard'];
 
 function Layout({ children }: PropsWithChildren): JSX.Element {
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const router = useRouter();
+    const { width } = useWindowSize();
     const { profile, isLoadingProfile } = useAuth();
+    const tracker = useTracker();
 
     const menuItems =
         profile?.current_role === 'COLLEGE_STUDENT'
             ? collegeMenuItems
             : utbkMenuItems;
+
+    const handleNewChat = () => {
+        tracker?.genericTrack('Create Empty Copilot Session');
+        router.push('/copilot');
+        setIsHistoryOpen(false);
+    };
+
+    const handleCloseHistory = () => {
+        setIsHistoryOpen(false);
+    };
 
     useEffect(() => {
         if (isLoadingProfile === undefined || isLoadingProfile) {
@@ -129,16 +152,81 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
 
     return (
         <div className={cn('bg-black flex flex-col h-screen', 'lg:flex-row')}>
-            {/* mobile topbar */}
-            <MobileTopbar />
+            {/* mobile copilot topbar & mobile topbar */}
+            {router.pathname.includes('/copilot') ? (
+                <div
+                    className={cn(
+                        'flex justify-between items-center py-3 px-4',
+                        'lg:hidden',
+                        isHistoryOpen ? 'invisible' : 'visible'
+                    )}>
+                    <button
+                        onClick={() => setIsHistoryOpen(true)}
+                        className="text-white hover:text-neutral-400 transition-colors duration-200">
+                        <HiOutlineMenuAlt2 size={24} />
+                    </button>
+
+                    <h1 className="text-white font-semibold leading-[140%]">
+                        Copilot AI
+                    </h1>
+
+                    <button
+                        onClick={handleNewChat}
+                        className="text-white hover:text-neutral-400 transition-colors duration-200">
+                        <FiEdit size={20} />
+                    </button>
+                </div>
+            ) : (
+                <MobileTopbar />
+            )}
 
             {/* desktop sidebar */}
             <Sidebar menuItems={menuItems} />
 
             {/* main content */}
-            <div className="flex-grow overflow-scroll scrollbar-none">
+            <div
+                className={cn(
+                    'flex-grow overflow-scroll scrollbar-none',
+                    router.pathname.includes('/copilot') ? 'flex flex-col' : ''
+                )}>
+                {/* copilot sidebar trigger */}
+                {router.pathname.includes('/copilot') ? (
+                    <div
+                        className={cn(
+                            'hidden',
+                            'lg:flex justify-end items-center gap-6 mt-8 mr-12',
+                            isHistoryOpen ? 'invisible' : 'visible'
+                        )}>
+                        <button
+                            onClick={() => setIsHistoryOpen(true)}
+                            className="text-white hover:text-neutral-400 transition-colors duration-200">
+                            <HiOutlineMenuAlt2 size={24} />
+                        </button>
+                        <button
+                            onClick={handleNewChat}
+                            className="text-white hover:text-neutral-400 transition-colors duration-200">
+                            <FiEdit size={20} />
+                        </button>
+                    </div>
+                ) : (
+                    <MobileTopbar />
+                )}
+
                 {children}
             </div>
+
+            {/* desktop copilot history */}
+            {router.pathname.includes('/copilot') &&
+            profile &&
+            isHistoryOpen ? (
+                <HistorySection
+                    isOpen={isHistoryOpen}
+                    onClose={handleCloseHistory}
+                    isMobile={width < 1024}
+                />
+            ) : (
+                <></>
+            )}
 
             {/* mobile navbar */}
             <MobileNavbar menuItems={menuItems} />
