@@ -41,7 +41,7 @@ const DashboardContainer = (): JSX.Element => {
     };
 
     return (
-        <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+        <section className="flex flex-col w-full gap-6 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
             <ProfileCompletionBanner />
             <DashboardUpdatesBanner bannerType="campaign" />
             <h1 className="text-2xl text-white font-bold text-center">
