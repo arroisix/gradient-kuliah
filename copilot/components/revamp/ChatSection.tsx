@@ -30,6 +30,7 @@ import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { GoArrowUpRight } from 'react-icons/go';
 import { PerformanceAnalysis } from '../content-renderer/PerformanceAnalysis';
 import { References } from '../content-renderer/References';
+import { CopilotOutlineIcon } from 'commons/components/elements/Icons/CopilotOutlineIcon';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
