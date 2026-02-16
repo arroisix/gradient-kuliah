@@ -13,7 +13,8 @@ import {
     ExerciseQuestion,
     CopilotContentRecommendation,
     CopilotInterrupt,
-    CopilotAttachment
+    CopilotAttachment,
+    CopilotReference
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
@@ -266,6 +267,7 @@ const CopilotContainer = ({
         let interrupt: CopilotInterrupt;
         let attachments: CopilotAttachment[] = [];
         let question_recommendation: string[] = [];
+        let references: CopilotReference[] = [];
 
         try {
             await chatApi.chat(chatInput, {
@@ -308,6 +310,13 @@ const CopilotContainer = ({
                         question_recommendation =
                             rich_content.question_recommendation;
                     }
+
+                    if (
+                        Array.isArray(rich_content?.references) &&
+                        rich_content.references.length > 0
+                    ) {
+                        references = rich_content.references;
+                    }
                 },
                 onInfo: (interruptResponse, thought) => {
                     if (interruptResponse) {
@@ -347,7 +356,8 @@ const CopilotContainer = ({
                                         performance_analysis,
                                         exercise_questions,
                                         attachments,
-                                        question_recommendation
+                                        question_recommendation,
+                                        references
                                     }
                                 };
                                 return [...prev, aiMessage];
@@ -420,6 +430,7 @@ const CopilotContainer = ({
         let interrupt: CopilotInterrupt;
         let attachments: CopilotAttachment[] = [];
         let question_recommendation: string[] = [];
+        let references: CopilotReference[] = [];
 
         try {
             await chatApi.chat(chatInput, {
@@ -462,6 +473,13 @@ const CopilotContainer = ({
                         question_recommendation =
                             rich_content.question_recommendation;
                     }
+
+                    if (
+                        Array.isArray(rich_content?.references) &&
+                        rich_content.references.length > 0
+                    ) {
+                        references = rich_content.references;
+                    }
                 },
                 onInfo: (interruptResponse, thought) => {
                     if (interruptResponse) {
@@ -501,7 +519,8 @@ const CopilotContainer = ({
                                         performance_analysis,
                                         exercise_questions,
                                         attachments,
-                                        question_recommendation
+                                        question_recommendation,
+                                        references
                                     }
                                 };
                                 return [...prev, aiMessage];

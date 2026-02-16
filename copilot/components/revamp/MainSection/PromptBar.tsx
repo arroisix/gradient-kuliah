@@ -22,6 +22,7 @@ import { FaArrowUp } from 'react-icons/fa6';
 import Modal from 'commons/components/modules/Modal';
 import { TbMath } from 'react-icons/tb';
 import { useWindowSize } from 'usehooks-ts';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 interface PromptBarProps {
     onSend?: (prompt: string, imageUrl?: string) => void;
@@ -57,6 +58,7 @@ function PromptBar({
     const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
     const tracker = useTracker();
     const { width } = useWindowSize();
+    const { profile } = useAuth();
 
     useEffect(() => {
         onStateChange?.({ isEditorOpen: activeForm !== null });
@@ -420,22 +422,26 @@ function PromptBar({
                                 </button>
                             </div>
 
-                            <button
-                                onClick={handleReferensiClick}
-                                type="button"
-                                className="bg-[#282B3C] flex items-center gap-3 p-3 rounded-lg w-full">
-                                <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
-                                    <BookOpenIcon className="text-[#DEDEDE] w-5 h-5" />
-                                </div>
-                                <div className="flex flex-col items-start gap-1">
-                                    <span className="text-white text-sm">
-                                        Pakai Referensi
-                                    </span>
-                                    <span className="text-[#999999] text-sm">
-                                        Gunakan materi kelas dari Gradient.
-                                    </span>
-                                </div>
-                            </button>
+                            {profile?.current_role === 'COLLEGE_STUDENT' ? (
+                                <button
+                                    onClick={handleReferensiClick}
+                                    type="button"
+                                    className="bg-[#282B3C] flex items-center gap-3 p-3 rounded-lg w-full">
+                                    <div className="w-8 h-8 rounded-full grid place-items-center bg-[#20222E]">
+                                        <BookOpenIcon className="text-[#DEDEDE] w-5 h-5" />
+                                    </div>
+                                    <div className="flex flex-col items-start gap-1">
+                                        <span className="text-white text-sm">
+                                            Pakai Referensi
+                                        </span>
+                                        <span className="text-[#999999] text-sm">
+                                            Gunakan materi kelas dari Gradient.
+                                        </span>
+                                    </div>
+                                </button>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                 </Modal>
@@ -445,7 +451,13 @@ function PromptBar({
 
             {/* desktop modal */}
             {isModalOpen && width >= 768 ? (
-                <div className="bg-[#181818] w-[303px] rounded-lg p-4 absolute -top-[(calc(153px+23px))] left-6 space-y-3">
+                <div
+                    className={cn(
+                        'animate-fade-up animate-duration-300 bg-[#181818] w-[303px] rounded-lg p-4 absolute left-6 space-y-3',
+                        profile?.current_role === 'COLLEGE_STUDENT'
+                            ? '-top-[(calc(153px+23px))]'
+                            : '-top-[(calc(76px+23px))]'
+                    )}>
                     <button
                         onClick={handleClickImage}
                         className="bg-[#222222] hover:bg-[#333333] transition-colors w-full flex items-center gap-3 px-4 py-3 rounded-lg">
@@ -455,20 +467,24 @@ function PromptBar({
                         </span>
                     </button>
 
-                    <button
-                        onClick={handleReferensiClick}
-                        type="button"
-                        className="bg-[#222222] hover:bg-[#333333] transition-colors w-full flex gap-3 px-4 py-3 rounded-lg">
-                        <BookOpenIcon className="text-[#999999] w-5 h-5" />
-                        <div className="flex flex-col items-start gap-1">
-                            <span className="text-white text-sm leading-tight">
-                                Pakai Referensi
-                            </span>
-                            <span className="text-[#999999] text-xs leading-[160%]">
-                                Gunakan materi kelas dari Gradient.
-                            </span>
-                        </div>
-                    </button>
+                    {profile?.current_role === 'COLLEGE_STUDENT' ? (
+                        <button
+                            onClick={handleReferensiClick}
+                            type="button"
+                            className="bg-[#222222] hover:bg-[#333333] transition-colors w-full flex gap-3 px-4 py-3 rounded-lg">
+                            <BookOpenIcon className="text-[#999999] w-5 h-5" />
+                            <div className="flex flex-col items-start gap-1">
+                                <span className="text-white text-sm leading-tight">
+                                    Pakai Referensi
+                                </span>
+                                <span className="text-[#999999] text-xs leading-[160%]">
+                                    Gunakan materi kelas dari Gradient.
+                                </span>
+                            </div>
+                        </button>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ) : (
                 <></>
