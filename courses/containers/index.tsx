@@ -18,6 +18,7 @@ import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
+import { cn } from 'commons/utils';
 
 // const SORT_OPTIONS = [
 //     { value: 'latest', label: 'Terakhir Rilis' },
@@ -65,7 +66,11 @@ const ClassContainer = ({
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-[78px]">
+                <div
+                    className={cn(
+                        'sticky z-[5] flex items-center justify-between py-2 bg-black top-[74px]',
+                        'lg:top-[78px]'
+                    )}>
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"
@@ -99,10 +104,7 @@ const ClassContainer = ({
                     />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
-                    <>
-                        <RenewSubscriptionBanner product="materi" />
-                        {isAuthenticated && <div className="h-6 md:h-0" />}
-                    </>
+                    <RenewSubscriptionBanner product="materi" />
                 )}
             </div>
         </div>

@@ -38,7 +38,7 @@ export default function RenewSubscriptionBanner({
                     is_subscribed
                         ? 'bottom-[85px] md:left-[286px]'
                         : isAuthenticated
-                        ? 'bottom-8 md:left-[36px]'
+                        ? 'bottom-20 md:left-[36px]'
                         : 'bottom-[16px] md:left-[36px]'
                 )}>
                 <div className="flex items-center justify-between w-full">
