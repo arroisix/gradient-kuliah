@@ -106,7 +106,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
             <div className="flex items-center justify-between mb-4">
                 <h2
                     className={cn(
-                        'text-lg font-bold md:text-xl',
+                        'text-white text-lg font-bold md:text-xl',
                         titleClassName
                     )}>
                     {title}

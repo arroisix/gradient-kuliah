@@ -18,11 +18,8 @@ import {
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
-import MobileHeader from 'copilot/components/revamp/MobileHeader';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import HistorySection from 'copilot/components/revamp/HistorySection';
 import ReferenceModal from 'copilot/components/revamp/Reference/ReferenceModal';
 import ReferenceContentModal from 'copilot/components/revamp/Reference/ReferenceContentModal';
 import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
@@ -30,6 +27,7 @@ import { cn } from 'commons/utils';
 import { FaArrowDown } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
+import { useRouter } from 'next/router';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -57,14 +55,13 @@ const CopilotContainer = ({
         string | undefined
     >();
     const [isEditorOpen, setIsEditorOpen] = useState(false);
-    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const [reasoning, setReasoning] = useState<Reasoning>({
         thoughts: [],
         isFinished: false
     });
 
+    const router = useRouter();
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
@@ -111,7 +108,13 @@ const CopilotContainer = ({
 
     useEffect(() => {
         const loadChatHistory = async () => {
+            if (sessionId && isLoadingResponse) {
+                return;
+            }
+
             if (!sessionId) {
+                setMessages([]);
+                setCurrentSessionId(undefined);
                 setIsLoadingHistory(false);
                 return;
             }
@@ -157,14 +160,6 @@ const CopilotContainer = ({
     useEffect(() => {
         scrollToBottom();
     }, [reasoning]);
-
-    useEffect(() => {
-        if (currentSessionId) {
-            window.history.pushState('', '', `/copilot/${currentSessionId}`);
-        } else {
-            setMessages([]);
-        }
-    }, [currentSessionId]);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
@@ -340,6 +335,9 @@ const CopilotContainer = ({
                     setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
+                        router.push(`/copilot/${sessionId}`, undefined, {
+                            shallow: true
+                        });
                     }
                     if (messageId) {
                         // use timeout to show the finished state of the reasoning
@@ -500,6 +498,9 @@ const CopilotContainer = ({
                     setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
+                        router.push(`/copilot/${sessionId}`, undefined, {
+                            shallow: true
+                        });
                     }
                     if (messageId) {
                         // use timeout to show the finished state of the reasoning
@@ -620,31 +621,11 @@ const CopilotContainer = ({
         );
     };
 
-    const handleOpenHistory = () => {
-        setIsHistoryOpen(true);
-    };
-
-    const handleCloseHistory = () => {
-        setIsHistoryOpen(false);
-    };
-
     return (
-        <div
-            className={cn('flex flex-col h-[calc(100vh-64px)]', 'md:flex-row')}>
-            <MobileHeader onOpenHistory={handleOpenHistory} />
-            {isAuthenticated && (
-                <HistorySection
-                    isOpen={isHistoryOpen}
-                    onClose={handleCloseHistory}
-                    onOpen={handleOpenHistory}
-                    isMobile={isMobileBreakpoints}
-                    setCurrentSessionId={setCurrentSessionId}
-                />
-            )}
-
+        <>
             <div
                 className={cn(
-                    'flex-grow flex flex-col overflow-hidden',
+                    'h-full flex flex-col overflow-hidden',
                     'md:px-4'
                 )}>
                 <div
@@ -743,7 +724,7 @@ const CopilotContainer = ({
                 selectedReferences={viewingUsedReferences}
                 isViewOnly={true}
             />
-        </div>
+        </>
     );
 };
 

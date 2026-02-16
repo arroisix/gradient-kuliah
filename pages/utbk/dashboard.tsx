@@ -1,40 +1,13 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
-import LearnLayout from 'commons/learnLayout';
-import Layout from 'commons/utbkLayout';
 import withAnon from 'commons/withAnon';
 import K12Dashboard from 'dashboard/containers/K12Dashboard';
 import type { GetStaticProps } from 'next';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import config from 'redux/api/config';
+import { Layout } from 'commons/components/Layout';
 
-const Dashboard = ({ courses }: { courses: Course[] }): JSX.Element => {
-    const router = useRouter();
-
-    // return <LoadingBackdrop />;
-
-    const { isLoadingProfile, isAuthenticated } = useAuth();
-
-    // it's necessary to prevent glitch
-    // proper loading state will be addressed later
-    if (isLoadingProfile === undefined || isLoadingProfile) {
-        return <></>;
-    }
-
-    if (!isAuthenticated) {
-        router.replace('/utbk');
-        return (
-            <Layout courses={courses}>
-                <LoadingBackdrop />
-            </Layout>
-        );
-    }
-
+const Dashboard = (): JSX.Element => {
     return (
-        <LearnLayout showSidebar fullHeightSidebar className="relative">
+        <Layout>
             <K12Dashboard />
-        </LearnLayout>
+        </Layout>
     );
 };
 
@@ -46,13 +19,8 @@ export const getStaticProps: GetStaticProps = async () => {
         'Persiapkan dirimu menghadapi UTBK 2026 dengan tryout UTBK gratis dari Gradient. Dapatkan pengalaman ujian sesungguhnya dan analisis hasil untuk meningkatkan performa belajarmu.';
 
     try {
-        const { data: coursesResponse } = await axios.get<
-            ListResponseData<Course>
-        >(`${config.API_BASE_URL}courses/v2/public?type=UTBK`);
-
         return {
             props: {
-                courses: coursesResponse.data,
                 title: META_TITLE,
                 description: META_DESCRIPTION,
                 canonical: `https://gradient.academy/utbk/dashboard`,

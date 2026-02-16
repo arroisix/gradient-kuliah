@@ -12,8 +12,8 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import RoleSwitcher from '../Navbar/RoleSwitcher';
-import { LiveClassOutline } from 'commons/components/elements/Icons/LiveClassOutline';
-import { LiveClassSolid } from 'commons/components/elements/Icons/LiveClassSolid';
+import { LiveClassOutlineIcon } from 'commons/components/elements/Icons/LiveClassOutlineIcon';
+import { LiveClassSolidIcon } from 'commons/components/elements/Icons/LiveClassSolidIcon';
 
 const Sidebar = ({
     fullHeight,
@@ -133,9 +133,9 @@ const Sidebar = ({
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
                             {pathname.includes('/live-class') ? (
-                                <LiveClassSolid className="shrink-0 w-5 h-5" />
+                                <LiveClassSolidIcon className="shrink-0 w-5 h-5" />
                             ) : (
-                                <LiveClassOutline className="shrink-0 w-5 h-5" />
+                                <LiveClassOutlineIcon className="shrink-0 w-5 h-5" />
                             )}
                             Live Class
                         </span>

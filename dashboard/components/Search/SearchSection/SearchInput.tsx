@@ -1,14 +1,8 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import {
-    Field,
-    Form,
-    Formik,
-    type FieldProps,
-    type FormikHelpers
-} from 'formik';
+import { SearchIcon } from 'commons/components/elements/Icons/SearchIcon';
+import { cn } from 'commons/utils';
+import { Formik, type FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
-import { BiSearch } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
 import { useLocalStorage } from 'usehooks-ts';
@@ -24,7 +18,6 @@ const DashboardSearchInput = ({
 }: DashboardSearchInputProps): JSX.Element => {
     const router = useRouter();
     const tracker = useTracker();
-    const inputRef = useRef<HTMLInputElement>(null);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [history, setSearchHistory] = useLocalStorage<string[]>(
         'gradient-search-history',
@@ -40,7 +33,6 @@ const DashboardSearchInput = ({
         { setSubmitting }: FormikHelpers<{ q: string }>
     ): void => {
         if (!q) {
-            router.push('/search');
             setSubmitting(false);
             return;
         }
@@ -59,29 +51,42 @@ const DashboardSearchInput = ({
 
     return (
         <Formik
-            initialValues={{ q: value }}
+            initialValues={{ q: value || ((router.query.q as string) ?? '') }}
             onSubmit={handleSearch}
             enableReinitialize>
-            <Form>
-                <div className="relative flex items-center">
-                    <Field name="q">
-                        {({ field }: FieldProps<string>) => (
-                            <input
-                                {...field}
-                                ref={inputRef}
-                                onFocus={track}
-                                className="w-full h-12 pl-5 pr-14 rounded-full bg-[#222222] text-white focus:ring-0 outline-none placeholder:text-neutral-600 border-none"
-                                placeholder={placeholder}
-                            />
-                        )}
-                    </Field>
-                    <button
-                        type="submit"
-                        className="absolute right-2 flex items-center justify-center w-7 h-7 bg-[#5F2BCE] rounded-full mr-2">
-                        <BiSearch size={16} className="text-white" />
+            {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
+                <form
+                    onSubmit={handleSubmit}
+                    autoComplete="off"
+                    className="bg-[#101010] py-2 px-3 rounded-full flex items-center gap-2">
+                    <button disabled={isSubmitting} type="submit">
+                        <SearchIcon
+                            className={cn(
+                                'shrink-0 w-5 h-5 transition-all',
+                                values.q.trim()
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            )}
+                        />
                     </button>
-                </div>
-            </Form>
+
+                    <input
+                        disabled={isSubmitting}
+                        onFocus={track}
+                        placeholder={placeholder}
+                        value={values.q}
+                        onChange={(e) =>
+                            setFieldValue('q', e.currentTarget.value)
+                        }
+                        name="q"
+                        type="text"
+                        className={cn(
+                            'bg-transparent placeholder:text-[#666666] border-none focus:ring-0 text-sm p-0 transition-all outline-none',
+                            values.q.trim() ? 'text-white' : 'text-[#666666]'
+                        )}
+                    />
+                </form>
+            )}
         </Formik>
     );
 };

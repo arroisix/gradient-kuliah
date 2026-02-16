@@ -2,12 +2,13 @@ import Button from 'commons/components/elements/Button';
 import { GraduateIcon } from 'commons/components/elements/Icons/GraduateIcon';
 import { PerformanceAnalysis as PerformanceAnalysisType } from 'copilot/types/copilot';
 import { TargetIcon } from 'lucide-react';
-import { CopilotSolidIcon } from '../../../assets/CopilotSolidIcon';
+
 import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
 import { cn, formatDate } from 'commons/utils';
 import { SpiderChart } from './SpiderChart';
+import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 
 interface PerformanceAnalysisProps {
     performance_analysis: PerformanceAnalysisType;
@@ -53,7 +54,7 @@ function PerformanceAnalysis({
     return (
         <div
             className={cn(
-                'animate-fade bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
+                'animate-fade animate-duration-500 bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
                 'md:max-w-[680px]'
             )}>
             {/* utbk countdown */}
@@ -182,7 +183,7 @@ function PerformanceAnalysis({
                             type="button"
                             variant="primary"
                             className="!py-2 !px-4 text-sm flex items-center gap-2 mx-auto">
-                            <CopilotSolidIcon className="shrink-0 fill-white w-4 h-4" />
+                            <CopilotSolidIcon className="shrink-0 text-white w-4 h-4" />
                             Bantu Jelaskan
                         </Button>
                     </div>

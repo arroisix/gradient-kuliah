@@ -240,7 +240,7 @@ const DashboardUpdatesBanner = ({
             <div className="w-full mb-8">
                 <div className="flex items-center justify-between mb-4">
                     {bannerType === 'general' && (
-                        <h2 className="text-lg font-bold md:text-xl">
+                        <h2 className="text-white text-lg font-bold md:text-xl">
                             Jangan Sampai Ketinggalan!
                         </h2>
                     )}

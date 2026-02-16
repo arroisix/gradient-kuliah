@@ -5,9 +5,9 @@ import {
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
     useGetLearnRecommendationQuery,
-    useGetNewlyReleasedForYouQuery,
+    // useGetNewlyReleasedForYouQuery,
     useGetMajorBooksQuery,
-    useGetMajorFlashcardsQuery,
+    // useGetMajorFlashcardsQuery,
     useGetMajorQuizQuery,
     useGetFreeForYouContentQuery
 } from 'dashboard/redux/api/dashboardApi';
@@ -20,14 +20,14 @@ import {
     BookRecommendationItem,
     QuizRecommendationItem,
     FlashcardRecommendationItem,
-    NewlyReleasedForYouItem,
+    // NewlyReleasedForYouItem,
     MajorBookItem,
-    MajorFlashcardItem,
+    // MajorFlashcardItem,
     MajorQuizItem,
     FreeForYouItem
 } from 'dashboard/types/dashboard';
 import DashboardUpdatesBanner from './DashboardBanner';
-import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
+// import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
 import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
@@ -57,13 +57,13 @@ const PrivateDashboardContent = (): JSX.Element => {
         { skip: !isAuthenticated }
     );
 
-    const {
-        data: newlyReleasedForYou,
-        isLoading: isLoadingNewlyReleasedForYou
-    } = useGetNewlyReleasedForYouQuery(
-        { limit: 12 },
-        { skip: !isAuthenticated }
-    );
+    // const {
+    //     data: newlyReleasedForYou,
+    //     isLoading: isLoadingNewlyReleasedForYou
+    // } = useGetNewlyReleasedForYouQuery(
+    //     { limit: 12 },
+    //     { skip: !isAuthenticated }
+    // );
 
     const { data: majorBooks, isLoading: isLoadingMajorBooks } =
         useGetMajorBooksQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -74,8 +74,8 @@ const PrivateDashboardContent = (): JSX.Element => {
     } = // <- added
         useGetMajorQuizQuery({ limit: 12 }, { skip: !isAuthenticated });
 
-    const { data: majorFlashcards, isLoading: isLoadingMajorFlashcards } =
-        useGetMajorFlashcardsQuery({ limit: 12 }, { skip: !isAuthenticated });
+    // const { data: majorFlashcards, isLoading: isLoadingMajorFlashcards } =
+    //     useGetMajorFlashcardsQuery({ limit: 12 }, { skip: !isAuthenticated });
 
     const { data: freeForYouContent, isLoading: isLoadingFreeForYou } =
         useGetFreeForYouContentQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -245,94 +245,94 @@ const PrivateDashboardContent = (): JSX.Element => {
         );
     };
 
-    const prepareNewlyReleasedItemData = (item: NewlyReleasedForYouItem) => {
-        let title,
-            href,
-            category,
-            courseName,
-            cardCount,
-            problemCount,
-            authorName;
+    // const prepareNewlyReleasedItemData = (item: NewlyReleasedForYouItem) => {
+    //     let title,
+    //         href,
+    //         category,
+    //         courseName,
+    //         cardCount,
+    //         problemCount,
+    //         authorName;
 
-        switch (item.type) {
-            case 'course':
-                title = item.title || item.course_name;
-                href = `/kelas/${item.course_slug}`;
-                category = 'Kelas';
-                courseName = item.course_name;
-                break;
+    //     switch (item.type) {
+    //         case 'course':
+    //             title = item.title || item.course_name;
+    //             href = `/kelas/${item.course_slug}`;
+    //             category = 'Kelas';
+    //             courseName = item.course_name;
+    //             break;
 
-            case 'Bank Soal':
-                title = item.book_title;
-                href = `/perpustakaan/bank-soal/${item.book_slug}`;
-                category = 'Bank Soal';
-                courseName = item.course_name;
-                problemCount = item.total_questions;
-                cardCount = item.card_count;
-                authorName = item.created_by;
-                break;
+    //         case 'Bank Soal':
+    //             title = item.book_title;
+    //             href = `/perpustakaan/bank-soal/${item.book_slug}`;
+    //             category = 'Bank Soal';
+    //             courseName = item.course_name;
+    //             problemCount = item.total_questions;
+    //             cardCount = item.card_count;
+    //             authorName = item.created_by;
+    //             break;
 
-            case 'Textbook':
-                title = item.book_title;
-                href = `/perpustakaan/textbook/${item.book_slug}`;
-                category = 'Textbook Solution';
-                courseName = item.course_name;
-                authorName = item.created_by;
-                break;
+    //         case 'Textbook':
+    //             title = item.book_title;
+    //             href = `/perpustakaan/textbook/${item.book_slug}`;
+    //             category = 'Textbook Solution';
+    //             courseName = item.course_name;
+    //             authorName = item.created_by;
+    //             break;
 
-            case 'Catatan': // Astronotes
-                title = item.book_title;
-                href = `/astronotes/${item.book_slug}/`;
-                category = 'Astronotes';
-                courseName = item.course_name;
-                authorName = item.created_by;
-                break;
+    //         case 'Catatan': // Astronotes
+    //             title = item.book_title;
+    //             href = `/astronotes/${item.book_slug}/`;
+    //             category = 'Astronotes';
+    //             courseName = item.course_name;
+    //             authorName = item.created_by;
+    //             break;
 
-            default:
-                // fallback for unexpected type
-                title = item.title || item.book_title || 'Unknown content';
-                href = '#';
-                category = 'Other';
-        }
+    //         default:
+    //             // fallback for unexpected type
+    //             title = item.title || item.book_title || 'Unknown content';
+    //             href = '#';
+    //             category = 'Other';
+    //     }
 
-        return {
-            id: item.id,
-            title: title || '',
-            category,
-            thumbnail: item.thumbnail,
-            href,
-            courseName: courseName ?? undefined,
-            cardCount: cardCount ?? undefined,
-            problemCount: problemCount ?? undefined,
-            authorName: authorName ?? undefined
-        };
-    };
+    //     return {
+    //         id: item.id,
+    //         title: title || '',
+    //         category,
+    //         thumbnail: item.thumbnail,
+    //         href,
+    //         courseName: courseName ?? undefined,
+    //         cardCount: cardCount ?? undefined,
+    //         problemCount: problemCount ?? undefined,
+    //         authorName: authorName ?? undefined
+    //     };
+    // };
 
-    const newlyReleasedHasTwoLineCards = checkForTwoLineTitles(
-        newlyReleasedForYou?.data || []
-    );
+    // const newlyReleasedHasTwoLineCards = checkForTwoLineTitles(
+    //     newlyReleasedForYou?.data || []
+    // );
 
-    const renderNewlyReleasedItem = (
-        item: NewlyReleasedForYouItem
-    ): JSX.Element => {
-        const itemData = prepareNewlyReleasedItemData(item);
-        return (
-            <ContentCard
-                {...itemData}
-                hasTwoLineCards={newlyReleasedHasTwoLineCards}
-                isBaru={true}
-                onClick={() => {
-                    tracker?.genericTrack('Click Dashboard Content Card', {
-                        section: 'Terbaru yang Cocok Untukmu',
-                        cardTitle: itemData.title,
-                        cardCategory: itemData.category,
-                        cardType: item.type
-                    });
-                }}
-                className="bg-[#181818]"
-            />
-        );
-    };
+    // const renderNewlyReleasedItem = (
+    //     item: NewlyReleasedForYouItem
+    // ): JSX.Element => {
+    //     const itemData = prepareNewlyReleasedItemData(item);
+    //     return (
+    //         <ContentCard
+    //             {...itemData}
+    //             hasTwoLineCards={newlyReleasedHasTwoLineCards}
+    //             isBaru={true}
+    //             onClick={() => {
+    //                 tracker?.genericTrack('Click Dashboard Content Card', {
+    //                     section: 'Terbaru yang Cocok Untukmu',
+    //                     cardTitle: itemData.title,
+    //                     cardCategory: itemData.category,
+    //                     cardType: item.type
+    //                 });
+    //             }}
+    //             className="bg-[#181818]"
+    //         />
+    //     );
+    // };
 
     const prepareMajorBookItemData = (item: MajorBookItem) => {
         const title = item.book_title || item.title || '';
@@ -390,29 +390,29 @@ const PrivateDashboardContent = (): JSX.Element => {
         );
     };
 
-    const renderMajorFlashcardItem = (
-        item: MajorFlashcardItem
-    ): JSX.Element => {
-        const title = item.title || '';
-        return (
-            <FlashcardCard
-                key={item.id}
-                slug={item.slug}
-                title={title}
-                totalCards={item.card_count ?? 0}
-                author={
-                    item.created_by
-                        ? {
-                              name: item.created_by.name,
-                              photo_profile: item.created_by.photo_profile || ''
-                          }
-                        : undefined
-                }
-                cardType="allFlashcards"
-                createdByMe={item.created_by_me}
-            />
-        );
-    };
+    // const renderMajorFlashcardItem = (
+    //     item: MajorFlashcardItem
+    // ): JSX.Element => {
+    //     const title = item.title || '';
+    //     return (
+    //         <FlashcardCard
+    //             key={item.id}
+    //             slug={item.slug}
+    //             title={title}
+    //             totalCards={item.card_count ?? 0}
+    //             author={
+    //                 item.created_by
+    //                     ? {
+    //                           name: item.created_by.name,
+    //                           photo_profile: item.created_by.photo_profile || ''
+    //                       }
+    //                     : undefined
+    //             }
+    //             cardType="allFlashcards"
+    //             createdByMe={item.created_by_me}
+    //         />
+    //     );
+    // };
 
     const renderMajorQuizItem = (item: MajorQuizItem): JSX.Element => {
         const exercise = {
@@ -540,13 +540,13 @@ const PrivateDashboardContent = (): JSX.Element => {
                 eventCategory="MajorClasses"
             />
 
-            <CarouselSection
+            {/* <CarouselSection
                 title="Terbaru yang Cocok Untukmu"
                 items={newlyReleasedForYou?.data}
                 isLoading={isLoadingNewlyReleasedForYou}
                 renderItem={renderNewlyReleasedItem}
                 eventCategory="NewlyReleasedForYou"
-            />
+            /> */}
 
             {!isDashboardRevamp && (
                 <CarouselSection
@@ -588,13 +588,13 @@ const PrivateDashboardContent = (): JSX.Element => {
                 eventCategory="MajorQuiz"
             />
 
-            <CarouselSection
+            {/* <CarouselSection
                 title="Flashcard dari Teman Sejurusan"
                 items={majorFlashcards?.data}
                 isLoading={isLoadingMajorFlashcards}
                 renderItem={renderMajorFlashcardItem}
                 eventCategory="MajorFlashcards"
-            />
+            /> */}
 
             {!isDashboardRevamp &&
                 learnRecommendation?.data?.map((courseRec, index) => {

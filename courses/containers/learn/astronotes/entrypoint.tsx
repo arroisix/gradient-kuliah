@@ -44,11 +44,11 @@ const AstronotesEntrypoint = ({
     });
 
     return (
-        <div className="pt-16">
+        <div>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 {isAuthenticated && <ContinueReadingSection />}
-                <h1 className="text-xl font-bold md:text-2xl text-balance">
+                <h1 className="text-white text-xl font-bold md:text-2xl text-balance">
                     {title}
                 </h1>
                 <EntrypointTabs />

@@ -85,7 +85,7 @@ function SubtestsAccordion({
                         </Accordion.Trigger>
                     </Accordion.Header>
 
-                    <Accordion.Content className="animate-fade mt-4 space-y-3">
+                    <Accordion.Content className="animate-fade animate-duration-500 mt-4 space-y-3">
                         <div className="bg-[#191920] p-3 rounded-lg border border-[#4B4E5F] space-y-4">
                             <h5 className="text-white font-semibold text-sm leading-tight flex items-center gap-2">
                                 <FaCircleCheck className="shrink-0 text-[#03AC5C] w-4 h-4" />{' '}

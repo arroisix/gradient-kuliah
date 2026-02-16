@@ -140,7 +140,7 @@ function ExerciseQuestionList({
             <div
                 key={currentQuestion.id}
                 className={cn(
-                    'animate-fade bg-[#191920] p-6 rounded-2xl w-full',
+                    'animate-fade animate-duration-500 bg-[#191920] p-6 rounded-2xl w-full',
                     'md:max-w-[680px]'
                 )}>
                 {!isSingleQuestion ? (
@@ -254,7 +254,7 @@ function ExerciseQuestionList({
                 </div>
 
                 {isOpenExplanation ? (
-                    <div className="animate-fade mt-6 md:mt-8">
+                    <div className="animate-fade animate-duration-500 mt-6 md:mt-8">
                         <div className="flex flex-col justify-center items-center gap-3 p-3 rounded-lg border border-[#7D89CC] mb-4">
                             <span className="flex items-center gap-2 leading-[160%]">
                                 <FaCircleCheck className="text-[#00C8B3] shrink-0 w-4 h-4" />{' '}

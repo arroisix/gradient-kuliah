@@ -3,7 +3,7 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import Select from 'commons/components/elements/Form/select';
 import { CDN_URL } from 'commons/constants';
-import Layout from 'commons/utbkLayout';
+import NonAuthLayout from 'commons/utbkLayout';
 import { Formik, FormikHelpers } from 'formik';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,11 +21,9 @@ import { cn } from 'commons/utils';
 import html2canvas from 'html2canvas-pro';
 import { GetStaticProps } from 'next';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
-import LearnLayout from 'commons/learnLayout';
 import axios from 'axios';
 import config from 'redux/api/config';
-import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { Layout } from 'commons/components/Layout';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -584,32 +582,27 @@ export const PrediksiPTN = (): JSX.Element => {
 };
 
 const PrediksiPTNPage = ({ courses }: { courses: Course[] }): JSX.Element => {
-    const { profile, isAuthenticated, isLoadingProfile } = useAuth();
+    const { profile } = useAuth();
 
-    if (isLoadingProfile) {
-        return <LoadingBackdrop />;
-    }
-
-    if (isAuthenticated && profile?.current_role === 'K12') {
+    if (!profile) {
         return (
-            <LearnLayout showSidebar fullHeightSidebar>
-                <div className="pt-16">
-                    <Breadcrumb className="w-full pb-5" />
-                    <div className="relative @container">
-                        <PrediksiPTN />
-                    </div>
-                </div>
-            </LearnLayout>
-        );
-    } else {
-        return (
-            <Layout courses={courses}>
+            <NonAuthLayout courses={courses}>
                 <div className="max-w-screen-lg mx-auto pt-32 px-4 @container">
                     <PrediksiPTN />
                 </div>
-            </Layout>
+            </NonAuthLayout>
         );
     }
+
+    return (
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <div className="w-full max-w-screen-lg mx-auto @container">
+                    <PrediksiPTN />
+                </div>
+            </div>
+        </Layout>
+    );
 };
 
 PrediksiPTNPage.displayName = 'Prediksi PTN';

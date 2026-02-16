@@ -100,13 +100,13 @@ const MainSection = ({
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="shrink-0 w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
+                            className="text-white shrink-0 w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
                             Lihat Try Out
                         </Link>
                     ) : (
                         <button
                             onClick={handleClick}
-                            className="shrink-0 w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
+                            className="text-white shrink-0 w-fit ml-auto text-sm font-semibold leading-tight h-[34px] px-3 grid place-items-center rounded-full border border-[#999999] hover:border-white transition-colors">
                             {data?.is_has_latest_result
                                 ? 'Lihat Analisa'
                                 : 'Coba Try Out'}

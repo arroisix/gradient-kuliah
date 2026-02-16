@@ -1,7 +1,10 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { Layout } from 'commons/components/Layout';
 import LearnLayout from 'commons/learnLayout';
+import { cn } from 'commons/utils';
 import ClassContainer from 'courses/containers';
 import { getPublicListCoursesV2 } from 'courses/redux/api/publicCourseV2Api';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { wrapper } from 'redux/store';
@@ -11,10 +14,22 @@ const ListClass = ({
 }: {
     courses: ListResponseData<Course>;
 }): JSX.Element => {
+    const { profile } = useAuth();
+
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <ClassContainer courses={courses} />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <ClassContainer courses={courses} />
-        </LearnLayout>
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <ClassContainer courses={courses} />
+            </div>
+        </Layout>
     );
 };
 

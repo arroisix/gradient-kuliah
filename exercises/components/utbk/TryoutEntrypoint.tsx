@@ -4,11 +4,9 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import LatihanContent from '../Entrypoint/EntrypointContent';
 import SetTargetDrawerButton from '../Entrypoint/SetTargetDrawerButton';
-import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const tryoutFilterOptions: Option[] = [
     { value: 'all', label: 'Semua' },
@@ -30,7 +28,7 @@ function TryoutEntrypoint() {
     const [page, setPage] = useState(Number(pageQuery));
 
     const { is_subscribed } = useCourseSubscription();
-    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { profile } = useAuth();
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -52,16 +50,14 @@ function TryoutEntrypoint() {
     };
 
     return (
-        <div className="pt-16">
-            <Breadcrumb className="w-full pb-5" />
-
-            <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
+        <div className={profile ? 'm-4 lg:my-8 lg:mx-12' : ''}>
+            <div className="w-full max-w-5xl mx-auto">
                 <div className="flex flex-row justify-between">
-                    <h1 className="text-xl font-bold md:text-2xl text-balance">
+                    <h1 className="text-white text-2xl font-bold text-balance">
                         Try Out
                     </h1>
 
-                    <div className="flex justify-between items-center gap-2 md:gap-4">
+                    <div className="flex justify-between items-center gap-2 lg:gap-4">
                         <Filter
                             options={tryoutFilterOptions}
                             defaultSelected={access_type as string}
@@ -70,7 +66,7 @@ function TryoutEntrypoint() {
                             className="[&>button]:px-4 [&>button]:py-2 [&>button]:text-sm [&>button]:font-bold [&>button]:w-fit"
                         />
 
-                        {isAuthenticated ? <SetTargetDrawerButton /> : <></>}
+                        {profile ? <SetTargetDrawerButton /> : <></>}
                     </div>
                 </div>
 
@@ -84,15 +80,13 @@ function TryoutEntrypoint() {
                 />
             </div>
 
-            {!is_subscribed && isAuthenticated ? (
+            {!is_subscribed && profile ? (
                 <>
-                    <div className="md:h-9" />
                     <RenewSubscriptionBanner product="latihan" type="K12" />
                     <RenewSubscriptionBanner
                         product="latihan"
                         type="K12_MOBILE"
                     />
-                    <div className="h-3 md:h-0" />
                 </>
             ) : (
                 <></>
