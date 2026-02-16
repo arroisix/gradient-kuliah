@@ -23,7 +23,7 @@ function MobileNavbar({ menuItems }: MobileNavbarProps): JSX.Element {
                 <Link
                     key={v.href}
                     href={v.href}
-                    className="group flex-grow flex flex-col items-center gap-1 transition-all">
+                    className="basis-1/5 group flex-grow flex flex-col items-center gap-1 transition-all">
                     {router.pathname.includes(v.href) ? (
                         <v.ActiveIcon
                             className={cn(
