@@ -1,22 +1,37 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { Layout } from 'commons/components/Layout';
 import LearnLayout from 'commons/learnLayout';
 import { getPopularSearches } from 'commons/redux/api/searchApi';
+import { cn } from 'commons/utils';
 import { getPopularBooks } from 'courses/redux/api/astronotesApi';
 import { getPopularVideos } from 'courses/redux/api/courseApi';
 import SearchLanding, {
     type SearchLandingProps
 } from 'dashboard/containers/searchLanding';
 import { getPublicCommunityPost } from 'komunitas/redux/api/komunitasApi';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { wrapper } from 'redux/store';
 
 const SearchLandingPage = (props: SearchLandingProps): JSX.Element => {
+    const { profile } = useAuth();
+
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <SearchLanding {...props} />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <SearchLanding {...props} />
-        </LearnLayout>
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <SearchLanding {...props} />
+            </div>
+        </Layout>
     );
 };
 

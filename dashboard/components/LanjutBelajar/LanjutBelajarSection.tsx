@@ -250,7 +250,9 @@ const LanjutBelajarSection: React.FC = () => {
 
     return (
         <div className="w-full pb-8">
-            <h2 className="text-xl font-bold mb-4">Lanjut Belajar, Yuk!</h2>
+            <h2 className="text-white text-xl font-bold mb-4">
+                Lanjut Belajar, Yuk!
+            </h2>
 
             <TabNavigation
                 activeTab={activeTab}

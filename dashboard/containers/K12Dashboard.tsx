@@ -4,12 +4,12 @@ import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { CDN_URL } from 'commons/constants';
-import { useMediaQuery } from 'usehooks-ts';
 import { XIcon } from 'lucide-react';
 import { BiSolidUpArrow } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
 import { useGetStudentTargetInstitutionsQuery } from 'dashboard/redux/api/dashboardApi';
 import { useGetStudentTryoutLatestResultQuery } from 'exercises/redux/api/exercisesApi';
+import Image from 'next/image';
 
 type Feature = {
     id: string;
@@ -26,8 +26,7 @@ const features: Feature[] = [
         title: 'Materi',
         description: 'Belajar materi UTBK secara bertahap.',
         url: '/utbk/materi',
-        icon: 'utbk/dashboard/materi.svg',
-        iconDesktop: 'utbk/dashboard/materi-desktop.svg'
+        icon: 'utbk/dashboard/materi_logo.svg'
     },
     {
         id: 'live-class',
@@ -37,25 +36,25 @@ const features: Feature[] = [
         icon: 'utbk/dashboard/live_class.svg'
     },
     {
-        id: 'kuis',
-        title: 'Try Out',
-        description: 'Uji kesiapan dengan simulasi UTBK.',
-        url: '/utbk/try-out',
-        icon: 'utbk/dashboard/try out.svg'
-    },
-    {
         id: 'copilot',
         title: 'Copilot AI',
         description: 'Teman bantu saat belajar.',
         url: '/copilot',
-        icon: 'utbk/dashboard/copilot.svg'
+        icon: 'utbk/dashboard/copilot_logo.svg'
     },
     {
         id: 'prediksi-ptn',
         title: 'Prediksi PTN',
         description: 'Perkirakan peluang masuk PTN.',
         url: '/utbk/prediksi-ptn',
-        icon: 'utbk/dashboard/prediksi-ptn.svg'
+        icon: 'utbk/dashboard/prediksi_ptn_logo.svg'
+    },
+    {
+        id: 'kuis',
+        title: 'Try Out',
+        description: 'Uji kesiapan dengan simulasi UTBK.',
+        url: '/utbk/try-out',
+        icon: 'utbk/dashboard/tryout_logo.svg'
     }
 ];
 
@@ -65,10 +64,6 @@ const K12Dashboard = (): JSX.Element => {
 
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     const tracker = useTracker();
-
-    const mediumMediaQuery = useMediaQuery('(min-width: 768px)');
-    const cardBaseClasses =
-        'relative group rounded-lg md:rounded-2xl transition-colors bg-[#222222] hover:bg-neutral-800 p-3 min-h-[65px]';
 
     const { data: targetInstitutions } = useGetStudentTargetInstitutionsQuery();
     const { data: tryoutLatestResult } = useGetStudentTryoutLatestResultQuery();
@@ -87,13 +82,25 @@ const K12Dashboard = (): JSX.Element => {
     }, [targetInstitutions, tryoutLatestResult]);
 
     return (
-        <section className="flex flex-col w-full gap-12 pb-12 mx-auto sm:overflow-x-clip overflow-x-visible max-w-[520px] lg:max-w-screen-md xl:max-w-[896px] md:h-[calc(100vh-128px)] justify-center">
-            <div className="flex flex-col gap-10 md:gap-6 lg:scale-125">
+        <section
+            className={cn(
+                'm-4 space-y-12 h-full',
+                'lg:m-0 lg:grid lg:place-items-center'
+            )}>
+            <div
+                className={cn(
+                    'flex flex-col justify-center items-center gap-6',
+                    'lg:scale-125'
+                )}>
                 <h1 className="text-center font-bold text-white text-2xl leading-[125%]">
                     Mau Belajar apa Hari ini?
                 </h1>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center max-w-[436px] self-center w-full">
+                <div
+                    className={cn(
+                        'w-full max-w-lg mx-auto grid gap-4',
+                        'lg:w-fit lg:grid-cols-2'
+                    )}>
                     {features.map((feature) => (
                         <div key={feature.id} className="relative">
                             <Link
@@ -104,27 +111,28 @@ const K12Dashboard = (): JSX.Element => {
                                     )
                                 }
                                 className={cn(
-                                    cardBaseClasses,
-                                    'flex flex-col justify-center gap-3 text-left pl-3 overflow-visible'
-                                )}
-                                style={{
-                                    backgroundImage: mediumMediaQuery
-                                        ? `url('${CDN_URL}/assets/${
-                                              feature.iconDesktop ??
-                                              feature.icon
-                                          }')`
-                                        : `url('${CDN_URL}/assets/${feature.icon}')`,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center right'
-                                }}>
-                                <div className="flex flex-col items-start w-full gap-1">
-                                    <h3 className="font-semibold text-white text-sm md:text-xs leading-[125%]">
+                                    'bg-[#222222] hover:opacity-75 transition-all rounded-2xl flex justify-between items-center gap-4 w-full h-[65px]',
+                                    'lg:max-w-[210px] lg:h-[74px]'
+                                )}>
+                                <div className="space-y-1 pl-3">
+                                    <h3 className="font-semibold text-white leading-[125%] text-xs">
                                         {feature.title}
                                     </h3>
-                                    {/* Show description only on xl+ */}
-                                    <p className="block text-xs md:text-[10px] md:leading-[150%] leading-[160%] text-neutral-400 w-full max-w-[118px] whitespace-nowrap md:whitespace-normal">
+                                    <p className="text-[#999999] text-[10px]">
                                         {feature.description}
                                     </p>
+                                </div>
+
+                                <div
+                                    className={cn(
+                                        'shrink-0 relative w-16 h-16',
+                                        'lg:h-[69px]'
+                                    )}>
+                                    <Image
+                                        src={`${CDN_URL}/assets/${feature.icon}`}
+                                        layout="fill"
+                                        className="object-cover object-center"
+                                    />
                                 </div>
                             </Link>
 

@@ -16,7 +16,6 @@ import {
     Reasoning,
     SelectedReference
 } from 'copilot/types/copilot';
-import CopilotIcon from 'copilot/assets/revamp/CopilotIcon';
 import { chatApi } from 'copilot/redux/api/copilotApi';
 import ImageModal from './ImageModal';
 import { useTracker } from 'tracker/tracker';
@@ -31,6 +30,7 @@ import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { GoArrowUpRight } from 'react-icons/go';
 import { PerformanceAnalysis } from '../content-renderer/PerformanceAnalysis';
 import { References } from '../content-renderer/References';
+import { CopilotOutlineIcon } from 'commons/components/elements/Icons/CopilotOutlineIcon';
 
 interface ChatSectionProps {
     reasoning: Reasoning;
@@ -418,7 +418,7 @@ const ChatSection = ({
                     {message.role === 'AI' ? (
                         <>
                             <div className="shrink-0 bg-[#5F2BCE] w-7 h-7 rounded-full grid place-items-center">
-                                <CopilotIcon className="fill-white w-4 h-4" />
+                                <CopilotOutlineIcon className="text-white w-4 h-4" />
                             </div>
                             {renderMessage(message)}
                         </>

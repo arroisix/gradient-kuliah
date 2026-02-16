@@ -1,38 +1,33 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import axios from 'axios';
-import LearnLayout from 'commons/learnLayout';
-import Layout from 'commons/utbkLayout';
+import { Layout } from 'commons/components/Layout';
+import NonAuthLayout from 'commons/utbkLayout';
+import { cn } from 'commons/utils';
 import { MateriEntrypoint } from 'courses/components/utbk/MateriEntrypoint';
 import type { GetStaticProps } from 'next';
 import config from 'redux/api/config';
 
 const MateriPage = ({ courses }: { courses: Course[] }): JSX.Element => {
-    const { isLoadingProfile, isAuthenticated } = useAuth();
+    const { profile } = useAuth();
 
-    // it's necessary to prevent glitch
-    // proper loading state will be addressed later
-    if (isLoadingProfile === undefined || isLoadingProfile) {
-        return <></>;
-    }
-
-    if (!isAuthenticated) {
+    if (!profile) {
         return (
-            <Layout courses={courses}>
+            <NonAuthLayout courses={courses}>
                 <div className="w-full max-w-5xl mx-auto px-6 pt-[calc(92px+32px)]">
                     <div className="min-h-[calc(100vh-92px-32px-32px-28px)]">
                         <MateriEntrypoint />
                     </div>
                 </div>
-            </Layout>
+            </NonAuthLayout>
         );
     }
 
     return (
-        <LearnLayout showSidebar fullHeightSidebar className="relative">
-            <div className="w-full max-w-5xl mx-auto mt-[calc(48px+32px)]">
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
                 <MateriEntrypoint />
             </div>
-        </LearnLayout>
+        </Layout>
     );
 };
 

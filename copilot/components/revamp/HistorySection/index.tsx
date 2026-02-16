@@ -2,15 +2,7 @@ import {
     BookmarkedChatsResponse,
     SessionHistoryResponse
 } from 'copilot/types/copilot';
-import Link from 'next/link';
-import {
-    useState,
-    useEffect,
-    useMemo,
-    useRef,
-    Dispatch,
-    SetStateAction
-} from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BiCopy, BiSearch } from 'react-icons/bi';
 import { FiEdit } from 'react-icons/fi';
@@ -25,24 +17,20 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import SessionMenuDropdown from './SessionMenuDropdown';
 import RenameDialog from './RenameDialog';
-import { HiOutlineChatAlt, HiOutlineMenuAlt2 } from 'react-icons/hi';
+import { HiOutlineChatAlt } from 'react-icons/hi';
 import { BsBookmark } from 'react-icons/bs';
 import { useTracker } from 'tracker/tracker';
 
 interface HistorySectionProps {
     isOpen: boolean;
     onClose: () => void;
-    onOpen: () => void;
     isMobile?: boolean;
-    setCurrentSessionId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const HistorySection = ({
     isOpen,
     onClose,
-    onOpen,
-    isMobile = false,
-    setCurrentSessionId
+    isMobile = false
 }: HistorySectionProps): JSX.Element => {
     const router = useRouter();
     const [bookmarkedChats, setBookmarkedChats] = useState<
@@ -178,7 +166,6 @@ const HistorySection = ({
 
     const handleNewChat = () => {
         tracker?.genericTrack('Create Empty Copilot Session');
-        setCurrentSessionId(undefined);
         router.push('/copilot');
         onClose();
     };
@@ -219,6 +206,8 @@ const HistorySection = ({
                         : session
                 )
             );
+
+            onClose();
         } catch (error) {
             console.error('Failed to rename session:', error);
         }
@@ -258,7 +247,8 @@ const HistorySection = ({
                 prev.filter((session) => session.id !== sessionId)
             );
 
-            if (router.query.sessionId === sessionId) {
+            const urlSessionId = router.query.sessionId?.[0];
+            if (urlSessionId === sessionId) {
                 router.push('/copilot');
             }
         } catch (error) {
@@ -281,12 +271,6 @@ const HistorySection = ({
         });
     };
 
-    useEffect(() => {
-        if (isMobile && isOpen) {
-            onClose();
-        }
-    }, [router.query.sessionId]);
-
     const mobileClasses = isMobile
         ? 'bg-neutral-900 fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
         : '';
@@ -302,18 +286,7 @@ const HistorySection = ({
                 mobileTransform
             )}>
             {!isOpen && !isMobile ? (
-                <div className="flex flex-row items-center gap-4 px-4 pt-6">
-                    <button
-                        onClick={onOpen}
-                        className="text-white hover:text-neutral-400 transition-colors duration-200">
-                        <HiOutlineMenuAlt2 size={24} />
-                    </button>
-                    <button
-                        onClick={handleNewChat}
-                        className="text-white hover:text-neutral-400 transition-colors duration-200">
-                        <FiEdit size={20} />
-                    </button>
-                </div>
+                <></>
             ) : (
                 <>
                     <div className="shrink-0 p-4 flex items-center justify-between">
@@ -383,10 +356,16 @@ const HistorySection = ({
                         ) : searchTerm ? (
                             <div className="overflow-y-auto scrollbar-none px-2 flex-1">
                                 {searchResults.map((result) => (
-                                    <Link
-                                        href={`/copilot/${result.session_id}`}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            router.push(
+                                                `/copilot/${result.session_id}`
+                                            );
+                                            onClose();
+                                        }}
                                         key={result.message_id}
-                                        className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer group block">
+                                        className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer group block w-full">
                                         <p className="text-sm text-neutral-400 line-clamp-2">
                                             {result.message}
                                         </p>
@@ -397,17 +376,23 @@ const HistorySection = ({
                                                 )}
                                             </span>
                                         )}
-                                    </Link>
+                                    </button>
                                 ))}
                             </div>
                         ) : activeTab === 'bookmark' ? (
                             <div className="overflow-y-auto scrollbar-none px-2 flex-1">
                                 {bookmarkedChats.length > 0 ? (
                                     bookmarkedChats.map((chat) => (
-                                        <Link
-                                            href={`/copilot/${chat.session_id}`}
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                router.push(
+                                                    `/copilot/${chat.session_id}`
+                                                );
+                                                onClose();
+                                            }}
                                             key={chat.message_id}
-                                            className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer flex flex-row group block">
+                                            className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer flex flex-row group block w-full">
                                             <div className="flex-shrink-0 mr-3">
                                                 <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center">
                                                     <CopilotIcon />
@@ -493,7 +478,7 @@ const HistorySection = ({
                                                     </div>
                                                 )}
                                             </div>
-                                        </Link>
+                                        </button>
                                     ))
                                 ) : (
                                     <div className="flex flex-col items-center justify-center h-full gap-2 text-center px-4">
@@ -514,23 +499,25 @@ const HistorySection = ({
                         ) : filteredSessions.length > 0 ? (
                             <div className="overflow-y-auto scrollbar-none px-2 flex-1">
                                 {filteredSessions.map((session) => (
-                                    <Link
-                                        href={`/copilot/${session.id}`}
-                                        onClick={() =>
-                                            handleSessionClick(session.id)
-                                        }
+                                    <button
                                         key={session.id}
-                                        className="group block">
+                                        type="button"
+                                        onClick={() => {
+                                            router.push(
+                                                `/copilot/${session.id}`
+                                            );
+                                            handleSessionClick(session.id);
+                                            onClose();
+                                        }}
+                                        className="group block w-full">
                                         <div className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer">
-                                            <div className="flex items-start justify-between gap-2">
-                                                <div>
-                                                    <h3 className="font-semibold text-sm mb-1">
-                                                        {session.name}
-                                                    </h3>
-                                                    <p className="text-sm text-neutral-400 line-clamp-2">
-                                                        {session.latest_chat}
-                                                    </p>
-                                                </div>
+                                            <div className="text-left">
+                                                <h3 className="font-semibold text-sm mb-1">
+                                                    {session.name}
+                                                </h3>
+                                                <p className="text-sm text-neutral-400 line-clamp-2">
+                                                    {session.latest_chat}
+                                                </p>
                                             </div>
                                             <span className="flex flex-row justify-between text-neutral-500 mt-2 block">
                                                 {session.latest_chat_at ? (
@@ -549,7 +536,7 @@ const HistorySection = ({
                                                 />
                                             </span>
                                         </div>
-                                    </Link>
+                                    </button>
                                 ))}
                             </div>
                         ) : (

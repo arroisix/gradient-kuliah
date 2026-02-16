@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from 'react';
 
-function LiveClassSolid({
+function LiveClassSolidIcon({
     className
 }: ComponentPropsWithoutRef<'svg'>): JSX.Element {
     return (
@@ -9,7 +9,6 @@ function LiveClassSolid({
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M10.0128 16.5586C10.0631 18.3396 9.73637 19.0759 8.01758 19.5586"
@@ -33,4 +32,4 @@ function LiveClassSolid({
     );
 }
 
-export { LiveClassSolid };
+export { LiveClassSolidIcon };

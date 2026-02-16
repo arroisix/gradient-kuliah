@@ -4,14 +4,12 @@ import ReferralModal from 'referral/components/ReferralModal';
 import DashboardContent from './dashboardContent';
 import DashboardFeatures from '../components/DashboardFeatures';
 import LanjutBelajarSection from '../components/LanjutBelajar/LanjutBelajarSection';
-import SearchSection from 'dashboard/components/Search/SearchSection';
+// import SearchSection from 'dashboard/components/Search/SearchSection';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import AnnouncementModal from 'dashboard/components/Announcement/AnnouncementModal';
 import { useGetAnnouncementsQuery } from 'dashboard/redux/api/dashboardApi';
 import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import ProfileCompletionBanner from 'dashboard/components/ProfileCompletionBanner';
 
 const DashboardContainer = (): JSX.Element => {
@@ -26,7 +24,6 @@ const DashboardContainer = (): JSX.Element => {
     const { data: announcements } = useGetAnnouncementsQuery(undefined, {
         skip: !isAuthenticated
     });
-    const { profile } = useAuth();
 
     useEffect(() => {
         if (checkout === 'success') setIsReferralModalOpen(true);
@@ -43,15 +40,14 @@ const DashboardContainer = (): JSX.Element => {
         setIsAnnouncementAlreadyOpened(true);
     };
 
-    if (isAuthenticated && !profile) {
-        return <LoadingBackdrop />;
-    }
-
     return (
-        <section className="flex flex-col w-full gap-6 pb-4 pt-16 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+        <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
             <ProfileCompletionBanner />
             <DashboardUpdatesBanner bannerType="campaign" />
-            <SearchSection />
+            <h1 className="text-2xl text-white font-bold text-center">
+                Mau Belajar apa Hari ini?
+            </h1>
+            {/* <SearchSection /> */}
             <DashboardFeatures />
             {isAuthenticated && <LanjutBelajarSection />}
             <DashboardContent />

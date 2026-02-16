@@ -1,7 +1,7 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import axios from 'axios';
-import LearnLayout from 'commons/learnLayout';
-import Layout from 'commons/utbkLayout';
+import { Layout } from 'commons/components/Layout';
+import NonAuthLayout from 'commons/utbkLayout';
 import withAnon from 'commons/withAnon';
 import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { TryoutEntrypoint } from 'exercises/components/utbk/TryoutEntrypoint';
@@ -12,36 +12,28 @@ import { useTracker } from 'tracker/tracker';
 
 const TryOutPage = ({ courses }: { courses: Course[] }): JSX.Element => {
     const tracker = useTracker();
-    const { isLoadingProfile, isAuthenticated } = useAuth();
+    const { profile } = useAuth();
 
     useEffect(() => {
         tracker?.genericTrack('Visit Try Out Landing Page');
     }, [tracker]);
 
-    if (isLoadingProfile === undefined || isLoadingProfile) {
+    if (!profile) {
         return (
-            <LearnLayout showSidebar fullHeightSidebar>
-                <></>
-            </LearnLayout>
-        );
-    }
-
-    if (!isAuthenticated) {
-        return (
-            <Layout courses={courses}>
-                <div className="max-w-screen-lg mx-auto pt-32 px-4 md:px-0">
+            <NonAuthLayout courses={courses}>
+                <div className="max-w-screen-lg mx-auto pt-32 px-4 lg:px-0">
                     <TryoutEntrypoint />
                 </div>
-            </Layout>
+            </NonAuthLayout>
         );
     }
 
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
+        <Layout>
             <SetTargetDrawer>
                 <TryoutEntrypoint />
             </SetTargetDrawer>
-        </LearnLayout>
+        </Layout>
     );
 };
 

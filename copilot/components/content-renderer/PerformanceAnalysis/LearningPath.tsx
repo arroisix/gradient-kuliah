@@ -42,7 +42,7 @@ function LearningPath({
 
     if (isLoading) {
         return (
-            <div className="animate-fade">
+            <div className="animate-fade animate-duration-500">
                 <div
                     className={cn(
                         'animate-pulse bg-[#333333] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto pb-8 h-64',
@@ -55,7 +55,7 @@ function LearningPath({
     return (
         <div
             className={cn(
-                'bg-[#191920] animate-fade rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto h-full max-h-[1024px] flex flex-col',
+                'bg-[#191920] animate-fade animate-duration-500 rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto h-full max-h-[1024px] flex flex-col',
                 'md:max-w-[680px]'
             )}>
             <div
