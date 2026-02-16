@@ -8,13 +8,13 @@ const UserAvatar = ({
     profile?: UpdateUserResponseData;
 }): JSX.Element => {
     return !profile ? (
-        <div className="w-8 h-8 bg-neutral-600 animate-pulse rounded-full"></div>
+        <div className="shrink-0 w-8 h-8 bg-neutral-600 animate-pulse rounded-full"></div>
     ) : !!profile.photo_profile ? (
-        <div className="w-8 h-8 relative">
+        <div className="shrink-0 relative w-8 h-8 rounded-full grid place-items-center overflow-hidden">
             <Image
                 src={profile.photo_profile}
                 layout="fill"
-                className="rounded-full"
+                className="object-cover object-center"
             />
         </div>
     ) : (

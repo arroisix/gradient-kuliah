@@ -38,11 +38,11 @@ function Sidebar({ menuItems }: SidebarProps): JSX.Element {
                             key={v.href}
                             href={v.href}
                             className="group transition-colors flex items-center gap-3 py-2 px-6">
-                            {router.pathname === v.href ? (
+                            {router.pathname.includes(v.href) ? (
                                 <v.ActiveIcon
                                     className={cn(
                                         'shrink-0 group-hover:text-white/75 w-6 h-6',
-                                        router.pathname === v.href
+                                        router.pathname.includes(v.href)
                                             ? 'text-white'
                                             : 'text-[#4B4E5F]'
                                     )}
@@ -51,7 +51,7 @@ function Sidebar({ menuItems }: SidebarProps): JSX.Element {
                                 <v.InactiveIcon
                                     className={cn(
                                         'shrink-0 group-hover:text-white/75 w-6 h-6',
-                                        router.pathname === v.href
+                                        router.pathname.includes(v.href)
                                             ? 'text-white'
                                             : 'text-[#4B4E5F]'
                                     )}
@@ -61,7 +61,7 @@ function Sidebar({ menuItems }: SidebarProps): JSX.Element {
                             <span
                                 className={cn(
                                     'shrink-0 group-hover:text-white/75 leading-tight font-medium',
-                                    router.pathname === v.href
+                                    router.pathname.includes(v.href)
                                         ? 'text-white'
                                         : 'text-[#4B4E5F]'
                                 )}>

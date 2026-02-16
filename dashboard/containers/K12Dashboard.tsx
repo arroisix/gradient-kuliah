@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useGetStudentTargetInstitutionsQuery } from 'dashboard/redux/api/dashboardApi';
 import { useGetStudentTryoutLatestResultQuery } from 'exercises/redux/api/exercisesApi';
 import Image from 'next/image';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 type Feature = {
     id: string;
@@ -36,18 +37,18 @@ const features: Feature[] = [
         icon: 'utbk/dashboard/live_class.svg'
     },
     {
-        id: 'copilot',
-        title: 'Copilot AI',
-        description: 'Teman bantu saat belajar.',
-        url: '/copilot',
-        icon: 'utbk/dashboard/copilot_logo.svg'
-    },
-    {
         id: 'prediksi-ptn',
         title: 'Prediksi PTN',
         description: 'Perkirakan peluang masuk PTN.',
         url: '/utbk/prediksi-ptn',
         icon: 'utbk/dashboard/prediksi_ptn_logo.svg'
+    },
+    {
+        id: 'copilot',
+        title: 'Copilot AI',
+        description: 'Teman bantu saat belajar.',
+        url: '/copilot',
+        icon: 'utbk/dashboard/copilot_logo.svg'
     },
     {
         id: 'kuis',
@@ -59,6 +60,7 @@ const features: Feature[] = [
 ];
 
 const K12Dashboard = (): JSX.Element => {
+    const { profile } = useAuth();
     const [isTooltipClosed, setIsTooltipClosed] = useState(true);
     const [tooltipText, setTooltipText] = useState('');
 
@@ -136,8 +138,10 @@ const K12Dashboard = (): JSX.Element => {
                                 </div>
                             </Link>
 
-                            {feature.url === '/copilot' && !isTooltipClosed ? (
-                                <div className="bg-[#5F2BCE] absolute -bottom-[calc(32px+16px)] left-0 right-0 py-2 px-3 rounded-lg flex justify-between items-center gap-2">
+                            {profile &&
+                            feature.url === '/copilot' &&
+                            !isTooltipClosed ? (
+                                <div className="bg-[#5F2BCE] absolute -bottom-[calc(32px+16px)] z-10 left-0 right-0 py-2 px-3 rounded-lg flex justify-between items-center gap-2">
                                     <span className="text-white text-xs">
                                         {tooltipText}
                                     </span>{' '}
