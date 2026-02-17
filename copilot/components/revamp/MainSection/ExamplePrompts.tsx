@@ -65,7 +65,7 @@ const ExamplePrompts = ({
                         });
                         onPromptClick(prompt);
                     }}
-                    className="bg-gradient-to-b from-black/10 to-white/10 border border-[#333540] flex items-center gap-2 py-3 px-4 rounded-xl w-full max-w-[256px]">
+                    className="bg-gradient-to-b from-black/10 to-white/10 border border-[#333540] flex items-center gap-2 py-3 px-4 rounded-xl w-full max-w-[256px] hover:opacity-75 transition-all">
                     <BookOpenIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
                     <span className="text-white text-xs text-start">
                         {prompt}

@@ -11,12 +11,14 @@ import { SpiderChart } from './SpiderChart';
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 
 interface PerformanceAnalysisProps {
+    isForModal?: boolean;
     performance_analysis: PerformanceAnalysisType;
     isLoadingResponse: boolean;
     sendMessage: (prompt: string, imageUrl?: string) => Promise<void>;
 }
 
 function PerformanceAnalysis({
+    isForModal = false,
     isLoadingResponse,
     performance_analysis,
     sendMessage
@@ -45,6 +47,7 @@ function PerformanceAnalysis({
     if (openedLearningPath) {
         return (
             <LearningPath
+                isForModal={isForModal}
                 problemset_result={openedLearningPath}
                 setOpenedLearningPath={setOpenedLearningPath}
             />
@@ -55,7 +58,7 @@ function PerformanceAnalysis({
         <div
             className={cn(
                 'animate-fade animate-duration-500 bg-[#191920] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto',
-                'md:max-w-[680px]'
+                isForModal ? '' : 'lg:max-w-[680px]'
             )}>
             {/* utbk countdown */}
             <div className="bg-[#282B3C] text-[#E9D5FF] font-bold text-xs leading-tight px-6 py-2 text-center uppercase tracking-[1.1px]">
@@ -66,7 +69,7 @@ function PerformanceAnalysis({
             <div
                 className={cn(
                     'bg-[#20222E] p-4 flex flex-col justify-between gap-4',
-                    'md:px-6 md:flex-row md:gap-8'
+                    isForModal ? '' : 'lg:px-6 lg:flex-row lg:gap-8'
                 )}>
                 <div className="flex flex-col items-start gap-1">
                     <h3 className="text-white font-semibold leading-[140%]">
@@ -94,15 +97,23 @@ function PerformanceAnalysis({
             <div
                 className={cn(
                     'space-y-8 m-4',
-                    'md:space-y-0 md:grid md:grid-cols-2 md:mt-6'
+                    isForModal
+                        ? ''
+                        : 'lg:space-y-0 lg:grid lg:grid-cols-2 lg:mt-6'
                 )}>
                 {/* left side */}
-                <div className={cn('flex flex-col gap-6', 'md:px-6')}>
+                <div
+                    className={cn(
+                        'flex flex-col gap-6',
+                        isForModal ? '' : 'lg:px-6'
+                    )}>
                     <div className="flex flex-col">
                         <div
                             className={cn(
                                 'flex justify-between items-center gap-4',
-                                'md:flex-col md:items-start md:gap-2'
+                                isForModal
+                                    ? ''
+                                    : 'lg:flex-col lg:items-start lg:gap-2'
                             )}>
                             <div>
                                 <div className="text-[#999999] text-sm leading-[160%]">
@@ -175,7 +186,7 @@ function PerformanceAnalysis({
                     <div
                         className={cn(
                             'hidden flex-grow justify-center items-end',
-                            'md:flex'
+                            isForModal ? '' : 'lg:flex'
                         )}>
                         <Button
                             disabled={isLoadingResponse}
@@ -188,9 +199,8 @@ function PerformanceAnalysis({
                         </Button>
                     </div>
                 </div>
-
                 {/* right side */}
-                <div className="md:px-6">
+                <div className={cn(isForModal ? '' : 'lg:px-6')}>
                     <h4 className="text-white font-semibold text-sm leading-tight mb-4">
                         Analisa per Materi
                     </h4>
@@ -206,7 +216,6 @@ function PerformanceAnalysis({
                         <></>
                     )}
                 </div>
-
                 <Button
                     disabled={isLoadingResponse}
                     onClick={handleClickPromptBtn}
@@ -214,7 +223,7 @@ function PerformanceAnalysis({
                     variant="primary"
                     className={cn(
                         '!py-2 !px-4 text-sm flex items-center gap-2 mx-auto',
-                        'md:hidden'
+                        isForModal ? '' : 'lg:hidden'
                     )}>
                     <CopilotSolidIcon className="shrink-0 fill-white w-4 h-4" />
                     Bantu Jelaskan

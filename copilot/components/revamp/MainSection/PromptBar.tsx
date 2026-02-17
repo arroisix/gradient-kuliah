@@ -25,6 +25,7 @@ import { useWindowSize } from 'usehooks-ts';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 
 interface PromptBarProps {
+    isForModal?: boolean;
     onSend?: (prompt: string, imageUrl?: string) => void;
     isLoading?: boolean;
     onStateChange?: (state: { isEditorOpen: boolean }) => void;
@@ -35,6 +36,7 @@ interface PromptBarProps {
 }
 
 function PromptBar({
+    isForModal = false,
     onSend,
     isLoading,
     onStateChange,
@@ -242,7 +244,7 @@ function PromptBar({
             <div
                 className={cn(
                     'bg-[#101010] bg-opacity-[55%] px-6 py-4 rounded-tl-2xl rounded-tr-2xl border-t space-y-4 transition-colors',
-                    'md:border md:mb-4 md:rounded-2xl',
+                    isForModal ? '' : 'lg:border lg:mb-4 lg:rounded-2xl',
                     prompt ? 'border-[#5F2BCE]' : 'border-[#222222]'
                 )}
                 onDragOver={handleDragOver}
@@ -353,7 +355,7 @@ function PromptBar({
             <p
                 className={cn(
                     'hidden justify-center items-center text-[#999999] font-medium text-xs leading-tight mb-8',
-                    'md:flex'
+                    isForModal ? '' : 'lg:flex'
                 )}>
                 *Copilot bisa salah, tolong cek lagi yaa!
             </p>
@@ -377,11 +379,12 @@ function PromptBar({
             )}
 
             {/* mobile modal */}
-            {isModalOpen && width < 768 ? (
+            {isModalOpen && width < 1024 ? (
                 <Modal
                     isOpen={isModalOpen}
                     setOpen={(value) => setIsModalOpen(value)}
                     permanent={true}
+                    containerClassName="modal modal-open modal-bottom lg:modal-middle min-h-[100px]"
                     variant="dark">
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
@@ -450,10 +453,11 @@ function PromptBar({
             )}
 
             {/* desktop modal */}
-            {isModalOpen && width >= 768 ? (
+            {isModalOpen && width >= 1024 ? (
                 <div
                     className={cn(
                         'animate-fade-up animate-duration-300 bg-[#181818] w-[303px] rounded-lg p-4 absolute left-6 space-y-3',
+                        isForModal ? '' : '',
                         profile?.current_role === 'COLLEGE_STUDENT'
                             ? '-top-[(calc(153px+23px))]'
                             : '-top-[(calc(76px+23px))]'

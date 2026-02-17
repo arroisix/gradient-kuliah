@@ -26,6 +26,7 @@ function generateHexTextColor(score: number): string {
 }
 
 interface LearningPathProps {
+    isForModal?: boolean;
     problemset_result: PerformanceAnalysis['problemset_results'][number];
     setOpenedLearningPath: Dispatch<
         SetStateAction<PerformanceAnalysis['problemset_results'][number] | null>
@@ -33,6 +34,7 @@ interface LearningPathProps {
 }
 
 function LearningPath({
+    isForModal = false,
     problemset_result,
     setOpenedLearningPath
 }: LearningPathProps): JSX.Element {
@@ -46,7 +48,7 @@ function LearningPath({
                 <div
                     className={cn(
                         'animate-pulse bg-[#333333] rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto pb-8 h-64',
-                        'md:max-w-[680px]'
+                        isForModal ? '' : 'lg:max-w-[680px]'
                     )}></div>
             </div>
         );
@@ -56,12 +58,12 @@ function LearningPath({
         <div
             className={cn(
                 'bg-[#191920] animate-fade animate-duration-500 rounded-2xl overflow-hidden w-full max-w-[303px] mx-auto h-full max-h-[1024px] flex flex-col',
-                'md:max-w-[680px]'
+                isForModal ? '' : 'lg:max-w-[680px]'
             )}>
             <div
                 className={cn(
                     'bg-[#20222E] p-4 flex justify-between items-center gap-4',
-                    'md:px-6'
+                    isForModal ? '' : 'lg:px-6'
                 )}>
                 <div className="flex items-center gap-4">
                     <button
@@ -69,7 +71,7 @@ function LearningPath({
                         type="button"
                         className={cn(
                             'bg-white/25 w-6 h-6 rounded-full grid place-items-center',
-                            'md:w-8 md:h-8'
+                            isForModal ? '' : 'lg:w-8 lg:h-8'
                         )}>
                         <ChevronLeftIcon className="text-white w-4 h-4" />
                     </button>
@@ -81,7 +83,9 @@ function LearningPath({
                         <h3
                             className={cn(
                                 'text-white font-semibold leading-tight text-sm',
-                                'md:leading-[140%] md:text-base'
+                                isForModal
+                                    ? ''
+                                    : 'lg:leading-[140%] lg:text-base'
                             )}>
                             {problemset_result.problemset_title}
                         </h3>
@@ -100,12 +104,13 @@ function LearningPath({
             <div
                 className={cn(
                     'flex-grow pt-6 pb-8 mx-3 space-y-6 overflow-scroll scrollbar-none',
-                    'md:mx-6 md:pr-4'
+                    isForModal ? '' : 'lg:mx-6 lg:pr-4'
                 )}>
                 {Array.isArray(data?.chapters) && data?.chapters.length > 0 ? (
                     data?.chapters.map((chapter, index, chapters) => (
                         <ChapterLearningPath
                             key={chapter.slug}
+                            isForModal={isForModal}
                             chapter={chapter}
                             isLastChapter={index === chapters.length - 1}
                         />
@@ -127,11 +132,13 @@ function LearningPath({
 }
 
 interface ChapterLearningPathProps {
+    isForModal?: boolean;
     chapter: GetProblemsetLearningPath['chapters'][number];
     isLastChapter: boolean;
 }
 
 function ChapterLearningPath({
+    isForModal = false,
     chapter,
     isLastChapter
 }: ChapterLearningPathProps): JSX.Element {
@@ -139,7 +146,11 @@ function ChapterLearningPath({
 
     return (
         <div>
-            <div className={cn('flex items-center mb-3', 'md:mb-4')}>
+            <div
+                className={cn(
+                    'flex items-center mb-3',
+                    isForModal ? '' : 'lg:mb-4'
+                )}>
                 {/* chapter dot indicator */}
                 <div className="relative shrink-0 z-10 w-5 flex justify-center items-center">
                     <div className="bg-[#666666] w-2.5 h-2.5 rounded-full" />
@@ -148,23 +159,25 @@ function ChapterLearningPath({
                 <h4
                     className={cn(
                         'text-white font-semibold leading-[140%] ml-3',
-                        'md:ml-4'
+                        isForModal ? '' : 'lg:ml-4'
                     )}>
                     {chapter.chapter_title}
                 </h4>
             </div>
-
             <div className="relative">
                 {/* timeline indicator */}
                 <div
                     className={cn(
                         'bg-[#666666] absolute -top-7 left-[9px] w-0.5',
-                        'md:-top-6',
+                        isForModal ? '' : 'lg:-top-6',
                         isLastChapter ? 'bottom-0' : '-bottom-12'
                     )}
                 />
-
-                <div className={cn('space-y-3', 'md:space-y-4')}>
+                <div
+                    className={cn(
+                        'space-y-3',
+                        isForModal ? '' : 'lg:space-y-4'
+                    )}>
                     {chapter.subchapters.map((subchapter) => (
                         <div key={subchapter.id} className="flex items-center">
                             {/* subchapter dot indicator */}
@@ -175,7 +188,9 @@ function ChapterLearningPath({
                             <div
                                 className={cn(
                                     'bg-[#222222] rounded-xl py-3 px-4 ml-3 w-full flex flex-col gap-4',
-                                    'md:ml-4 md:flex-row md:justify-between md:items-center'
+                                    isForModal
+                                        ? ''
+                                        : 'lg:ml-4 lg:flex-row lg:justify-between lg:items-center'
                                 )}>
                                 <div className="flex flex-row items-center gap-4">
                                     {subchapter.type === 'video' ? (
@@ -214,7 +229,7 @@ function ChapterLearningPath({
                                     rel="noopener noreferrer"
                                     className={cn(
                                         'text-white text-center font-semibold text-sm leading-tight rounded-full py-2 px-4 transition-colors border border-transparent w-full',
-                                        'md:w-fit',
+                                        isForModal ? '' : 'lg:w-fit',
                                         subchapter.is_finished
                                             ? 'bg-[#2C2C2C] hover:bg-[#2C2C2C]/[75%] border-[#999999]'
                                             : 'bg-[#333333] hover:bg-[#333333]/[75%]'
