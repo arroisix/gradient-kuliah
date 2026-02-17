@@ -27,9 +27,7 @@ import { MobileTopbar } from './MobileTopbar';
 import { useRouter } from 'next/router';
 import HistorySection from 'copilot/components/revamp/HistorySection';
 import { useWindowSize } from 'usehooks-ts';
-import { HiOutlineMenuAlt2 } from 'react-icons/hi';
-import { FiEdit } from 'react-icons/fi';
-import { useTracker } from 'tracker/tracker';
+import CopilotNavbar from './CopilotNavbar';
 
 interface MenuItem {
     title: string;
@@ -117,18 +115,11 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
     const router = useRouter();
     const { width } = useWindowSize();
     const { profile, isLoadingProfile } = useAuth();
-    const tracker = useTracker();
 
     const menuItems =
         profile?.current_role === 'COLLEGE_STUDENT'
             ? collegeMenuItems
             : utbkMenuItems;
-
-    const handleNewChat = () => {
-        tracker?.genericTrack('Create Empty Copilot Session');
-        router.push('/copilot');
-        setIsHistoryOpen(false);
-    };
 
     const handleCloseHistory = () => {
         setIsHistoryOpen(false);
@@ -155,32 +146,14 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
             {/* mobile copilot topbar & mobile topbar */}
             <div
                 className={cn(
-                    'bg-black fixed z-50 top-0 left-0 right-0',
+                    'bg-black fixed z-[51] top-0 left-0 right-0',
                     'lg:hidden'
                 )}>
                 {router.pathname.includes('/copilot') ? (
-                    <div
-                        className={cn(
-                            'flex justify-between items-center py-3 px-4',
-                            'lg:hidden',
-                            isHistoryOpen ? 'invisible' : 'visible'
-                        )}>
-                        <button
-                            onClick={() => setIsHistoryOpen(true)}
-                            className="text-white hover:text-neutral-400 transition-colors duration-200">
-                            <HiOutlineMenuAlt2 size={24} />
-                        </button>
-
-                        <h1 className="text-white font-semibold leading-[140%]">
-                            Copilot AI
-                        </h1>
-
-                        <button
-                            onClick={handleNewChat}
-                            className="text-white hover:text-neutral-400 transition-colors duration-200">
-                            <FiEdit size={20} />
-                        </button>
-                    </div>
+                    <CopilotNavbar.Mobile
+                        isHistoryOpen={isHistoryOpen}
+                        setIsHistoryOpen={setIsHistoryOpen}
+                    />
                 ) : (
                     <MobileTopbar />
                 )}
@@ -200,23 +173,10 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                 )}>
                 {/* copilot sidebar trigger */}
                 {router.pathname.includes('/copilot') ? (
-                    <div
-                        className={cn(
-                            'hidden',
-                            'lg:flex justify-end items-center gap-6 mt-8 mr-12',
-                            isHistoryOpen ? 'invisible' : 'visible'
-                        )}>
-                        <button
-                            onClick={() => setIsHistoryOpen(true)}
-                            className="text-white hover:text-neutral-400 transition-colors duration-200">
-                            <HiOutlineMenuAlt2 size={24} />
-                        </button>
-                        <button
-                            onClick={handleNewChat}
-                            className="text-white hover:text-neutral-400 transition-colors duration-200">
-                            <FiEdit size={20} />
-                        </button>
-                    </div>
+                    <CopilotNavbar
+                        isHistoryOpen={isHistoryOpen}
+                        setIsHistoryOpen={setIsHistoryOpen}
+                    />
                 ) : (
                     <></>
                 )}
