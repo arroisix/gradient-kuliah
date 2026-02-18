@@ -8,13 +8,11 @@ import { useTracker } from 'tracker/tracker';
 import { useLocalStorage } from 'usehooks-ts';
 
 interface DashboardSearchInputProps {
-    isForMobileCollege?: boolean;
     value?: string;
     placeholder?: string;
 }
 
 const DashboardSearchInput = ({
-    isForMobileCollege = false,
     value = '',
     placeholder = 'Cari topik, materi, soal apapun'
 }: DashboardSearchInputProps): JSX.Element => {
@@ -60,27 +58,15 @@ const DashboardSearchInput = ({
                 <form
                     onSubmit={handleSubmit}
                     autoComplete="off"
-                    className={cn(
-                        'rounded-full flex items-center gap-2',
-                        isForMobileCollege
-                            ? 'bg-[#282B3C] flex-row-reverse py-3 px-4'
-                            : 'bg-[#101010] py-2 px-3'
-                    )}>
+                    className="bg-[#101010] px-3 rounded-full flex items-center gap-2">
                     <button
                         disabled={isSubmitting}
                         type="submit"
-                        className={cn(
-                            'shrink-0',
-                            isForMobileCollege
-                                ? 'bg-[#5F2BCE] w-8 h-8 grid place-items-center rounded-full'
-                                : ''
-                        )}>
+                        className="shrink-0">
                         <SearchIcon
                             className={cn(
                                 'shrink-0 w-5 h-5 transition-all',
-                                isForMobileCollege
-                                    ? 'text-white'
-                                    : values.q.trim()
+                                values.q.trim()
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             )}
@@ -98,7 +84,7 @@ const DashboardSearchInput = ({
                         name="q"
                         type="text"
                         className={cn(
-                            'w-full bg-transparent placeholder:text-[#666666] border-none focus:ring-0 text-sm p-0 transition-all outline-none',
+                            'w-full bg-transparent placeholder:text-[#666666] border-none focus:ring-0 text-sm py-3 px-0 transition-all outline-none',
                             values.q.trim() ? 'text-white' : 'text-[#666666]'
                         )}
                     />

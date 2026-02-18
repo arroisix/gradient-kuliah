@@ -50,10 +50,7 @@ const DashboardContainer = (): JSX.Element => {
                 Mau Belajar apa Hari ini?
             </h1>
             <div className={cn('mb-4', 'lg:hidden')}>
-                <DashboardSearchInput
-                    isForMobileCollege
-                    placeholder="Cari topik, materi, soal"
-                />
+                <DashboardSearchInput placeholder="Cari topik, materi, soal" />
             </div>
             {/* <SearchSection /> */}
             <DashboardFeatures />
