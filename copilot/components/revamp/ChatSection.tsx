@@ -33,6 +33,7 @@ import { References } from '../content-renderer/References';
 import { CopilotOutlineIcon } from 'commons/components/elements/Icons/CopilotOutlineIcon';
 
 interface ChatSectionProps {
+    isForModal?: boolean;
     reasoning: Reasoning;
     messages: ChatMessage[];
     onRetry?: (message: ChatMessage) => void;
@@ -45,6 +46,7 @@ interface ChatSectionProps {
 }
 
 const ChatSection = ({
+    isForModal = false,
     reasoning,
     messages,
     setMessages,
@@ -256,6 +258,7 @@ const ChatSection = ({
                         {Array.isArray(rich_content?.exercise_questions) &&
                         rich_content.exercise_questions.length > 0 ? (
                             <ExerciseQuestionList
+                                isForModal={isForModal}
                                 currentSessionId={currentSessionId ?? ''}
                                 message_id={message.id}
                                 exercise_questions={
@@ -269,6 +272,7 @@ const ChatSection = ({
                         {/* performance analysis */}
                         {rich_content?.performance_analysis ? (
                             <PerformanceAnalysis
+                                isForModal={isForModal}
                                 isLoadingResponse={isLoadingResponse}
                                 sendMessage={sendMessage}
                                 performance_analysis={
@@ -284,6 +288,7 @@ const ChatSection = ({
                         rich_content.content_recommendations.length > 0 ? (
                             <div className="carousel flex space-x-4 p-1">
                                 <ContentRecommendations
+                                    isForModal={isForModal}
                                     content_recommendations={
                                         rich_content.content_recommendations
                                     }
@@ -300,13 +305,17 @@ const ChatSection = ({
                                 onClick={() => handleRetry(message)}
                                 className={cn(
                                     'text-[#999999] hover:text-white hover:bg-[#333333] transition-colors w-8 h-8 rounded-full flex justify-center items-center',
-                                    'md:gap-1 md:w-fit md:px-2'
+                                    isForModal
+                                        ? ''
+                                        : 'lg:gap-1 lg:w-fit lg:px-2'
                                 )}>
                                 <RefreshCwIcon className="shrink-0 w-5 h-5" />
                                 <span
                                     className={cn(
                                         'hidden',
-                                        'md:block md:capitalize md:font-semibold md:text-xs md:leading-tight'
+                                        isForModal
+                                            ? ''
+                                            : 'lg:block lg:capitalize lg:font-semibold lg:text-xs lg:leading-tight'
                                     )}>
                                     retry
                                 </span>

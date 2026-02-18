@@ -5,6 +5,7 @@ import { BadgeQuestionMarkIcon, BookOpenIcon, VideoIcon } from 'lucide-react';
 import Link from 'next/link';
 
 interface SubchapterRecommendationProps {
+    isForModal?: boolean;
     type: ContentRecommendationType;
     title: string;
     course_slug: string;
@@ -14,6 +15,7 @@ interface SubchapterRecommendationProps {
 }
 
 function SubchapterRecommendation({
+    isForModal = false,
     type,
     title,
     course_slug,
@@ -26,17 +28,21 @@ function SubchapterRecommendation({
         <div
             className={cn(
                 'carousel-item bg-[#222222] rounded-xl w-full',
-                'md:max-w-[527px]'
+                isForModal ? '' : 'lg:max-w-[527px]'
             )}>
             <div
                 className={cn(
                     'w-full p-3',
-                    'md:flex md:flex-row md:justify-between md:items-center'
+                    isForModal
+                        ? ''
+                        : 'lg:flex lg:flex-row lg:justify-between lg:items-center'
                 )}>
                 <div
                     className={cn(
                         'flex flex-col gap-2 mb-4',
-                        'md:flex-row md:items-center md:gap-4 md:mb-0'
+                        isForModal
+                            ? ''
+                            : 'lg:flex-row lg:items-center lg:gap-4 lg:mb-0'
                     )}>
                     {type === 'video' ? (
                         <VideoIcon className="text-white shrink-0 w-4 h-4" />
@@ -71,7 +77,7 @@ function SubchapterRecommendation({
                     rel="noopener noreferrer"
                     className={cn(
                         'bg-[#5F2BCE] text-white font-semibold text-sm leading-tight py-2 px-4 block w-full rounded-full text-center shrink-0',
-                        'md:w-fit'
+                        isForModal ? '' : 'lg:w-fit'
                     )}>
                     {type === 'video'
                         ? 'Tonton Video'

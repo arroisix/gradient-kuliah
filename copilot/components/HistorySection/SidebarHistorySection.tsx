@@ -130,7 +130,7 @@ const SidebarHistorySection = ({
     if (!isOpen) return <></>;
 
     return (
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#181818] z-10 flex flex-col">
+        <div className="bg-[#181818] h-full flex flex-col">
             <div className="flex flex-col min-h-0 flex-1">
                 {isLoading ? (
                     <div className="flex items-center justify-center h-full">
@@ -140,7 +140,7 @@ const SidebarHistorySection = ({
                         />
                     </div>
                 ) : sessionHistory.length > 0 ? (
-                    <div className="overflow-y-auto flex-1">
+                    <div className="overflow-y-auto scrollbar-thin flex-1">
                         {sessionHistory.map((session) => (
                             <button
                                 key={session.id}

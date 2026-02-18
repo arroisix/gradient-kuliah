@@ -194,6 +194,7 @@ const CopilotModal = ({
                     'flex flex-col overflow-hidden'
                 )}>
                 <CopilotSidebarContainer
+                    currentContext={currentContext}
                     sessionId={sessionId}
                     isCollapsed={isCollapsed}
                     isMobile={isMobile}

@@ -1,17 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
-import MainSection from '../components/MainSection/MainSection';
-import ChatSection from '../components/ChatSection/ChatSection';
+import MainSection from 'copilot/components/revamp/MainSection';
+import ChatSection from 'copilot/components/revamp/ChatSection';
 import {
     ChatMessage,
     ContextReference,
     ChatInput,
     ChatHistoryContextItem,
     ReferenceContentType,
-    SelectedReference
+    SelectedReference,
+    CopilotContentRecommendation,
+    PerformanceAnalysis,
+    CopilotInterrupt,
+    CopilotAttachment,
+    CopilotReference,
+    Reasoning,
+    ExerciseQuestion
 } from '../types/copilot';
-import PromptBar from '../components/MainSection/PromptBar';
+import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import {
     IoClose,
     IoChevronDown,
@@ -22,6 +28,10 @@ import { MdHistory } from 'react-icons/md';
 import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
 import SidebarHistorySection from '../components/HistorySection/SidebarHistorySection';
+import { FaArrowDown } from 'react-icons/fa6';
+import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
+import { toast } from 'react-toastify';
+import { FiEdit } from 'react-icons/fi';
 
 type ContentType =
     | 'course_video'
@@ -30,6 +40,7 @@ type ContentType =
     | 'astronotes_content';
 
 interface CopilotSidebarContainerProps {
+    currentContext?: SelectedReference;
     sessionId?: string;
     isCollapsed?: boolean;
     isMobile: boolean;
@@ -50,6 +61,7 @@ interface CopilotSidebarContainerProps {
 }
 
 const CopilotSidebarContainer = ({
+    currentContext,
     sessionId,
     isCollapsed = false,
     isMobile,
@@ -71,21 +83,14 @@ const CopilotSidebarContainer = ({
     const [currentSessionId, setCurrentSessionId] = useState<
         string | undefined
     >();
-    const [pendingMessage, setPendingMessage] = useState<{
-        content: string;
-        timestamp: string;
-    } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const chatContainerRef = useRef<HTMLDivElement>(null);
-    const promptBarRef = useRef<HTMLInputElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleImageCapture = () => {
-        fileInputRef.current?.click();
-    };
+    const [reasoning, setReasoning] = useState<Reasoning>({
+        thoughts: [],
+        isFinished: false
+    });
 
     const handleToggleCollapse = () => {
         onCollapsedChange(!isCollapsed);
@@ -132,48 +137,32 @@ const CopilotSidebarContainer = ({
             setCurrentSessionId(sessionId);
 
             const response = await chatApi.getChatHistory(sessionId);
-
             if (response.history?.length > 0) {
                 const convertedMessages: ChatMessage[] = response.history.map(
-                    (item: {
-                        role: 'AI' | 'User';
-                        message: string;
-                        message_id: string;
-                        rating: number;
-                        is_bookmarked: boolean;
-                        image?: string | null;
-                        keyword?: string | null;
-                        context?: {
-                            data: ChatHistoryContextItem[];
-                        };
-                    }) => ({
+                    (item) => ({
                         id: item.message_id,
                         role: item.role === 'AI' ? 'AI' : 'User',
                         content: item.message,
                         timestamp: new Date().toISOString(),
                         rating: item.rating,
                         isBookmarked: item.is_bookmarked,
-                        image: item.image,
-                        keyword: item.keyword,
+                        images: item.images,
                         usedReferences:
                             convertHistoryContextToSelectedReferences(
                                 item.context
-                            )
+                            ),
+                        rich_content: item.rich_content,
+                        interrupt: item.interrupt
                     })
                 );
                 setMessages(convertedMessages);
+                setCurrentSessionId(sessionId);
             } else {
                 setMessages([]);
             }
-
-            setIsHistoryOpen(false);
-
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100);
         } catch (error) {
-            setIsHistoryOpen(false);
         } finally {
+            setIsHistoryOpen(false);
             setIsLoadingHistory(false);
         }
     };
@@ -181,6 +170,7 @@ const CopilotSidebarContainer = ({
     useEffect(() => {
         const loadChatHistory = async () => {
             if (!sessionId) {
+                setMessages([]);
                 setIsLoadingHistory(false);
                 return;
             }
@@ -189,33 +179,21 @@ const CopilotSidebarContainer = ({
                 const response = await chatApi.getChatHistory(sessionId);
                 if (response.history?.length > 0) {
                     const convertedMessages: ChatMessage[] =
-                        response.history.map(
-                            (item: {
-                                role: 'AI' | 'User';
-                                message: string;
-                                message_id: string;
-                                rating: number;
-                                is_bookmarked: boolean;
-                                image?: string | null;
-                                keyword?: string | null;
-                                context?: {
-                                    data: ChatHistoryContextItem[];
-                                };
-                            }) => ({
-                                id: item.message_id,
-                                role: item.role === 'AI' ? 'AI' : 'User',
-                                content: item.message,
-                                timestamp: new Date().toISOString(),
-                                rating: item.rating,
-                                isBookmarked: item.is_bookmarked,
-                                image: item.image,
-                                keyword: item.keyword,
-                                usedReferences:
-                                    convertHistoryContextToSelectedReferences(
-                                        item.context
-                                    )
-                            })
-                        );
+                        response.history.map((item) => ({
+                            id: item.message_id,
+                            role: item.role === 'AI' ? 'AI' : 'User',
+                            content: item.message,
+                            timestamp: new Date().toISOString(),
+                            rating: item.rating,
+                            isBookmarked: item.is_bookmarked,
+                            images: item.images,
+                            usedReferences:
+                                convertHistoryContextToSelectedReferences(
+                                    item.context
+                                ),
+                            rich_content: item.rich_content,
+                            interrupt: item.interrupt
+                        }));
                     setMessages(convertedMessages);
                     setCurrentSessionId(sessionId);
                 }
@@ -223,7 +201,6 @@ const CopilotSidebarContainer = ({
                 console.error('Error loading chat history:', error);
             } finally {
                 setIsLoadingHistory(false);
-                scrollToBottom();
             }
         };
 
@@ -236,6 +213,10 @@ const CopilotSidebarContainer = ({
         }
     }, [messages]);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [reasoning]);
+
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         const isNearBottom =
@@ -244,10 +225,15 @@ const CopilotSidebarContainer = ({
     };
 
     const scrollToBottom = () => {
-        chatContainerRef.current?.scrollTo({
-            top: chatContainerRef.current.scrollHeight,
+        messagesEndRef.current?.scrollIntoView({
+            block: 'nearest',
             behavior: 'smooth'
         });
+    };
+
+    const handleNewChat = () => {
+        setCurrentSessionId(undefined);
+        setMessages([]);
     };
 
     const buildChatContextFromReferences = (
@@ -306,15 +292,18 @@ const CopilotSidebarContainer = ({
 
         setIsLoadingResponse(true);
         const timestamp = new Date().toISOString();
-
         const currentUsedReferences = [...selectedReferences];
+        const images = [];
+        if (imageUrl) {
+            images.push(imageUrl);
+        }
 
         const userMessage: ChatMessage = {
             id: crypto.randomUUID(),
             role: 'User',
             content: prompt,
             timestamp,
-            image: imageUrl || null,
+            images,
             usedReferences:
                 currentUsedReferences.length > 0
                     ? currentUsedReferences
@@ -323,7 +312,6 @@ const CopilotSidebarContainer = ({
 
         setMessages((prev) => [...prev, userMessage]);
         handleClearReferences();
-        scrollToBottom();
 
         let currentResponse = '';
         const chatInput: ChatInput = {
@@ -335,53 +323,128 @@ const CopilotSidebarContainer = ({
             chapter_id: chapterId
         };
 
+        let content_recommendations: CopilotContentRecommendation[] = [];
+        let performance_analysis: PerformanceAnalysis;
+        let exercise_questions: ExerciseQuestion[] = [];
+        let interrupt: CopilotInterrupt;
+        let attachments: CopilotAttachment[] = [];
+        let question_recommendation: string[] = [];
+        let references: CopilotReference[] = [];
+
         try {
             await chatApi.chat(chatInput, {
-                onContent: (content) => {
-                    currentResponse += content;
-                    setPendingMessage({
-                        content: currentResponse,
-                        timestamp: new Date().toISOString()
-                    });
-                    scrollToBottom();
-                },
-                onComplete: (messageId, sessionId, sessionName, keyword) => {
-                    setPendingMessage(null);
+                onContent: (content, rich_content) => {
+                    if (content) {
+                        currentResponse = content;
+                    }
 
+                    if (
+                        Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0
+                    ) {
+                        content_recommendations =
+                            rich_content.content_recommendations;
+                    }
+
+                    if (rich_content?.performance_analysis) {
+                        performance_analysis =
+                            rich_content.performance_analysis;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0
+                    ) {
+                        exercise_questions = rich_content.exercise_questions;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.attachments) &&
+                        rich_content.attachments.length > 0
+                    ) {
+                        attachments = rich_content.attachments;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.question_recommendation) &&
+                        rich_content.question_recommendation.length > 0
+                    ) {
+                        question_recommendation =
+                            rich_content.question_recommendation;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.references) &&
+                        rich_content.references.length > 0
+                    ) {
+                        references = rich_content.references;
+                    }
+                },
+                onInfo: (interruptResponse, thought) => {
+                    if (interruptResponse) {
+                        currentResponse = interruptResponse.message;
+                        interrupt = interruptResponse;
+                    }
+
+                    if (thought) {
+                        setReasoning((v) => ({
+                            ...v,
+                            thoughts: [...v.thoughts, thought]
+                        }));
+                    }
+                },
+                onComplete: (messageId, sessionId) => {
+                    setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
-                            const aiMessage: ChatMessage = {
-                                id: messageId,
-                                role: 'AI',
-                                content: currentResponse,
-                                timestamp: new Date().toISOString(),
-                                keyword: keyword
-                            };
-                            return [...prev, aiMessage];
-                        });
+                        // use timeout to show the finished state of the reasoning
+                        setTimeout(() => {
+                            setReasoning({ thoughts: [], isFinished: false });
+                            setIsLoadingResponse(false);
+                            setMessages((prev) => {
+                                const aiMessage: ChatMessage = {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString(),
+                                    interrupt,
+                                    rich_content: {
+                                        content_recommendations,
+                                        performance_analysis,
+                                        exercise_questions,
+                                        attachments,
+                                        question_recommendation,
+                                        references
+                                    }
+                                };
+                                return [...prev, aiMessage];
+                            });
+                        }, 1000);
                     }
                 },
                 onError: (error) => {
-                    console.error('Chat error:', error);
-                    setPendingMessage(null);
-
+                    setReasoning({ thoughts: [], isFinished: false });
+                    setIsLoadingResponse(false);
+                    toast.error(`${error}.`, {
+                        position: 'top-center',
+                        theme: 'colored',
+                        hideProgressBar: true
+                    });
                     const errorMessage: ChatMessage = {
                         id: 'error',
                         role: 'AI',
-                        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                        content: `${error}.`,
                         timestamp: new Date().toISOString()
                     };
                     setMessages((prev) => [...prev, errorMessage]);
-                    scrollToBottom();
                 }
             });
         } catch (error) {
+            setReasoning({ thoughts: [], isFinished: false });
+            setIsLoadingResponse(false);
             console.error('Chat error:', error);
-            setPendingMessage(null);
-
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',
@@ -389,32 +452,31 @@ const CopilotSidebarContainer = ({
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
-            scrollToBottom();
-        } finally {
-            setIsLoadingResponse(false);
-            scrollToBottom();
         }
     };
 
-    const handleRetry = (message: ChatMessage) => {
+    const handleRetry = async (message: ChatMessage) => {
         const timestamp = new Date().toISOString();
         const userMessage: ChatMessage = {
             id: crypto.randomUUID(),
             role: 'User',
             content: message.content,
             timestamp,
-            image: message.image,
+            images: message.images,
             usedReferences: message.usedReferences
         };
 
-        setMessages((prev) => [...prev, userMessage]);
-        scrollToBottom();
+        const imageUrl =
+            Array.isArray(message.images) && message.images.length > 0
+                ? message.images[0]
+                : undefined;
 
+        setMessages((prev) => [...prev, userMessage]);
         let currentResponse = '';
         const chatInput: ChatInput = {
             input_text: message.content,
             session_id: currentSessionId,
-            image_url: message.image || undefined,
+            image_url: imageUrl,
             context: message.usedReferences
                 ? buildChatContextFromReferences(message.usedReferences)
                 : undefined,
@@ -423,63 +485,148 @@ const CopilotSidebarContainer = ({
         };
 
         setIsLoadingResponse(true);
+        let content_recommendations: CopilotContentRecommendation[] = [];
+        let performance_analysis: PerformanceAnalysis;
+        let exercise_questions: ExerciseQuestion[] = [];
+        let interrupt: CopilotInterrupt;
+        let attachments: CopilotAttachment[] = [];
+        let question_recommendation: string[] = [];
+        let references: CopilotReference[] = [];
 
-        chatApi.chat(chatInput, {
-            onContent: (content) => {
-                currentResponse += content;
-                setPendingMessage({
-                    content: currentResponse,
-                    timestamp: new Date().toISOString()
-                });
-                scrollToBottom();
-            },
-            onComplete: (messageId, sessionId, sessionName, keyword) => {
-                setPendingMessage(null);
+        try {
+            await chatApi.chat(chatInput, {
+                onContent: (content, rich_content) => {
+                    if (content) {
+                        currentResponse = content;
+                    }
 
-                if (sessionId) {
-                    setCurrentSessionId(sessionId);
+                    if (
+                        Array.isArray(rich_content?.content_recommendations) &&
+                        rich_content.content_recommendations.length > 0
+                    ) {
+                        content_recommendations =
+                            rich_content.content_recommendations;
+                    }
+
+                    if (rich_content?.performance_analysis) {
+                        performance_analysis =
+                            rich_content.performance_analysis;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.exercise_questions) &&
+                        rich_content.exercise_questions.length > 0
+                    ) {
+                        exercise_questions = rich_content.exercise_questions;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.attachments) &&
+                        rich_content.attachments.length > 0
+                    ) {
+                        attachments = rich_content.attachments;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.question_recommendation) &&
+                        rich_content.question_recommendation.length > 0
+                    ) {
+                        question_recommendation =
+                            rich_content.question_recommendation;
+                    }
+
+                    if (
+                        Array.isArray(rich_content?.references) &&
+                        rich_content.references.length > 0
+                    ) {
+                        references = rich_content.references;
+                    }
+                },
+                onInfo: (interruptResponse, thought) => {
+                    if (interruptResponse) {
+                        currentResponse = interruptResponse.message;
+                        interrupt = interruptResponse;
+                    }
+
+                    if (thought) {
+                        setReasoning((v) => ({
+                            ...v,
+                            thoughts: [...v.thoughts, thought]
+                        }));
+                    }
+                },
+                onComplete: (messageId, sessionId) => {
+                    setReasoning((v) => ({ ...v, isFinished: true }));
+                    if (sessionId) {
+                        setCurrentSessionId(sessionId);
+                    }
+                    if (messageId) {
+                        // use timeout to show the finished state of the reasoning
+                        setTimeout(() => {
+                            setReasoning({ thoughts: [], isFinished: false });
+                            setIsLoadingResponse(false);
+                            setMessages((prev) => {
+                                const aiMessage: ChatMessage = {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString(),
+                                    interrupt,
+                                    rich_content: {
+                                        content_recommendations,
+                                        performance_analysis,
+                                        exercise_questions,
+                                        attachments,
+                                        question_recommendation,
+                                        references
+                                    }
+                                };
+                                return [...prev, aiMessage];
+                            });
+                        }, 1000);
+                    }
+                },
+                onError: (error) => {
+                    setReasoning({ thoughts: [], isFinished: false });
+                    setIsLoadingResponse(false);
+                    console.error('Chat error:', error);
+                    const errorMessage: ChatMessage = {
+                        id: 'error',
+                        role: 'AI',
+                        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                        timestamp: new Date().toISOString()
+                    };
+                    setMessages((prev) => [...prev, errorMessage]);
                 }
-                if (messageId) {
-                    setMessages((prev) => {
-                        const aiMessage: ChatMessage = {
-                            id: messageId,
-                            role: 'AI',
-                            content: currentResponse,
-                            timestamp: new Date().toISOString(),
-                            keyword: keyword
-                        };
-                        return [...prev, aiMessage];
-                    });
-                }
-                setIsLoadingResponse(false);
-            },
-            onError: (error) => {
-                console.error('Chat error:', error);
-                setPendingMessage(null);
-
-                const errorMessage: ChatMessage = {
-                    id: 'error',
-                    role: 'AI',
-                    content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
-                    timestamp: new Date().toISOString()
-                };
-                setMessages((prev) => [...prev, errorMessage]);
-                setIsLoadingResponse(false);
-            }
-        });
+            });
+        } catch (error) {
+            setReasoning({ thoughts: [], isFinished: false });
+            setIsLoadingResponse(false);
+            console.error('Chat error:', error);
+            const errorMessage: ChatMessage = {
+                id: 'error',
+                role: 'AI',
+                content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                timestamp: new Date().toISOString()
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+        }
     };
 
     const handleClearReferences = () => {
-        selectedReferences.forEach((ref) => {
+        for (const ref of selectedReferences) {
+            if (ref.id === currentContext?.id) {
+                continue;
+            }
             onRemoveReference(ref.id, ref.contentType);
-        });
+        }
     };
 
     const isMobileFullscreen = isMobile && isCollapsed;
 
     return (
         <>
-            <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
+            <div className="h-full bg-black flex flex-col overflow-hidden">
                 <div
                     className={cn(
                         'flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 transition-colors duration-300',
@@ -499,6 +646,12 @@ const CopilotSidebarContainer = ({
                         ) : (
                             <IoClose size={24} />
                         )}
+                    </button>
+
+                    <button
+                        onClick={handleNewChat}
+                        className="p-1 text-gray-400 hover:text-white transition-colors z-10">
+                        <FiEdit size={20} />
                     </button>
 
                     <div
@@ -546,71 +699,77 @@ const CopilotSidebarContainer = ({
                     </div>
                 </div>
 
-                <div
-                    className={cn(
-                        'flex-1 overflow-hidden transition-all duration-300 ease-in-out relative',
-                        isCollapsed && !isMobile
-                            ? 'h-0 opacity-0'
-                            : 'flex opacity-100'
-                    )}>
-                    <div className="flex flex-col w-full h-full">
-                        {isLoadingHistory ? (
-                            <div className="flex-1 flex items-center justify-center">
-                                <AiOutlineLoading3Quarters
-                                    size={24}
-                                    className="animate-spin text-neutral-400"
-                                />
-                                <span className="ml-2 text-neutral-400">
-                                    Loading...
-                                </span>
-                            </div>
-                        ) : messages.length > 0 ? (
-                            <div
-                                ref={chatContainerRef}
-                                onScroll={handleScroll}
-                                className="flex-1 overflow-y-auto p-4 min-h-0 pb-2 sm:pb-4">
-                                <ChatSection
-                                    messages={messages}
-                                    pendingMessage={pendingMessage}
-                                    setMessages={setMessages}
-                                    onRetry={handleRetry}
-                                    isLoading={isLoadingResponse}
-                                    currentSessionId={currentSessionId}
-                                    isSidebar={true}
-                                    onOpenUsedReferencesModal={
-                                        onOpenUsedReferencesModal
-                                    }
-                                />
-                                <div ref={messagesEndRef} />
-                            </div>
-                        ) : (
-                            <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
+                {isHistoryOpen ? (
+                    <SidebarHistorySection
+                        isOpen={isHistoryOpen}
+                        onClose={handleToggleHistory}
+                        bookSlug={bookSlug}
+                        chapterId={chapterId}
+                        onSessionSelect={handleSessionSelect}
+                        currentSessionId={currentSessionId}
+                    />
+                ) : (
+                    <>
+                        <div
+                            onScroll={handleScroll}
+                            className={cn(
+                                'flex-grow overflow-scroll scrollbar-none px-4 pt-4',
+                                isLoadingHistory
+                                    ? 'grid place-items-center'
+                                    : '',
+                                messages.length > 0 ? '' : 'pb-4'
+                            )}>
+                            {isLoadingHistory ? (
+                                <LoadingIndicator />
+                            ) : messages.length > 0 ? (
+                                <div className="space-y-4">
+                                    <ChatSection
+                                        isForModal
+                                        reasoning={reasoning}
+                                        messages={messages}
+                                        setMessages={setMessages}
+                                        onRetry={handleRetry}
+                                        isLoading={isLoadingResponse}
+                                        currentSessionId={currentSessionId}
+                                        isLoadingResponse={isLoadingResponse}
+                                        sendMessage={handleSendMessage}
+                                        onOpenUsedReferencesModal={
+                                            onOpenUsedReferencesModal
+                                        }
+                                    />
+                                    <div ref={messagesEndRef} />
+                                </div>
+                            ) : (
                                 <MainSection
-                                    className={cn(
-                                        'bg-[#181818] flex-none w-full max-w-md mx-auto px-4 py-0',
-                                        '[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden'
-                                    )}
-                                    showTitle={false}
-                                    showActionButtons={false}
-                                    onSendMessage={handleSendMessage}
-                                    onImageCapture={handleImageCapture}
+                                    isForModal
                                     contentType={contentType}
+                                    onSendMessage={handleSendMessage}
                                 />
-                            </div>
-                        )}
+                            )}
+                        </div>
 
-                        <div className="border-t border-gray-700 flex-shrink-0 bg-[#181818]">
+                        <div className="relative">
+                            {showScrollButton && !isEditorOpen ? (
+                                <button
+                                    type="button"
+                                    onClick={scrollToBottom}
+                                    className="bg-[#5F2BCE] hover:opacity-80 transition-all w-8 h-8 grid place-items-center rounded-full absolute -top-4 left-1/2 -translate-x-1/2">
+                                    <FaArrowDown className="text-white w-4 h-4" />
+                                    <span className="sr-only">
+                                        scroll to bottom
+                                    </span>
+                                </button>
+                            ) : (
+                                <></>
+                            )}
+
                             <PromptBar
-                                ref={promptBarRef}
-                                fileInputRef={fileInputRef}
-                                placeholder="Lagi butuh bantuan apa sobat?"
+                                isForModal
                                 onSend={handleSendMessage}
                                 isLoading={isLoadingResponse}
                                 onStateChange={({ isEditorOpen }) =>
                                     setIsEditorOpen(isEditorOpen)
                                 }
-                                showBorder={false}
-                                isSidebar={true}
                                 onOpenReferenceModal={onOpenReferenceModal}
                                 onOpenReferenceContentModal={
                                     onOpenReferenceContentModal
@@ -618,43 +777,8 @@ const CopilotSidebarContainer = ({
                                 referenceCount={selectedReferences.length}
                             />
                         </div>
-
-                        {showScrollButton && !isEditorOpen && (
-                            <button
-                                onClick={scrollToBottom}
-                                className={cn(
-                                    'absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200',
-                                    'p-2 sm:p-3 bottom-36 left-1/2 transform -translate-x-1/2'
-                                )}
-                                aria-label="Scroll to bottom">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                                    />
-                                </svg>
-                            </button>
-                        )}
-                    </div>
-
-                    {isHistoryOpen && (
-                        <SidebarHistorySection
-                            isOpen={isHistoryOpen}
-                            onClose={handleToggleHistory}
-                            bookSlug={bookSlug}
-                            chapterId={chapterId}
-                            onSessionSelect={handleSessionSelect}
-                            currentSessionId={currentSessionId}
-                        />
-                    )}
-                </div>
+                    </>
+                )}
             </div>
         </>
     );
