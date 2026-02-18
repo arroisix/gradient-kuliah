@@ -1,7 +1,7 @@
 import LearnLayout from 'commons/learnLayout';
+import DownloadsContainer from 'courses/containers/Downloads';
 import { GetStaticProps } from 'next';
 import { wrapper } from 'redux/store';
-import DownloadsContainer from '../../../courses/containers/Downloads';
 
 const Downloads = (): JSX.Element => {
     return (

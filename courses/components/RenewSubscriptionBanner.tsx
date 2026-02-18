@@ -11,7 +11,7 @@ interface RenewSubscriptionBannerProps {
     product?: string;
     k12Product?: string;
     k12Description?: string;
-    type?: 'COLLEGE_STUDENT' | 'K12' | 'K12_MOBILE';
+    type?: 'COLLEGE_STUDENT' | 'K12' | 'K12_MOBILE' | 'COLLEGE_STUDENT_V2';
     className?: string;
 }
 
@@ -62,6 +62,55 @@ export default function RenewSubscriptionBanner({
                         <p className="hidden md:block">Beli Paket</p>
                         <p className="md:hidden">Beli</p>
                     </button>
+                </div>
+            </div>
+        );
+    };
+
+    const collegeStudentComponentV2 = (): JSX.Element => {
+        return (
+            <div className={
+                cn(
+                    "fixed left-1/2 -translate-x-1/2 w-[90%] lg:w-fit z-40 md:translate-x-[calc(-50%+125px)] bg-black p-4 md:p-6 md:rounded-t-xl overflow-hidden",
+                    isAuthenticated ? "md:w-[60%] bottom-[88px] md:bottom-0 rounded-xl " : "md:-translate-x-1/2 md:w-[75%] bottom-0 rounded-t-xl",
+                    className
+                )
+            }>
+                <div className='flex flex-col md:flex-row items-center gap-4 md:gap-6 lg:gap-10 relative'>
+                    <span className='text-md lg:text-xl font-semibold text-white z-10'>
+                        Daftar Gradient untuk melihat rekomendasi sesuai jurusan kamu!
+                    </span>
+
+                    <Button
+                        variant='primary'
+                        className='z-10 w-full md:w-fit'
+                        onClick={() => {
+                            if (isAuthenticated)
+                                window.location.href = '/langganan';
+                            else
+                                window.location.href =
+                                    '/daftar?redirect=/langganan';
+                        }}>
+                        Daftar
+                    </Button>
+
+                    <div className="w-[159px] aspect-[159/149] z-0 absolute left-[-24px] bottom-[-20px] md:bottom-[-48px] z-0">
+                        <Image
+                            src={`${CDN_URL}/assets/college-v2-banner-icon.png`}
+                            alt="College V2 Banner Icon"
+                            layout="fill"
+                            objectFit="cover"
+                        />
+                    </div>
+
+                    <div className="w-full md:w-[441px] aspect-[441/330] z-0 absolute right-[-120px] z-0 bottom-[-40px] md:bottom-[-60px]">
+                        <Image
+                            src={`${CDN_URL}/assets/college-v2-banner-bg.png`}
+                            alt="College V2 Banner Background"
+                            layout="fill"
+                            objectFit="cover"
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -140,6 +189,7 @@ export default function RenewSubscriptionBanner({
 
     const renderComponent = (): JSX.Element => {
         if (type === 'COLLEGE_STUDENT') return collegeStudentComponent();
+        if (type === 'COLLEGE_STUDENT_V2') return collegeStudentComponentV2();
         if (type === 'K12') return k12Component();
         return k12MobileComponent();
     };

@@ -3,8 +3,9 @@ import { Layout } from 'commons/components/Layout';
 import LearnLayout from 'commons/learnLayout';
 import { cn } from 'commons/utils';
 import ClassContainer from 'courses/containers';
-import { getPublicListCoursesV2 } from 'courses/redux/api/publicCourseV2Api';
-import type { GetStaticProps } from 'next';
+import { getPublicListCoursesV3 } from 'courses/redux/api/publicCourseV3Api';
+import { getPublicListCourseCluster } from 'courses/redux/api/publicCourseApi';
+import { GetStaticProps } from 'next';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { wrapper } from 'redux/store';
@@ -12,7 +13,7 @@ import { wrapper } from 'redux/store';
 const ListClass = ({
     courses
 }: {
-    courses: ListResponseData<Course>;
+    courses: ListResponseData<CourseV3>;
 }): JSX.Element => {
     const { profile } = useAuth();
 
@@ -41,11 +42,21 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             never
         >;
 
-        dispatch(getPublicListCoursesV2.initiate({ page: 1, limit: 6 }));
-
-        const [coursesResponse] = await Promise.all(
-            dispatch(getRunningQueriesThunk())
+        const courseClusterResponse = await dispatch(
+            getPublicListCourseCluster.initiate()
         );
+        const firstCategory =
+            courseClusterResponse?.data?.data?.[0]?.name ?? '';
+
+        const coursesResponse = await dispatch(
+            getPublicListCoursesV3.initiate({
+                page: 1,
+                limit: 8,
+                category: firstCategory
+            })
+        );
+
+        await Promise.all(dispatch(getRunningQueriesThunk()));
 
         const safeCoursesData = coursesResponse?.data
             ? JSON.parse(JSON.stringify(coursesResponse.data))
