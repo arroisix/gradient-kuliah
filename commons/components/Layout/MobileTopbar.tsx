@@ -22,11 +22,7 @@ function MobileTopbar(): JSX.Element {
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Portal>
-                    <DropdownMenu.Content
-                        asChild
-                        loop
-                        side="bottom"
-                        sideOffset={12}>
+                    <DropdownMenu.Content loop side="bottom" sideOffset={12}>
                         <ProfileMenuContent />
                     </DropdownMenu.Content>
                 </DropdownMenu.Portal>
