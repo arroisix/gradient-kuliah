@@ -20,12 +20,14 @@ function initUserQuestionAnswer() {
 }
 
 interface ExerciseQuestionListProps {
+    isForModal?: boolean;
     currentSessionId: string;
     message_id: string;
     exercise_questions: ExerciseQuestion[];
 }
 
 function ExerciseQuestionList({
+    isForModal = false,
     currentSessionId,
     message_id,
     exercise_questions
@@ -141,13 +143,15 @@ function ExerciseQuestionList({
                 key={currentQuestion.id}
                 className={cn(
                     'animate-fade animate-duration-500 bg-[#191920] p-6 rounded-2xl w-full',
-                    'md:max-w-[680px]'
+                    isForModal ? '' : 'lg:max-w-[680px]'
                 )}>
                 {!isSingleQuestion ? (
                     <div
                         className={cn(
                             'flex flex-col-reverse mb-4 gap-1',
-                            'md:flex-row md:justify-between md:items-center'
+                            isForModal
+                                ? ''
+                                : 'lg:flex-row lg:justify-between lg:items-center'
                         )}>
                         <span></span>
                         <span className="text-[#999999] text-sm leading-[160%]">
@@ -169,7 +173,7 @@ function ExerciseQuestionList({
                 <div
                     className={cn(
                         'grid gap-3 mt-4 mb-4',
-                        'md:grid-cols-2 md:mb-8'
+                        isForModal ? '' : 'lg:grid-cols-2 lg:mb-8'
                     )}>
                     {currentQuestion.options.map((option) => (
                         <button
@@ -178,7 +182,7 @@ function ExerciseQuestionList({
                             onClick={() => handleSelectAnswer(option.id)}
                             type="button"
                             className={cn(
-                                'py-3 rounded-lg border border-[#7D89CC] text-center disabled:opacity-75 transition-colors',
+                                'text-white py-3 rounded-lg border border-[#7D89CC] text-center disabled:opacity-75 transition-colors',
                                 isLoading ? 'bg-opacity-75' : '',
                                 selectedAnswerId === option.id
                                     ? 'bg-[#7D89CC]'
@@ -192,7 +196,9 @@ function ExerciseQuestionList({
                 <div
                     className={cn(
                         'flex flex-col-reverse gap-3',
-                        'md:flex-row md:justify-between md:items-center md:gap-6'
+                        isForModal
+                            ? ''
+                            : 'lg:flex-row lg:justify-between lg:items-center lg:gap-6'
                     )}>
                     <button
                         onClick={() => setIsOpenExplanation(!isOpenExplanation)}
@@ -208,7 +214,11 @@ function ExerciseQuestionList({
                         />
                     </button>
 
-                    <div className="flex justify-between items-center gap-3 w-full md:w-fit">
+                    <div
+                        className={cn(
+                            'flex justify-between items-center gap-3 w-full',
+                            isForModal ? '' : 'lg:w-fit'
+                        )}>
                         {!isSingleQuestion ? (
                             <Button
                                 disabled={isFirstQuestion || isLoading}
@@ -217,10 +227,16 @@ function ExerciseQuestionList({
                                 variant="secondary"
                                 className={cn(
                                     '!p-0 w-[46px] h-[46px] grid place-items-center',
-                                    'md:w-fit md:h-fit md:!px-4 md:!py-2 md:flex md:items-center md:gap-2'
+                                    isForModal
+                                        ? ''
+                                        : 'lg:w-fit lg:h-fit lg:!px-4 lg:!py-2 lg:flex lg:items-center lg:gap-2'
                                 )}>
                                 <ChevronLeftIcon className="shrink-0 w-5 h-5" />
-                                <span className="hidden md:block">
+                                <span
+                                    className={cn(
+                                        'hidden',
+                                        isForModal ? '' : 'lg:block'
+                                    )}>
                                     Sebelumnya
                                 </span>
                             </Button>
@@ -254,7 +270,11 @@ function ExerciseQuestionList({
                 </div>
 
                 {isOpenExplanation ? (
-                    <div className="animate-fade animate-duration-500 mt-6 md:mt-8">
+                    <div
+                        className={cn(
+                            'animate-fade animate-duration-500 mt-6',
+                            isForModal ? '' : 'lg:mt-8'
+                        )}>
                         <div className="flex flex-col justify-center items-center gap-3 p-3 rounded-lg border border-[#7D89CC] mb-4">
                             <span className="flex items-center gap-2 leading-[160%]">
                                 <FaCircleCheck className="text-[#00C8B3] shrink-0 w-4 h-4" />{' '}

@@ -151,34 +151,40 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
     }
 
     return (
-        <div className={cn('bg-black flex flex-col h-screen', 'lg:flex-row')}>
+        <div className={cn('bg-black', 'lg:h-screen lg:flex')}>
             {/* mobile copilot topbar & mobile topbar */}
-            {router.pathname.includes('/copilot') ? (
-                <div
-                    className={cn(
-                        'flex justify-between items-center py-3 px-4',
-                        'lg:hidden',
-                        isHistoryOpen ? 'invisible' : 'visible'
-                    )}>
-                    <button
-                        onClick={() => setIsHistoryOpen(true)}
-                        className="text-white hover:text-neutral-400 transition-colors duration-200">
-                        <HiOutlineMenuAlt2 size={24} />
-                    </button>
+            <div
+                className={cn(
+                    'bg-black fixed z-50 top-0 left-0 right-0',
+                    'lg:hidden'
+                )}>
+                {router.pathname.includes('/copilot') ? (
+                    <div
+                        className={cn(
+                            'flex justify-between items-center py-3 px-4',
+                            'lg:hidden',
+                            isHistoryOpen ? 'invisible' : 'visible'
+                        )}>
+                        <button
+                            onClick={() => setIsHistoryOpen(true)}
+                            className="text-white hover:text-neutral-400 transition-colors duration-200">
+                            <HiOutlineMenuAlt2 size={24} />
+                        </button>
 
-                    <h1 className="text-white font-semibold leading-[140%]">
-                        Copilot AI
-                    </h1>
+                        <h1 className="text-white font-semibold leading-[140%]">
+                            Copilot AI
+                        </h1>
 
-                    <button
-                        onClick={handleNewChat}
-                        className="text-white hover:text-neutral-400 transition-colors duration-200">
-                        <FiEdit size={20} />
-                    </button>
-                </div>
-            ) : (
-                <MobileTopbar />
-            )}
+                        <button
+                            onClick={handleNewChat}
+                            className="text-white hover:text-neutral-400 transition-colors duration-200">
+                            <FiEdit size={20} />
+                        </button>
+                    </div>
+                ) : (
+                    <MobileTopbar />
+                )}
+            </div>
 
             {/* desktop sidebar */}
             <Sidebar menuItems={menuItems} />
@@ -186,8 +192,11 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
             {/* main content */}
             <div
                 className={cn(
-                    'flex-grow overflow-scroll scrollbar-none',
-                    router.pathname.includes('/copilot') ? 'flex flex-col' : ''
+                    'pb-[59px] min-h-screen',
+                    'lg:pb-0 lg:flex-grow lg:overflow-x-hidden lg:overflow-y-scroll lg:scrollbar-none',
+                    router.pathname.includes('/copilot')
+                        ? 'h-screen flex flex-col pt-12 lg:pt-0'
+                        : 'pt-14 lg:pt-0'
                 )}>
                 {/* copilot sidebar trigger */}
                 {router.pathname.includes('/copilot') ? (

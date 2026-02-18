@@ -13,11 +13,12 @@ import {
 } from 'courses/components/CourseList';
 import CourseTabs from 'courses/components/CourseTabs';
 import React, { useState } from 'react';
-import { IoIosSearch } from 'react-icons/io';
+import { SearchIcon } from 'commons/components/elements/Icons/SearchIcon';
 import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
+import { cn } from 'commons/utils';
 
 // const SORT_OPTIONS = [
 //     { value: 'latest', label: 'Terakhir Rilis' },
@@ -65,18 +66,35 @@ const ClassContainer = ({
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-[78px]">
-                    <div className="relative flex-grow mr-4">
+                <div
+                    className={cn(
+                        'sticky z-[5] flex items-center justify-between py-2 bg-black top-[74px]',
+                        'lg:top-[78px]'
+                    )}>
+                    <div className="bg-[#101010] px-3 rounded-full flex items-center gap-2 w-full">
+                        <button type="submit" className="shrink-0">
+                            <SearchIcon
+                                className={cn(
+                                    'shrink-0 w-5 h-5 transition-all',
+                                    searchTerm.trim()
+                                        ? 'text-white'
+                                        : 'text-[#666666]'
+                                )}
+                            />
+                        </button>
+
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Cari kelas"
-                            className="w-full px-4 py-2 text-white border rounded-full bg-graphite-800 placeholder:text-graphite-600 border-graphite-600/50"
-                        />
-                        <IoIosSearch
-                            size={20}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
+                            autoComplete="off"
+                            className={cn(
+                                'w-full bg-transparent placeholder:text-[#666666] border-none focus:ring-0 text-sm py-3 px-0 transition-all outline-none',
+                                searchTerm.trim()
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            )}
                         />
                     </div>
                     {/* {isAuthenticated && (
@@ -99,10 +117,7 @@ const ClassContainer = ({
                     />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
-                    <>
-                        <RenewSubscriptionBanner product="materi" />
-                        {isAuthenticated && <div className="h-6 md:h-0" />}
-                    </>
+                    <RenewSubscriptionBanner product="materi" />
                 )}
             </div>
         </div>

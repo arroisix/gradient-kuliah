@@ -58,8 +58,11 @@ const DashboardSearchInput = ({
                 <form
                     onSubmit={handleSubmit}
                     autoComplete="off"
-                    className="bg-[#101010] py-2 px-3 rounded-full flex items-center gap-2">
-                    <button disabled={isSubmitting} type="submit">
+                    className="bg-[#101010] px-3 rounded-full flex items-center gap-2">
+                    <button
+                        disabled={isSubmitting}
+                        type="submit"
+                        className="shrink-0">
                         <SearchIcon
                             className={cn(
                                 'shrink-0 w-5 h-5 transition-all',
@@ -81,7 +84,7 @@ const DashboardSearchInput = ({
                         name="q"
                         type="text"
                         className={cn(
-                            'bg-transparent placeholder:text-[#666666] border-none focus:ring-0 text-sm p-0 transition-all outline-none',
+                            'w-full bg-transparent placeholder:text-[#666666] border-none focus:ring-0 text-sm py-3 px-0 transition-all outline-none',
                             values.q.trim() ? 'text-white' : 'text-[#666666]'
                         )}
                     />
