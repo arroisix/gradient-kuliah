@@ -682,6 +682,14 @@ export const copilotApi = baseApi.injectEndpoints({
                 method: 'GET'
             }),
             providesTags: ['COPILOT_CREDIT']
+        }),
+        topupCredit: builder.mutation<Transaction, TopupInputData>({
+            query: (data) => ({
+                url: `${COPILOT_BASE_URL}credit/topup/`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['COPILOT_CREDIT']
         })
     }),
     overrideExisting: false
@@ -704,5 +712,6 @@ export const {
     useGetContentRecommendationDataQuery,
     useUpdateExerciseAnswerMutation,
     useGetProblemsetLearningPathQuery,
-    useGetUserCreditQuery
+    useGetUserCreditQuery,
+    useTopupCreditMutation
 } = copilotApi;

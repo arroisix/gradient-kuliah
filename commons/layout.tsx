@@ -25,6 +25,9 @@ interface LayoutProps {
     fullHeightSidebar?: boolean;
     isFullBlackBackground?: boolean;
     withoutK12Paywall?: boolean;
+    // accomodate landing page revamp which still uses old layout but with new background, can be removed once the revamp is fully rolled out and old layout is removed
+    withoutMaxWidthContainer?: boolean;
+    withoutBackButton?: boolean;
 }
 
 const Layout = ({
@@ -35,7 +38,9 @@ const Layout = ({
     showSidebar,
     fullHeightSidebar,
     isFullBlackBackground,
-    withoutK12Paywall = false
+    withoutMaxWidthContainer = false,
+    withoutK12Paywall = false,
+    withoutBackButton = false
 }: LayoutProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
@@ -61,22 +66,22 @@ const Layout = ({
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
                 courses={courses}
+                withoutBackButton={withoutBackButton}
             />
 
-            <div className="h-14 bg-[#222222]"></div>
+            {
+                <div
+                    className={cn(
+                        'h-14 bg-[#222222]',
+                        paymentPage && 'bg-transparent'
+                    )}></div>
+            }
 
-            {!isAuthenticated && <CountdownBanner />}
-
-            {/* {isAuthenticated && (
-                <AppInstallBanner
-                    showSidebar={
-                        showSidebar && is_subscribed && !isMobileBreakpoints
-                    }
-                />
-            )} */}
+            {!isAuthenticated && !paymentPage && <CountdownBanner />}
 
             <section
                 className={cn(
+                    'flex justify-center',
                     showSidebar &&
                         isAuthenticated &&
                         'pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-8 lg:gap-[6rem]',
@@ -88,7 +93,10 @@ const Layout = ({
                 <div
                     className={cn(
                         `min-h-full md:h-[100vh - 65px] w-full`,
-                        fullHeightSidebar && 'md:pl-[12rem] lg:pl-[16rem]'
+                        fullHeightSidebar && 'md:pl-[12rem] lg:pl-[16rem]',
+                        !showSidebar &&
+                            !withoutMaxWidthContainer &&
+                            'max-w-screen-xl px-4'
                     )}>
                     {children}
                 </div>

@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { sendGTMEvent } from '@next/third-parties/google';
+import { useRouter } from 'next/router';
 
 interface PaymentContextType {
     isModalCheckoutOpen: boolean;
@@ -27,6 +28,8 @@ interface PaymentContextType {
     setCardId: (data?: string) => void;
     tempCard?: CreditCard;
     setTempCard: (data?: CreditCard) => void;
+    topupAmount: number;
+    setTopupAmount: (amount: number) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -38,16 +41,21 @@ export function PaymentProvider({
     packetId
 }: {
     children: ReactNode;
-    packetId: string;
+    packetId?: string;
 }): JSX.Element {
     const [isModalCheckoutOpen, setModalCheckoutOpen] =
         useState<boolean>(false);
-    const { data: packet } = useGetDetailPacketOfferQuery(packetId);
+    const { data: packet } = useGetDetailPacketOfferQuery(packetId as string, {
+        skip: !packetId
+    });
+    const router = useRouter();
+    const { amount } = router.query;
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
     const [cardId, setCardId] = useState<string | undefined>();
     const [tempCard, setTempCard] = useState<CreditCard | undefined>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
+    const [topupAmount, setTopupAmount] = useState<number>(0);
     const [appliedPromo, setAppliedPromo] = useState<
         ValidatePromoResponse | undefined
     >(undefined);
@@ -76,20 +84,22 @@ export function PaymentProvider({
         }
 
         setPaymentMethod(to);
-        sendGTMEvent({
-            event: 'add_payment_info',
-            ecommerce: {
-                currency: 'IDR',
-                value: parseInt(packet?.price ?? ''),
-                payment_type: to,
-                items: [
-                    {
-                        item_id: packet?.packet_name,
-                        price: parseInt(packet?.price ?? '')
-                    }
-                ]
-            }
-        });
+        if (packetId) {
+            sendGTMEvent({
+                event: 'add_payment_info',
+                ecommerce: {
+                    currency: 'IDR',
+                    value: parseInt(packet?.price ?? ''),
+                    payment_type: to,
+                    items: [
+                        {
+                            item_id: packet?.packet_name,
+                            price: parseInt(packet?.price ?? '')
+                        }
+                    ]
+                }
+            });
+        }
     };
 
     useEffect(() => {
@@ -110,6 +120,15 @@ export function PaymentProvider({
         }
     }, []);
 
+    useEffect(() => {
+        if (amount) {
+            const numericAmount = parseInt(amount as string, 10);
+            if (!isNaN(numericAmount)) {
+                setTopupAmount(numericAmount);
+            }
+        }
+    }, [amount]);
+
     const memoedValue = useMemo(
         () => ({
             isModalCheckoutOpen,
@@ -128,7 +147,9 @@ export function PaymentProvider({
             cardId,
             setCardId,
             tempCard,
-            setTempCard
+            setTempCard,
+            topupAmount,
+            setTopupAmount
         }),
         [
             isModalCheckoutOpen,
@@ -139,7 +160,8 @@ export function PaymentProvider({
             appliedPromo,
             promoAppliedManually,
             cardId,
-            tempCard
+            tempCard,
+            topupAmount
         ]
     );
 

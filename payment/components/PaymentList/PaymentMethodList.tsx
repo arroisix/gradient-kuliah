@@ -52,7 +52,7 @@ const PaymentMethodList: React.FC = () => {
 
     return (
         <div
-            className={`flex flex-col overflow-y-auto mx-4 sm:mx-8 md:mx-32 ${
+            className={`flex flex-col overflow-y-auto w-full ${
                 paymentMethod === 'VOUCHER'
                     ? 'pb-28 md:pb-20'
                     : 'pb-44 md:pb-36'

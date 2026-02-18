@@ -32,6 +32,7 @@ import KelasIconFill from '../../elements/Icons/KelasFill';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 import RoleSwitcher from './RoleSwitcher';
+import { ChevronLeftIcon } from 'lucide-react';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -90,14 +91,15 @@ interface NavbarProps {
     fullHeightSidebar?: boolean;
     showSubscriptionReminder?: boolean;
     setCloseReminder?: (value: boolean) => void;
+    withoutBackButton?: boolean;
 }
 
 const Navbar = ({
     paymentPage,
-    noPadding,
     shouldTransparent,
     showSidebar,
-    fullHeightSidebar
+    fullHeightSidebar,
+    withoutBackButton
 }: NavbarProps): JSX.Element => {
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
@@ -144,11 +146,7 @@ const Navbar = ({
         }
 
         if (paymentPage) {
-            return lightMode
-                ? 'bg-white shadow-md'
-                : isAuthenticated
-                ? 'bg-black'
-                : 'bg-[#222222]';
+            return lightMode ? 'bg-white shadow-md' : 'bg-transparent';
         }
 
         if (showSidebar && fullHeightSidebar) {
@@ -184,21 +182,21 @@ const Navbar = ({
     return (
         <header
             className={cn(
-                'fixed top-0 left-0 w-full transition-all ease-in-out duration-200 flex flex-col',
+                'fixed top-0 left-0 w-full transition-all ease-in-out duration-200 flex flex-col justify-center items-center',
                 computeBgColor(),
                 showSidebar && isAuthenticated && 'border-b border-[#101010]'
             )}
             style={{ zIndex: 100 }}>
             <div
                 className={cn(
-                    'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
-                    isAuthenticated && showSidebar
-                        ? 'lg:px-6'
-                        : noPadding
-                        ? 'lg:px-16'
-                        : 'lg:px-12'
+                    'flex items-center min-h-14 justify-between w-full px-4 xl:px-0 py-3 gap-4 max-w-screen-xl',
+                    isAuthenticated && showSidebar ? 'lg:px-6' : ''
                 )}>
-                <div className="flex items-center flex-auto gap-4 md:flex-1 lg:flex-auto lg:gap-8">
+                <div
+                    className={cn(
+                        'flex items-center flex-auto gap-4 md:flex-1 lg:flex-auto lg:gap-8',
+                        paymentPage && '!hidden'
+                    )}>
                     {isShowHamburgerMenu && (
                         <FiMenu
                             className="text-white lg:hidden"
@@ -308,20 +306,45 @@ const Navbar = ({
                             </>
                         )}
                     </div>
-                    {/* {isShowSidebar && (
-                        <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
-                    )} */}
+
                     <div
                         className={cn(
                             'w-full max-w-lg',
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
-                        {!isDashboard &&
+                        {!paymentPage &&
+                            !isDashboard &&
                             (!isAuthenticated ||
                                 profile?.current_role ===
                                     'COLLEGE_STUDENT') && <SearchBar />}
                     </div>
                 </div>
+                {paymentPage &&
+                    (withoutBackButton ? (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
+                                Gradient
+                            </span>
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                                G
+                            </span>
+                        </Link>
+                    ) : (
+                        <Button
+                            variant="secondary"
+                            className="flex items-center justify-center gap-2"
+                            onClick={() => router.back()}>
+                            <ChevronLeftIcon />
+                            Kembali
+                        </Button>
+                    ))}
                 {paymentPage ? (
                     <Button
                         variant="primary"
