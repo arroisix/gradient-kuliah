@@ -25,7 +25,6 @@ import { CDN_URL } from 'commons/constants';
 import { BiSearch } from 'react-icons/bi';
 import Link from 'next/link';
 import { MdFileDownload } from 'react-icons/md';
-import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
@@ -359,7 +358,7 @@ const ClassContainer = ({
                             <input
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-[#222222] border-none focus:ring-0"
+                                className="w-full bg-[#222222] border-none focus:ring-0 text-white placeholder:text-[#666666]"
                                 placeholder="Cari kelas"
                             />
                         </label>
@@ -392,7 +391,7 @@ const ClassContainer = ({
                             <input
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-transparent border-none focus:ring-0"
+                                className="w-full bg-transparent border-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0 text-white placeholder:text-[#666666]"
                                 placeholder="Cari kelas"
                             />
                         </label>
@@ -441,7 +440,7 @@ const ClassContainer = ({
                     <RenewSubscriptionBanner 
                         type='COLLEGE_STUDENT_V2'
                     />
-                    {isAuthenticated && <div className="h-44 md:h-8 lg:h-10" />}
+                    {isAuthenticated && <div className="h-[18vh] md:h-[12vh] lg:h-[10vh]" />}
                 </>
             )}
 

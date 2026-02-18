@@ -71,8 +71,8 @@ export default function RenewSubscriptionBanner({
         return (
             <div className={
                 cn(
-                    "fixed left-1/2 -translate-x-1/2 w-[90%] lg:w-fit z-40 md:translate-x-[calc(-50%+125px)] bg-black p-4 md:p-6 md:rounded-t-xl overflow-hidden",
-                    isAuthenticated ? "md:w-[60%] bottom-[88px] md:bottom-0 rounded-xl " : "md:-translate-x-1/2 md:w-[75%] bottom-0 rounded-t-xl",
+                    "fixed left-1/2 -translate-x-1/2 w-[90%] lg:w-fit z-40 lg:translate-x-[calc(-50%+125px)] bg-black p-4 md:p-6 overflow-hidden",
+                    isAuthenticated ? "md:w-[60%] bottom-[68px] md:bottom-[58px] lg:bottom-0 rounded-xl md:rounded-none md:rounded-t-xl" : "md:-translate-x-1/2 md:w-[75%] bottom-0 rounded-t-xl",
                     className
                 )
             }>

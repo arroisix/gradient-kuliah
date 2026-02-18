@@ -86,7 +86,7 @@ const CourseEntrypointTabs = ({
                                 {isAuthenticated && index === 0 && (
                                     <Sparkles isActive={active} />
                                 )}
-                                <span>{tab.label}</span>
+                                <span className='text-white'>{tab.label}</span>
                             </Link>
                         );
                     })}
@@ -128,7 +128,7 @@ const CourseEntrypointTabs = ({
                             {isAuthenticated && index === 0 && (
                                 <Sparkles isActive={active} />
                             )}
-                            <span>{tab.label}</span>
+                            <span className='text-white'>{tab.label}</span>
                         </Link>
                     );
                 })}
