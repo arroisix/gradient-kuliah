@@ -87,13 +87,14 @@ const LearnLayout = ({
                             'pb-16': isAuthenticated && !noPadding,
                             'pb-8': !isAuthenticated && !noPadding,
                             'pb-0': noPadding
-                        }
+                        },
+                        !showSidebar && 'flex justify-center'
                     )}>
                     {showSidebar && isAuthenticated && width >= 768 && (
                         <Sidebar fullHeight={fullHeightSidebar} />
                     )}
                     <div
-                        className={cn('w-full', {
+                        className={cn('w-full max-w-screen-xl', {
                             'md:pl-[250px]':
                                 showSidebar &&
                                 fullHeightSidebar &&

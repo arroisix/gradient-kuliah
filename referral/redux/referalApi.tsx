@@ -54,7 +54,7 @@ export const referalApi = baseApi.injectEndpoints({
         getAllCoupons: builder.query<
             GetCouponsResponse,
             {
-                packet_id: string;
+                packet_id?: string;
             }
         >({
             query: (params) => ({

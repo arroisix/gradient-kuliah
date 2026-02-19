@@ -110,6 +110,10 @@ type Transaction = {
     deadline: string | Date;
     payment_method: PaymentMethod;
     subscriber: Subscription;
+    buyer: {
+        id: string;
+        email: string;
+    };
     payment_amount: number;
     discount_amount: number;
     promo_code: string;
@@ -125,10 +129,19 @@ type Transaction = {
     charge_id?: string;
     promo?: TransactionPromo;
     failure_code?: string;
+    transaction_type: 'SUBSCRIPTION' | 'TOP_UP';
 };
 
 interface CheckoutInputData {
     packet_id: string;
+    payment_method: PaymentMethod;
+    phone_number?: string;
+    promo_code?: string | null;
+    user_card_id?: string;
+}
+
+interface TopupInputData {
+    topup_price: number;
     payment_method: PaymentMethod;
     phone_number?: string;
     promo_code?: string | null;

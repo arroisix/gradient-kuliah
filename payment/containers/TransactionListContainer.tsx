@@ -81,6 +81,7 @@ const TransactionListContainer = (): JSX.Element => {
                 checkExpiry(tx.deadline as string) && tx.status !== 'SUCCESS'
         ) || [];
 
+    console.log(data);
     const renderByTab = (): JSX.Element => {
         switch (activeTab) {
             case 'SEMUA':

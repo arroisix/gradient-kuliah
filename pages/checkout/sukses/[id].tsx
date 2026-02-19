@@ -47,10 +47,14 @@ const SuccessCheckoutId = (): JSX.Element => {
             localStorage.removeItem('redirect');
             router.push(url.toString());
         } else {
-            const url =
+            let url =
                 profile?.current_role === 'K12'
                     ? '/utbk/dashboard?checkout=success'
                     : '/dashboard?checkout=success';
+
+            if (transaction?.transaction_type === 'TOP_UP') {
+                url = `/copilot?checkout=success`;
+            }
 
             router.push(url);
         }
@@ -96,7 +100,7 @@ const SuccessCheckoutId = (): JSX.Element => {
     }
 
     return (
-        <Layout isFullBlackBackground>
+        <Layout isFullBlackBackground paymentPage withoutBackButton>
             <section className="min-h-[75vh] pt-4 px-4 md:px-[7.5rem] flex justify-center items-center flex-col space-y-4">
                 {isLoading || !transaction ? (
                     <Skeleton />
@@ -117,67 +121,148 @@ const SuccessCheckoutId = (): JSX.Element => {
                             </span>
                         </div>
 
-                        {/* Transaction details */}
-                        <div className="grid grid-cols-2 grid-rows-4 gap-3">
-                            <span className="text-neutral-400 text-sm text-left">
-                                No. Transaksi
-                            </span>
-                            <span className="text-white text-sm text-right">
-                                {transaction.id.substring(0, 8).toUpperCase()}
-                            </span>
-                            <span className="text-neutral-400 text-sm text-left">
-                                Detail Paket
-                            </span>
-                            <span className="text-white text-sm text-right">
-                                {
-                                    transaction.subscriber.subscribed_packet
-                                        .packet_name
-                                }
-                            </span>
-                            <span className="text-neutral-400 text-sm text-left">
-                                Waktu Transaksi
-                            </span>
-                            <span className="text-white text-sm text-right">
-                                {moment(transaction.created_at)
-                                    .utc(true)
-                                    .format('D MMM YYYY, hh:mm')}
-                            </span>
-                            <span className="text-neutral-400 text-sm text-left">
-                                Metode Bayar
-                            </span>
-                            <span className="text-white text-sm text-right">
-                                {NAME_PAYMENT[transaction.payment_method]}
-                            </span>
-                        </div>
-
-                        <div className="h-0 border border-[#4D5165]"></div>
-
-                        {/* Price details */}
-                        <div className="grid grid-cols-2 gap-y-3">
-                            <span className="text-neutral-400 text-sm text-left">
-                                Harga Paket
-                            </span>
-                            <span className="text-white text-sm text-right">
-                                {formatCurrency(transaction.amount.toString())}
-                            </span>
-                            {transaction.promo && (
-                                <>
+                        {transaction.transaction_type === 'TOP_UP' && (
+                            <>
+                                <div className="grid grid-cols-2 grid-rows-4 gap-3">
                                     <span className="text-neutral-400 text-sm text-left">
-                                        Diskon{' '}
-                                        {toTitleCase(
-                                            transaction.promo.promo_type
-                                        )}{' '}
-                                        {transaction.promo.code}
+                                        No. Transaksi
                                     </span>
-                                    <span className="text-green-400 text-sm text-right">
-                                        -
+                                    <span className="text-white text-sm text-right">
+                                        {transaction.id
+                                            .substring(0, 8)
+                                            .toUpperCase()}
+                                    </span>
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Topup
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        Credit Copilot AI
+                                    </span>
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Waktu Transaksi
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {moment(transaction.created_at)
+                                            .utc(true)
+                                            .format('D MMM YYYY, hh:mm')}
+                                    </span>
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Metode Bayar
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {
+                                            NAME_PAYMENT[
+                                                transaction.payment_method
+                                            ]
+                                        }
+                                    </span>
+                                </div>
+
+                                <div className="h-0 border border-[#4D5165]"></div>
+
+                                {/* Price details */}
+                                <div className="grid grid-cols-2 gap-y-3">
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Harga Topup
+                                    </span>
+                                    <span className="text-white text-sm text-right">
                                         {formatCurrency(
-                                            transaction.discount_amount.toString()
+                                            transaction.amount.toString()
                                         )}
                                     </span>
-                                </>
-                            )}
-                        </div>
+                                    {transaction.promo && (
+                                        <>
+                                            <span className="text-neutral-400 text-sm text-left">
+                                                Diskon{' '}
+                                                {toTitleCase(
+                                                    transaction.promo.promo_type
+                                                )}{' '}
+                                                {transaction.promo.code}
+                                            </span>
+                                            <span className="text-green-400 text-sm text-right">
+                                                -
+                                                {formatCurrency(
+                                                    transaction.discount_amount.toString()
+                                                )}
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                            </>
+                        )}
+
+                        {transaction.transaction_type === 'SUBSCRIPTION' && (
+                            <>
+                                <div className="grid grid-cols-2 grid-rows-4 gap-3">
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        No. Transaksi
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {transaction.id
+                                            .substring(0, 8)
+                                            .toUpperCase()}
+                                    </span>
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Detail Paket
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {
+                                            transaction.subscriber
+                                                .subscribed_packet.packet_name
+                                        }
+                                    </span>
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Waktu Transaksi
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {moment(transaction.created_at)
+                                            .utc(true)
+                                            .format('D MMM YYYY, hh:mm')}
+                                    </span>
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Metode Bayar
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {
+                                            NAME_PAYMENT[
+                                                transaction.payment_method
+                                            ]
+                                        }
+                                    </span>
+                                </div>
+
+                                <div className="h-0 border border-[#4D5165]"></div>
+
+                                {/* Price details */}
+                                <div className="grid grid-cols-2 gap-y-3">
+                                    <span className="text-neutral-400 text-sm text-left">
+                                        Harga Paket
+                                    </span>
+                                    <span className="text-white text-sm text-right">
+                                        {formatCurrency(
+                                            transaction.amount.toString()
+                                        )}
+                                    </span>
+                                    {transaction.promo && (
+                                        <>
+                                            <span className="text-neutral-400 text-sm text-left">
+                                                Diskon{' '}
+                                                {toTitleCase(
+                                                    transaction.promo.promo_type
+                                                )}{' '}
+                                                {transaction.promo.code}
+                                            </span>
+                                            <span className="text-green-400 text-sm text-right">
+                                                -
+                                                {formatCurrency(
+                                                    transaction.discount_amount.toString()
+                                                )}
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                            </>
+                        )}
 
                         <div className="h-0 border border-[#4D5165] border-dashed"></div>
 
