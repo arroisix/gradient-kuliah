@@ -47,10 +47,14 @@ const SuccessCheckoutId = (): JSX.Element => {
             localStorage.removeItem('redirect');
             router.push(url.toString());
         } else {
-            const url =
+            let url =
                 profile?.current_role === 'K12'
                     ? '/utbk/dashboard?checkout=success'
                     : '/dashboard?checkout=success';
+
+            if (transaction?.transaction_type === 'TOP_UP') {
+                url = `/copilot?checkout=success`;
+            }
 
             router.push(url);
         }

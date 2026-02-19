@@ -20,10 +20,11 @@ export const transactionApi = baseApi.injectEndpoints({
         }),
         getAllPaymentMethods: builder.query<
             ResponseData<PaymentMethodSection>,
-            void
+            { payment_method_usage?: string }
         >({
-            query: () => ({
-                url: `${TRANSACTION_BASE_URL}payment-methods/`
+            query: (params) => ({
+                url: `${TRANSACTION_BASE_URL}payment-methods/`,
+                params
             })
         }),
         getAllUserCards: builder.query<CreditCardListResponse, void>({

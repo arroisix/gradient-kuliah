@@ -13,7 +13,7 @@ const Topup = () => {
         <Layout paymentPage isFullBlackBackground>
             <PaymentProvider>
                 <TopupInfo />
-                <PaymentMethodList />
+                <PaymentMethodList isForTopup />
                 <CheckoutTopupBottomSheet
                     onPromoClick={() => setPromoModalOpen(true)}
                 />
