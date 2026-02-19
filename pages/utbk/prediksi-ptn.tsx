@@ -341,7 +341,7 @@ export const PrediksiPTN = (): JSX.Element => {
     return (
         <>
             <h1 className="text-white font-bold text-2xl mb-2.5 text-center @3xl:text-start">
-                Kalkukator Prediksi PTN
+                Kalkulator Prediksi PTN
             </h1>
 
             <p className="text-[#DEDEDE] text-sm mb-6 text-center @3xl:text-start">
