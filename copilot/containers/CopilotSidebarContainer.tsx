@@ -32,6 +32,7 @@ import { FaArrowDown } from 'react-icons/fa6';
 import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
 import { toast } from 'react-toastify';
 import { FiEdit } from 'react-icons/fi';
+import CreditDropdown from 'commons/components/CreditDropdown';
 
 type ContentType =
     | 'course_video'
@@ -654,17 +655,23 @@ const CopilotSidebarContainer = ({
                         <FiEdit size={20} />
                     </button>
 
-                    <div
-                        onClick={handleToggleCollapse}
-                        onKeyDown={handleKeyDown}
-                        role="button"
-                        tabIndex={0}
-                        className="flex items-center cursor-pointer flex-1 justify-center hover:opacity-80 transition-opacity h-full py-4 -my-4"
-                        aria-label={isCollapsed ? 'Expand' : 'Collapse'}>
-                        <h3 className="text-white font-extrabold text-base xl:text-lg">
-                            Copilot AI
-                        </h3>
-                    </div>
+                    {isCollapsed ? (
+                        <div
+                            onClick={handleToggleCollapse}
+                            onKeyDown={handleKeyDown}
+                            role="button"
+                            tabIndex={0}
+                            className="flex items-center cursor-pointer flex-1 justify-center hover:opacity-80 transition-opacity h-full py-4 -my-4"
+                            aria-label={isCollapsed ? 'Expand' : 'Collapse'}>
+                            <h3 className="text-white font-extrabold text-base xl:text-lg">
+                                Copilot AI
+                            </h3>
+                        </div>
+                    ) : (
+                        <div className="flex-1 flex justify-center items-center">
+                            <CreditDropdown />
+                        </div>
+                    )}
 
                     <button
                         onClick={handleToggleHistory}

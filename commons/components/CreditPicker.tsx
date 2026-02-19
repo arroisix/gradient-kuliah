@@ -1,4 +1,4 @@
-import { formatCurrency } from 'commons/utils';
+import { cn, formatCurrency } from 'commons/utils';
 import { SparklesIcon, Check } from 'lucide-react';
 import Button from './elements/Button';
 import React from 'react';
@@ -29,7 +29,15 @@ const CreditPicker = ({
                 <div className="flex flex-col items-start gap-2">
                     <div className="text-sm text-neutral-300">
                         Sisa credit kamu :{' '}
-                        <span className="text-white font-semibold">
+                        <span
+                            className={cn(
+                                'font-semibold',
+                                credit && (credit as number) > 5000
+                                    ? 'text-white'
+                                    : credit && (credit as number) > 3000
+                                    ? 'text-yellow-500'
+                                    : 'text-red-500'
+                            )}>
                             {isLoading || !credit
                                 ? '—'
                                 : formatCurrency(credit as string)
