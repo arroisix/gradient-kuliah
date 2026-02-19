@@ -21,7 +21,8 @@ import {
     GetContentRecommendation,
     CopilotInterrupt,
     UpdateExerciseAnswer,
-    GetProblemsetLearningPath
+    GetProblemsetLearningPath,
+    CopilotCredit
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -674,6 +675,21 @@ export const copilotApi = baseApi.injectEndpoints({
                 url: `${COPILOT_BASE_URL}v2/problemset-learning-path/${problemset_progress_id}/`,
                 method: 'GET'
             })
+        }),
+        getUserCredit: builder.query<CopilotCredit, void>({
+            query: () => ({
+                url: `${COPILOT_BASE_URL}credit/`,
+                method: 'GET'
+            }),
+            providesTags: ['COPILOT_CREDIT']
+        }),
+        topupCredit: builder.mutation<Transaction, TopupInputData>({
+            query: (data) => ({
+                url: `${COPILOT_BASE_URL}credit/topup/`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['COPILOT_CREDIT']
         })
     }),
     overrideExisting: false
@@ -695,5 +711,7 @@ export const {
     useLazySearchContentQuery,
     useGetContentRecommendationDataQuery,
     useUpdateExerciseAnswerMutation,
-    useGetProblemsetLearningPathQuery
+    useGetProblemsetLearningPathQuery,
+    useGetUserCreditQuery,
+    useTopupCreditMutation
 } = copilotApi;

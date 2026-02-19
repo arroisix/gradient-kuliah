@@ -1,3 +1,9 @@
+export interface CopilotCredit {
+    credit: number;
+    user_id: string;
+    user_email: string;
+}
+
 export interface ChatResponse {
     type: 'CONTENT' | 'INFO';
     content: string | null;

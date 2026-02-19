@@ -13,13 +13,9 @@ const Checkout = (): JSX.Element => {
 
     return (
         <Layout paymentPage>
-            {packetId ? (
-                <PaymentProvider packetId={packetId}>
-                    <TransactionContainer />
-                </PaymentProvider>
-            ) : (
-                <></>
-            )}
+            <PaymentProvider packetId={packetId as string}>
+                <TransactionContainer />
+            </PaymentProvider>
         </Layout>
     );
 };

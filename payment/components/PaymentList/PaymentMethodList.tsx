@@ -8,13 +8,21 @@ import PaymentMethodCardSection from './PaymentMethodCardSection';
 import PaymentMethodFreeSection from './PaymentMethodFreeSection';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
-const PaymentMethodList: React.FC = () => {
+interface PaymentMethodListProps {
+    isForTopup?: boolean;
+}
+
+const PaymentMethodList: React.FC<PaymentMethodListProps> = ({
+    isForTopup
+}) => {
     const { packet, paymentMethod } = usePayment();
     const {
         data: paymentMethods,
         isLoading: paymentMethodsLoading,
         error: paymentMethodsError
-    } = useGetAllPaymentMethodsQuery();
+    } = useGetAllPaymentMethodsQuery({
+        payment_method_usage: isForTopup ? 'TOPUP' : 'SUBSCRIPTION'
+    });
     const { data: configData } = useGetConfigQuery();
 
     useEffect(() => {
@@ -52,7 +60,7 @@ const PaymentMethodList: React.FC = () => {
 
     return (
         <div
-            className={`flex flex-col overflow-y-auto mx-4 sm:mx-8 md:mx-32 ${
+            className={`flex flex-col overflow-y-auto w-full ${
                 paymentMethod === 'VOUCHER'
                     ? 'pb-28 md:pb-20'
                     : 'pb-44 md:pb-36'
@@ -63,7 +71,10 @@ const PaymentMethodList: React.FC = () => {
                 ) : (
                     <>
                         {sortedSections.map((section) => {
-                            if (section.key === 'card') {
+                            if (
+                                section.key === 'card' &&
+                                section.payment_methods.length > 0
+                            ) {
                                 if (
                                     configData?.configs
                                         .is_credit_card_config_enabled
@@ -77,6 +88,9 @@ const PaymentMethodList: React.FC = () => {
                                     return <></>;
                                 }
                             } else {
+                                if (section.payment_methods.length === 0) {
+                                    return <></>;
+                                }
                                 return (
                                     <PaymentMethodSectionComponent
                                         key={section.key}

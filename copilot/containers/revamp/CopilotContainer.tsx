@@ -18,7 +18,7 @@ import {
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ReferenceModal from 'copilot/components/revamp/Reference/ReferenceModal';
 import ReferenceContentModal from 'copilot/components/revamp/Reference/ReferenceContentModal';
@@ -28,6 +28,7 @@ import { FaArrowDown } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
 import { useRouter } from 'next/router';
+import { baseApi } from 'redux/api/baseApi';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -37,6 +38,7 @@ const CopilotContainer = ({
     sessionId
 }: CopilotContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const dispatch = useDispatch();
     const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
     const [isReferenceContentModalOpen, setIsReferenceContentModalOpen] =
         useState(false);
@@ -362,6 +364,10 @@ const CopilotContainer = ({
                                 };
                                 return [...prev, aiMessage];
                             });
+                            console.log('Updating user credit');
+                            dispatch(
+                                baseApi.util.invalidateTags(['COPILOT_CREDIT'])
+                            );
                         }, 1000);
                     }
                 },
@@ -385,7 +391,6 @@ const CopilotContainer = ({
         } catch (error) {
             setReasoning({ thoughts: [], isFinished: false });
             setIsLoadingResponse(false);
-            console.error('Chat error:', error);
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',

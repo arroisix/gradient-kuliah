@@ -1,3 +1,4 @@
+import { useTopupCreditMutation } from 'copilot/redux/api/copilotApi';
 import {
     useCheckoutMutation,
     useExtendCheckoutMutation,
@@ -11,6 +12,7 @@ const useCheckout = () => {
         useFreeCheckoutMutation();
     const [extendCheckout, { isLoading: extendLoading }] =
         useExtendCheckoutMutation();
+    const [topup, { isLoading: topupLoading }] = useTopupCreditMutation();
 
     return {
         checkout,
@@ -21,7 +23,9 @@ const useCheckout = () => {
         freeLoading,
         freeError,
         extendCheckout,
-        extendLoading
+        extendLoading,
+        topup,
+        topupLoading
     };
 };
 

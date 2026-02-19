@@ -17,6 +17,7 @@ const K12_ALLOWED_PREFIXES = [
     '/profil',
     '/aktivasi-email',
     '/copilot',
+    '/topup',
     '/kontak-kami',
     '/transaksi',
     '/referral',
