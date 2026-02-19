@@ -14,16 +14,21 @@ type ContentType =
     | null;
 
 interface MainSectionProps {
+    isForModal?: boolean;
     contentType?: ContentType;
     onSendMessage: (prompt: string, imageUrl?: string) => void;
 }
 
 const MainSection = ({
+    isForModal = false,
     contentType,
     onSendMessage
 }: MainSectionProps): JSX.Element => {
     const [isShowBanner, setIsShowBanner] = useState(false);
-    const { data, isLoading } = useGetStudentTryoutLatestResultQuery();
+    const { data, isLoading } = useGetStudentTryoutLatestResultQuery(
+        undefined,
+        { skip: isForModal }
+    );
     const { profile } = useAuth();
 
     const handleClick = () => {
@@ -34,10 +39,10 @@ const MainSection = ({
     };
 
     useEffect(() => {
-        if (!isLoading) {
+        if (!isForModal && !isLoading) {
             setIsShowBanner(true);
         }
-    }, [data, isLoading]);
+    }, [data, isForModal, isLoading]);
 
     return (
         <div>
@@ -49,7 +54,7 @@ const MainSection = ({
                 Lagi butuh bantuan apa?
             </h2>
 
-            {isLoading ? (
+            {!isForModal && isLoading ? (
                 <div className="animate-pulse bg-[#333333] w-full max-w-[600px] h-20 mx-auto rounded-lg mb-4"></div>
             ) : isShowBanner ? (
                 <div

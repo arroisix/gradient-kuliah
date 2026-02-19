@@ -11,6 +11,8 @@ import AnnouncementModal from 'dashboard/components/Announcement/AnnouncementMod
 import { useGetAnnouncementsQuery } from 'dashboard/redux/api/dashboardApi';
 import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
 import ProfileCompletionBanner from 'dashboard/components/ProfileCompletionBanner';
+import DashboardSearchInput from 'dashboard/components/Search/SearchSection/SearchInput';
+import { cn } from 'commons/utils';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -41,12 +43,15 @@ const DashboardContainer = (): JSX.Element => {
     };
 
     return (
-        <section className="flex flex-col w-full gap-6 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+        <section className="flex flex-col w-full gap-6 mx-auto max-w-screen-2xl">
             <ProfileCompletionBanner />
             <DashboardUpdatesBanner bannerType="campaign" />
             <h1 className="text-2xl text-white font-bold text-center">
                 Mau Belajar apa Hari ini?
             </h1>
+            <div className={cn('mb-4', 'lg:hidden')}>
+                <DashboardSearchInput placeholder="Cari topik, materi, soal" />
+            </div>
             {/* <SearchSection /> */}
             <DashboardFeatures />
             {isAuthenticated && <LanjutBelajarSection />}

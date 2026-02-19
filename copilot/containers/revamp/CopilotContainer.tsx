@@ -631,13 +631,13 @@ const CopilotContainer = ({
             <div
                 className={cn(
                     'h-full flex flex-col overflow-hidden',
-                    'md:px-4'
+                    'lg:px-4'
                 )}>
                 <div
                     onScroll={handleScroll}
                     className={cn(
                         'flex-grow overflow-scroll scrollbar-none px-4 pt-4',
-                        'md:px-0',
+                        'lg:px-0',
                         isLoadingHistory ? 'grid place-items-center' : '',
                         messages.length > 0 ? '' : 'pb-4'
                     )}>
@@ -647,7 +647,7 @@ const CopilotContainer = ({
                         <div
                             className={cn(
                                 'space-y-4',
-                                'md:w-full md:max-w-[720px] md:mx-auto'
+                                'lg:w-full lg:max-w-[720px] lg:mx-auto'
                             )}>
                             <ChatSection
                                 reasoning={reasoning}
@@ -672,15 +672,13 @@ const CopilotContainer = ({
                 <div
                     className={cn(
                         'relative',
-                        'md:w-full md:max-w-[720px] md:mx-auto'
+                        'lg:w-full lg:max-w-[720px] lg:mx-auto'
                     )}>
                     {showScrollButton && !isEditorOpen ? (
                         <button
                             type="button"
                             onClick={scrollToBottom}
-                            className={cn(
-                                'bg-[#5F2BCE] hover:opacity-80 transition-all w-8 h-8 grid place-items-center rounded-full absolute -top-4 left-1/2 -translate-x-1/2'
-                            )}>
+                            className="bg-[#5F2BCE] hover:opacity-80 transition-all w-8 h-8 grid place-items-center rounded-full absolute -top-4 left-1/2 -translate-x-1/2">
                             <FaArrowDown className="text-white w-4 h-4" />
                             <span className="sr-only">scroll to bottom</span>
                         </button>

@@ -6,10 +6,12 @@ import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
 import { ChapterRecommendation } from './ChapterRecommendation';
 
 interface ContentRecommendationsProps {
+    isForModal?: boolean;
     content_recommendations: CopilotContentRecommendation[];
 }
 
 function ContentRecommendations({
+    isForModal = false,
     content_recommendations
 }: ContentRecommendationsProps): JSX.Element {
     const hasManyRecommendation = content_recommendations?.length > 1;
@@ -124,6 +126,7 @@ function ContentRecommendations({
             {contentRecommendationRes?.data.map((v) => (
                 <SubchapterRecommendation
                     key={v.slug}
+                    isForModal={isForModal}
                     type={v.type}
                     title={v.title}
                     course_slug={v.course_slug ?? ''}

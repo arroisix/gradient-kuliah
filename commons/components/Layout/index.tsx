@@ -165,8 +165,8 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
             {/* main content */}
             <div
                 className={cn(
-                    'pb-[59px] min-h-screen',
-                    'lg:pb-0 lg:flex-grow lg:overflow-x-hidden lg:overflow-y-scroll lg:scrollbar-none',
+                    'pb-[59px] min-h-screen overflow-x-hidden',
+                    'lg:pb-0 lg:flex-grow lg:overflow-y-scroll lg:scrollbar-none',
                     router.pathname.includes('/copilot')
                         ? 'h-screen flex flex-col pt-12 lg:pt-0'
                         : 'pt-14 lg:pt-0'
