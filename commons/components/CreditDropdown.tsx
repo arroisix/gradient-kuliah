@@ -1,4 +1,4 @@
-import { formatCurrency } from 'commons/utils';
+import { cn, formatCurrency } from 'commons/utils';
 import { SparklesIcon } from 'lucide-react';
 import { useGetUserCreditQuery } from 'copilot/redux/api/copilotApi';
 import { DropdownMenu } from 'radix-ui';
@@ -46,15 +46,25 @@ const CreditDropdown = (): JSX.Element => {
                             color="#E48E0D"
                             fill="#E48E0D"
                         />
-                        <span className="text-sm font-semibold text-white">
-                            {isLoading || !data
-                                ? '—'
-                                : formatCurrency(
-                                      data.credit as unknown as string
-                                  )
-                                      .slice(2)
-                                      .split(',')[0]}
-                        </span>
+                        {data && (
+                            <span
+                                className={cn(
+                                    'text-sm font-semibold',
+                                    data?.credit > 5000
+                                        ? 'text-white'
+                                        : data?.credit > 3000
+                                        ? 'text-yellow-500'
+                                        : 'text-red-500'
+                                )}>
+                                {isLoading || !data
+                                    ? '—'
+                                    : formatCurrency(
+                                          data.credit as unknown as string
+                                      )
+                                          .slice(2)
+                                          .split(',')[0]}
+                            </span>
+                        )}
                     </button>
                 </DropdownMenu.Trigger>
 
@@ -76,15 +86,25 @@ const CreditDropdown = (): JSX.Element => {
                                 </h3>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold">
-                                    {isLoading || !data
-                                        ? '—'
-                                        : formatCurrency(
-                                              data.credit as unknown as string
-                                          )
-                                              .slice(2)
-                                              .split(',')[0]}
-                                </div>
+                                {data && (
+                                    <div
+                                        className={cn(
+                                            'text-2xl font-bold',
+                                            data?.credit > 5000
+                                                ? 'text-white'
+                                                : data?.credit > 3000
+                                                ? 'text-yellow-500'
+                                                : 'text-red-500'
+                                        )}>
+                                        {isLoading || !data
+                                            ? '—'
+                                            : formatCurrency(
+                                                  data.credit as unknown as string
+                                              )
+                                                  .slice(2)
+                                                  .split(',')[0]}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -122,13 +142,25 @@ const CreditDropdown = (): JSX.Element => {
                     onClick={() => setIsMobileOpen(true)}
                     className="flex gap-2 items-center py-1 px-3 border border-neutral-400 rounded-full text-white hover:border-gray-700 hover:bg-graphite-800 transition-colors duration-200">
                     <SparklesIcon size={16} color="#E48E0D" fill="#E48E0D" />
-                    <span className="text-sm font-semibold text-white">
-                        {isLoading || !data
-                            ? '—'
-                            : formatCurrency(data.credit as unknown as string)
-                                  .slice(2)
-                                  .split(',')[0]}
-                    </span>
+                    {data && (
+                        <span
+                            className={cn(
+                                'text-sm font-semibold',
+                                data?.credit > 5000
+                                    ? 'text-white'
+                                    : data?.credit > 3000
+                                    ? 'text-yellow-500'
+                                    : 'text-red-500'
+                            )}>
+                            {isLoading || !data
+                                ? '—'
+                                : formatCurrency(
+                                      data.credit as unknown as string
+                                  )
+                                      .slice(2)
+                                      .split(',')[0]}
+                        </span>
+                    )}
                 </button>
             </div>
 
@@ -152,15 +184,25 @@ const CreditDropdown = (): JSX.Element => {
                             </div>
 
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-white">
-                                    {isLoading || !data
-                                        ? '—'
-                                        : formatCurrency(
-                                              data.credit as unknown as string
-                                          )
-                                              .slice(2)
-                                              .split(',')[0]}
-                                </div>
+                                {data && (
+                                    <div
+                                        className={cn(
+                                            'text-2xl font-bold',
+                                            data?.credit > 5000
+                                                ? 'text-white'
+                                                : data?.credit > 3000
+                                                ? 'text-yellow-500'
+                                                : 'text-red-500'
+                                        )}>
+                                        {isLoading || !data
+                                            ? '—'
+                                            : formatCurrency(
+                                                  data?.credit as unknown as string
+                                              )
+                                                  .slice(2)
+                                                  .split(',')[0]}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
