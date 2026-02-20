@@ -66,7 +66,9 @@ function ReferenceItem({ reference }: ReferenceItemProps): JSX.Element {
     if (reference.type === 'video') {
         url =
             profile?.current_role === 'COLLEGE_STUDENT'
-                ? `/kelas/${reference.subchapter_slug}`
+                ? `/kelas/${reference.course_slug || '_'}/${
+                      reference.subchapter_slug
+                  }`
                 : `/utbk/materi/${reference.course_slug}/${
                       reference.chapter_slug || '_'
                   }/${reference.subchapter_slug}`;
