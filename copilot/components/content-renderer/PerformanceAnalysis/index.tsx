@@ -7,7 +7,7 @@ import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
 import { cn, formatDate } from 'commons/utils';
-import { SpiderChart } from './SpiderChart';
+import { SpiderChart } from 'commons/components/SpiderChart';
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 
 interface PerformanceAnalysisProps {
@@ -37,6 +37,14 @@ function PerformanceAnalysis({
         (performance_analysis.total_score /
             performance_analysis.passing_grade) *
         100;
+
+    const labelsWithScore = performance_analysis.problemset_results.reduce(
+        (acc: Record<string, number>, label) => {
+            acc[label.problemset_title] = label.score;
+            return acc;
+        },
+        {}
+    );
 
     const handleClickPromptBtn = () => {
         sendMessage(
@@ -176,9 +184,8 @@ function PerformanceAnalysis({
                             </h3>
 
                             <SpiderChart
-                                problemset_results={
-                                    performance_analysis.problemset_results
-                                }
+                                labels={Object.keys(labelsWithScore)}
+                                scores={Object.values(labelsWithScore)}
                             />
                         </div>
                     </div>
