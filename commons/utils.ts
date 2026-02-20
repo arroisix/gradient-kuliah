@@ -301,3 +301,12 @@ export function formatDate(isoStr: string): string {
         year: 'numeric'
     });
 }
+
+export function getUTBKRemainingDays(): number {
+    const now = new Date();
+    const utbkDay = new Date(now.getFullYear(), 3, 21);
+    const remainingDays = Math.round(
+        (utbkDay.getTime() / 1000 - now.getTime() / 1000) / (60 * 60 * 24)
+    );
+    return remainingDays;
+}

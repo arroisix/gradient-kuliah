@@ -6,7 +6,7 @@ import { TargetIcon } from 'lucide-react';
 import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
-import { cn, formatDate } from 'commons/utils';
+import { cn, formatDate, getUTBKRemainingDays } from 'commons/utils';
 import { SpiderChart } from 'commons/components/SpiderChart';
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 
@@ -27,12 +27,7 @@ function PerformanceAnalysis({
         PerformanceAnalysisType['problemset_results'][number] | null
     >(null);
 
-    const now = new Date();
-    const utbkDay = new Date(now.getFullYear(), 3, 21);
-    const remainingUTBKDays = Math.round(
-        (utbkDay.getTime() / 1000 - now.getTime() / 1000) / (60 * 60 * 24)
-    );
-
+    const remainingDays = getUTBKRemainingDays();
     const percentage_progress =
         (performance_analysis.total_score /
             performance_analysis.passing_grade) *
@@ -70,7 +65,7 @@ function PerformanceAnalysis({
             )}>
             {/* utbk countdown */}
             <div className="bg-[#282B3C] text-[#E9D5FF] font-bold text-xs leading-tight px-6 py-2 text-center uppercase tracking-[1.1px]">
-                UTBK {remainingUTBKDays} hari lagi
+                UTBK {remainingDays} hari lagi
             </div>
 
             {/* header */}
