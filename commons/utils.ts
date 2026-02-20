@@ -20,10 +20,7 @@ export const formatCurrency = (amount: string): string => {
         style: 'currency',
         currency: 'IDR'
     });
-    return formatter
-        .format(+amount)
-        .replace(/\s/g, '')
-        .replace('p', '-');
+    return formatter.format(+amount).replace(/\s/g, '');
 };
 
 export const generateInitial = (target: string): string => {

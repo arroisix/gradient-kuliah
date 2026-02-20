@@ -3,19 +3,36 @@ import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint
 import { GetStaticProps } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { Layout } from 'commons/components/Layout';
 
 const BankSoalPage = ({
     books
 }: {
     books: ListResponseData<Astronote>;
 }): JSX.Element => {
+    const { profile } = useAuth();
+
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <AstronotesEntrypoint
+                    title="Kumpulan Bank Soal Materi Perkuliahan"
+                    books={books}
+                />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesEntrypoint
-                title="Kumpulan Bank Soal Materi Perkuliahan"
-                books={books}
-            />
-        </LearnLayout>
+        <Layout>
+            <div className="m-4 lg:mx-12 lg:my-8">
+                <AstronotesEntrypoint
+                    title="Kumpulan Bank Soal Materi Perkuliahan"
+                    books={books}
+                />
+            </div>
+        </Layout>
     );
 };
 
