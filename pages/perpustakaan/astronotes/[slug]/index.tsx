@@ -3,6 +3,8 @@ import LearnLayout from 'commons/learnLayout';
 import AstronotesDetail from 'courses/containers/learn/astronotes/detail';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { Layout } from 'commons/components/Layout';
 
 const AstronotesDetailPage = ({
     slug,
@@ -13,14 +15,30 @@ const AstronotesDetailPage = ({
     astronotes: BookDetailInterface;
     recommendations: GetBookRecommendationResponse;
 }): JSX.Element => {
+    const { profile } = useAuth();
+
+    if (!profile) {
+        return (
+            <LearnLayout fullHeightSidebar>
+                <AstronotesDetail
+                    slug={slug}
+                    astronotes={astronotes}
+                    recommendations={recommendations}
+                />
+            </LearnLayout>
+        );
+    }
+
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesDetail
-                slug={slug}
-                astronotes={astronotes}
-                recommendations={recommendations}
-            />
-        </LearnLayout>
+        <Layout>
+            <div className={'m-4 lg:mx-12 lg:my-8'}>
+                <AstronotesDetail
+                    slug={slug}
+                    astronotes={astronotes}
+                    recommendations={recommendations}
+                />
+            </div>
+        </Layout>
     );
 };
 

@@ -138,7 +138,7 @@ const Astronotes = ({
                 </div>
                 <CopilotDrawer onCopilotClick={handleCopilotClick} />
                 <div
-                    className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-0 dark:bg-black"
+                    className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-auto dark:bg-black"
                     style={{ minWidth: notebookWidth }}>
                     <AstronotesNavigation />
                 </div>
