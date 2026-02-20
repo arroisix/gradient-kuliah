@@ -74,7 +74,7 @@ function InterruptOptions({
         return <></>;
     }
 
-    if (isFieldsAreString) {
+    if (usedOptions) {
         return (
             <div className="bg-[#191920] p-6 rounded-2xl w-full max-w-[680px]">
                 <div className={cn('grid gap-3', 'lg:grid-cols-2')}>
