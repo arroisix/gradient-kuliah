@@ -46,7 +46,8 @@ function PromptBar({
     referenceCount = 0
 }: PromptBarProps): JSX.Element {
     const promptBarRef = useRef<HTMLTextAreaElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const cameraInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [prompt, setPrompt] = useState('');
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -76,8 +77,12 @@ function PromptBar({
             setImageUrl(null);
             setImageName(null);
             setActiveForm(null);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
+            if (cameraInputRef.current) {
+                cameraInputRef.current.value = '';
+            }
+
+            if (imageInputRef.current) {
+                imageInputRef.current.value = '';
             }
         }
     };
@@ -186,8 +191,12 @@ function PromptBar({
     const handleRemoveImage = () => {
         setImageUrl(null);
         setImageName(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+        if (cameraInputRef.current) {
+            cameraInputRef.current.value = '';
+        }
+
+        if (imageInputRef.current) {
+            imageInputRef.current.value = '';
         }
     };
 
@@ -209,13 +218,13 @@ function PromptBar({
 
     const handleClickCamera = (): void => {
         tracker?.genericTrack('Click Scan Foto Soal CTA');
-        fileInputRef.current?.click();
+        cameraInputRef.current?.click();
         setIsModalOpen(false);
     };
 
     const handleClickImage = (): void => {
         tracker?.genericTrack('Click Image Attachment');
-        fileInputRef.current?.click();
+        imageInputRef.current?.click();
         setIsModalOpen(false);
     };
 
@@ -234,11 +243,19 @@ function PromptBar({
         <>
             <input
                 hidden
-                ref={fileInputRef}
+                ref={cameraInputRef}
                 onChange={handleImageUpload}
                 type="file"
-                accept="image/png,image/gif,image/jpeg,image/jpg,image/*"
+                accept="image/*"
                 capture="environment"
+            />
+
+            <input
+                hidden
+                ref={imageInputRef}
+                onChange={handleImageUpload}
+                type="file"
+                accept="image/png,image/gif,image/jpeg,image/jpg"
             />
 
             <div
@@ -366,8 +383,12 @@ function PromptBar({
                         onClose={() => {
                             setShowCropModal(false);
                             setTempImageUrl(null);
-                            if (fileInputRef.current) {
-                                fileInputRef.current.value = '';
+                            if (cameraInputRef.current) {
+                                cameraInputRef.current.value = '';
+                            }
+
+                            if (imageInputRef.current) {
+                                imageInputRef.current.value = '';
                             }
                         }}
                         imageUrl={tempImageUrl}
