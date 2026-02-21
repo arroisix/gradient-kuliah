@@ -29,7 +29,7 @@ function InterruptInput({
                 let prompt = '';
                 const entries = Object.entries(values);
                 if (entries.length > 1) {
-                    for (const [key, value] of Object.entries(values)) {
+                    for (const [key, value] of entries) {
                         prompt += `- ${key}: ${value}\n`;
                     }
                 } else if (entries.length === 1) {
