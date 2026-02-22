@@ -1,12 +1,15 @@
 import withAnon from 'commons/withAnon';
-import K12Dashboard from 'dashboard/containers/K12Dashboard';
 import type { GetStaticProps } from 'next';
 import { Layout } from 'commons/components/Layout';
+import { Analytics } from 'dashboard/components/Analytics';
+import { cn } from 'commons/utils';
 
 const Dashboard = (): JSX.Element => {
     return (
         <Layout>
-            <K12Dashboard />
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <Analytics />
+            </div>
         </Layout>
     );
 };
