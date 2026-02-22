@@ -56,6 +56,10 @@ const ClassContainer = ({
     const currentTab = Array.isArray(rawCurrentTab)
         ? rawCurrentTab[0]
         : rawCurrentTab;
+    const isUserAuthenticated = isAuthenticated || !!currentUser?.id;
+    const isSearching = debouncedSearchTerm.trim().length > 0;
+    const shouldUsePrivateSearch = isSearching && isUserAuthenticated;
+    const usePrivateCoursesApi = isSearching ? shouldUsePrivateSearch : isUserAuthenticated;
     const anchorRef = useRef<HTMLDivElement | null>(null);
     const {
         isLoading: isLoadingCourseSubscription,
@@ -87,14 +91,14 @@ const ClassContainer = ({
         isLoading: isLoadingPublicCourseCluster
     } = useGetPublicListCourseClusterQuery(
         void 0,
-        { skip: isAuthenticated }
+        { skip: isUserAuthenticated }
     );
     const {
         data: privateCourseClusterData,
         isLoading: isLoadingPrivateCourseCluster
     } = useGetPrivateListCourseClusterQuery(
         void 0,
-        { skip: !isAuthenticated }
+        { skip: !isUserAuthenticated }
     );
     const {
         data: privateMajorCourses,
@@ -107,12 +111,12 @@ const ClassContainer = ({
             search: debouncedSearchTerm || undefined
         },
         {
-            skip: !router.isReady || !isAuthenticated
+            skip: !router.isReady || !isUserAuthenticated || isSearching
         }
     );
 
-    const courseClusterData = isAuthenticated ? privateCourseClusterData : publicCourseClusterData;
-    const isLoadingCourseCluster = isAuthenticated ? isLoadingPrivateCourseCluster : isLoadingPublicCourseCluster;
+    const courseClusterData = isUserAuthenticated ? privateCourseClusterData : publicCourseClusterData;
+    const isLoadingCourseCluster = isUserAuthenticated ? isLoadingPrivateCourseCluster : isLoadingPublicCourseCluster;
     const privateMajorPayload = privateMajorCourses as ListResponseData<CourseV3> & {
         major?: string;
         major_name?: string;
@@ -135,7 +139,7 @@ const ClassContainer = ({
             label: item.name
         }));
 
-        if (!isAuthenticated || !majorCategory) {
+        if (!isUserAuthenticated || !majorCategory) {
             return clusterTabs;
         }
 
@@ -143,32 +147,32 @@ const ClassContainer = ({
             { value: AUTH_MAJOR_TAB_VALUE, label: majorCategory },
             ...clusterTabs.filter((tab) => tab.value !== majorCategory)
         ];
-    }, [courseClusterData, isAuthenticated, majorCategory]);
+    }, [courseClusterData, isUserAuthenticated, majorCategory]);
 
     const hasResolvedDefaultCategory = useMemo(() => {
         if (currentTab) return true;
 
-        return isAuthenticated
+        return isUserAuthenticated
             ? !!(majorCategory || courseClusterData?.data?.[0]?.name)
             : !!courseClusterData?.data?.[0]?.name;
-    }, [currentTab, isAuthenticated, majorCategory, courseClusterData]);
+    }, [currentTab, isUserAuthenticated, majorCategory, courseClusterData]);
 
     const activeCategory = useMemo(
         () =>
             currentTab ||
-            (isAuthenticated
+                        (isUserAuthenticated
                 ? courseTabs[0]?.value ||
                   majorCategory ||
                   (courseClusterData?.data?.[0]?.name ?? '')
                 : (courseClusterData?.data?.[0]?.name ?? '')),
-        [currentTab, isAuthenticated, courseTabs, majorCategory, courseClusterData]
+                [currentTab, isUserAuthenticated, courseTabs, majorCategory, courseClusterData]
     );
     const firstTabValue = courseTabs[0]?.value ?? '';
     const isMajorTabByName =
         !!majorCategory &&
         normalizeTabValue(activeCategory) === normalizeTabValue(majorCategory);
     const mappedCategory =
-        isAuthenticated &&
+        isUserAuthenticated &&
         (activeCategory === AUTH_MAJOR_TAB_VALUE ||
             isMajorTabByName ||
             (!!firstTabValue && activeCategory === firstTabValue))
@@ -178,7 +182,7 @@ const ClassContainer = ({
     useEffect(() => {
         if (
             !router.isReady ||
-            !isAuthenticated ||
+            !isUserAuthenticated ||
             !currentTab ||
             currentTab === AUTH_MAJOR_TAB_VALUE ||
             !isMajorTabByName
@@ -199,20 +203,20 @@ const ClassContainer = ({
         );
     }, [
         router,
-        isAuthenticated,
+        isUserAuthenticated,
         currentTab,
         isMajorTabByName
     ]);
-    const shouldUsePrivateMajorCourses = isAuthenticated && mappedCategory === '';
+    const shouldUsePrivateMajorCourses = isUserAuthenticated && !isSearching && mappedCategory === '';
 
     const initialQueryArgs = useMemo(
         () => ({
             page: 1,
             limit: 8,
-            category: mappedCategory,
+            category: isSearching ? undefined : mappedCategory,
             search: debouncedSearchTerm || undefined
         }),
-        [mappedCategory, debouncedSearchTerm]
+        [mappedCategory, debouncedSearchTerm, isSearching]
     );
 
     const { data: publicListCourses, isLoading: isLoadingPublicListCourses, isFetching: isFetchingPublicListCourses } = useGetPublicListCoursesV3Query(
@@ -220,9 +224,10 @@ const ClassContainer = ({
         {
             skip:
                 !router.isReady ||
-                isAuthenticated ||
-                !hasResolvedDefaultCategory ||
-                !mappedCategory
+                isUserAuthenticated ||
+                shouldUsePrivateSearch ||
+                (!isSearching && !hasResolvedDefaultCategory) ||
+                (!isSearching && !mappedCategory)
         }
     );
     const { data: privateListCourses, isLoading: isLoadingPrivateListCourses, isFetching: isFetchingPrivateListCourses } = useGetPrivateListCoursesV3Query(
@@ -230,8 +235,8 @@ const ClassContainer = ({
         {
             skip:
                 !router.isReady ||
-                !isAuthenticated ||
-                !hasResolvedDefaultCategory ||
+                (isSearching ? !shouldUsePrivateSearch : !isUserAuthenticated) ||
+                (!isSearching && !hasResolvedDefaultCategory) ||
                 shouldUsePrivateMajorCourses
         }
     );
@@ -242,24 +247,24 @@ const ClassContainer = ({
         useLazyGetPrivateListCoursesV3Query();
 
     const listCourses =
-        (isAuthenticated
+        (usePrivateCoursesApi
             ? shouldUsePrivateMajorCourses
                 ? privateMajorCourses
                 : privateListCourses
             : publicListCourses) ??
-        (!isAuthenticated && !currentTab ? courses : undefined);
-    const isLoadingCourses = isAuthenticated
+        (!isUserAuthenticated && !currentTab ? courses : undefined);
+    const isLoadingCourses = usePrivateCoursesApi
         ? shouldUsePrivateMajorCourses
             ? isLoadingPrivateMajorCourses
             : isLoadingPrivateListCourses
         : isLoadingPublicListCourses;
     const isFetchingCourses =
-        isAuthenticated
+        usePrivateCoursesApi
             ? shouldUsePrivateMajorCourses
                 ? false
                 : isFetchingPrivateListCourses
             : isFetchingPublicListCourses;
-    const isFetchingMoreCourses = isAuthenticated
+    const isFetchingMoreCourses = usePrivateCoursesApi
         ? isFetchingMorePrivateCourses
         : isFetchingMorePublicCourses;
 
@@ -269,7 +274,7 @@ const ClassContainer = ({
 
     useEffect(() => {
         setAllCourses(listCourses);
-    }, [listCourses, isAuthenticated, activeCategory]);
+    }, [listCourses, isUserAuthenticated, activeCategory]);
 
     const hasMore = useMemo(() => {
         if (!allCourses) return false;
@@ -278,18 +283,18 @@ const ClassContainer = ({
     }, [allCourses]);
 
     const loadMore = useCallback(async (): Promise<void> => {
-        if (!hasMore || !allCourses?.next_page || isFetchingMoreCourses || !activeCategory) {
+        if (!hasMore || !allCourses?.next_page || isFetchingMoreCourses) {
             return;
         }
 
         const nextPageArgs = {
             page: allCourses.next_page,
             limit: 8,
-            category: mappedCategory,
+            category: isSearching ? undefined : mappedCategory,
             search: debouncedSearchTerm || undefined
         };
 
-        const response = isAuthenticated
+        const response = usePrivateCoursesApi
             ? await fetchPrivateCourses(nextPageArgs).unwrap()
             : await fetchPublicCourses(nextPageArgs).unwrap();
 
@@ -305,12 +310,39 @@ const ClassContainer = ({
         hasMore,
         allCourses,
         isFetchingMoreCourses,
+        isSearching,
         mappedCategory,
         debouncedSearchTerm,
-        isAuthenticated,
+        usePrivateCoursesApi,
         fetchPrivateCourses,
         fetchPublicCourses
     ]);
+
+    const groupedSearchCourses = useMemo(() => {
+        if (!isSearching || !allCourses?.data?.length) return [];
+
+        const groupedCourses = new Map<string, CourseV3[]>();
+
+        allCourses.data.forEach((course) => {
+            const clusters =
+                Array.isArray(course.clusters) && course.clusters.length > 0
+                    ? [...new Set(course.clusters)]
+                    : ['Lainnya'];
+
+            clusters.forEach((clusterName) => {
+                if (!groupedCourses.has(clusterName)) {
+                    groupedCourses.set(clusterName, []);
+                }
+
+                groupedCourses.get(clusterName)?.push(course);
+            });
+        });
+
+        return Array.from(groupedCourses.entries()).map(([cluster, courses]) => ({
+            cluster,
+            courses
+        }));
+    }, [isSearching, allCourses]);
 
     useEffect(() => {
         const anchorElement = anchorRef.current;
@@ -342,7 +374,7 @@ const ClassContainer = ({
         };
     }, [hasMore, isFetchingMoreCourses, loadMore]);
 
-    const isLoading = isLoadingCourseCluster || isLoadingCourses;
+    const isLoading = (isSearching ? false : isLoadingCourseCluster) || isLoadingCourses;
     
     return (
         <div className='w-full min-h-[calc(100vh-64px)] relative'>
@@ -374,16 +406,18 @@ const ClassContainer = ({
                         Kelas
                     </h1>
 
-                    <div className='w-full'>
-                        {isLoadingCourseCluster || !courseTabs.length ? (
-                            <Skeleton className='w-full h-[46px]' />
-                        ) : (
-                            <CourseEntrypointTabs
-                                tabs={courseTabs}
-                                defaultTab={courseTabs[0].value}
-                            />
-                        )}
-                    </div>
+                    {!isSearching && (
+                        <div className='w-full'>
+                            {isLoadingCourseCluster || !courseTabs.length ? (
+                                <Skeleton className='w-full h-[46px]' />
+                            ) : (
+                                <CourseEntrypointTabs
+                                    tabs={courseTabs}
+                                    defaultTab={courseTabs[0].value}
+                                />
+                            )}
+                        </div>
+                    )}
 
                     <div className='flex items-center gap-3'>
                         <label className="flex items-center flex-1 h-[38px] gap-2 px-3 rounded-full bg-[#222222] text-[#666666]">
@@ -403,16 +437,18 @@ const ClassContainer = ({
                 </div>
             </div>
 
-            <div className='hidden lg:block w-full mb-6 z-10 relative'>
-                {isLoadingCourseCluster || !courseTabs.length ? (
-                    <Skeleton className='w-full h-[46px]' />
-                ) : (
-                    <CourseEntrypointTabs
-                        tabs={courseTabs}
-                        defaultTab={courseTabs[0].value}
-                    />
-                )}
-            </div>
+            {!isSearching && (
+                <div className='hidden lg:block w-full mb-6 z-10 relative'>
+                    {isLoadingCourseCluster || !courseTabs.length ? (
+                        <Skeleton className='w-full h-[46px]' />
+                    ) : (
+                        <CourseEntrypointTabs
+                            tabs={courseTabs}
+                            defaultTab={courseTabs[0].value}
+                        />
+                    )}
+                </div>
+            )}
 
             <div className='w-full z-10 relative'>
                 {isLoading || !allCourses || isFetchingCourses ? (
@@ -422,7 +458,50 @@ const ClassContainer = ({
                     )} />
                 ) : (
                     <>
-                        <CourseList courses={allCourses.data ?? []} />
+                        {isSearching ? (
+                            (allCourses.data?.length ?? 0) > 0 ? (
+                                <div className='flex flex-col gap-6'>
+                                    <span className='text-[#999999] text-sm'>
+                                        Hasil pencarian untuk "{searchTerm}"
+                                    </span>
+
+                                    <div className='flex flex-col gap-8'>
+                                        {groupedSearchCourses.map((group) => (
+                                            <div key={group.cluster} className='flex flex-col gap-4'>
+                                                <h2 className='text-white text-sm font-semibold'>
+                                                    {group.cluster}
+                                                </h2>
+                                                <CourseList
+                                                    courses={group.courses}
+                                                    highlightQuery={debouncedSearchTerm}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className='w-full h-[calc(100vh-268px)] flex flex-col items-center justify-center gap-6'>
+                                    <div className='w-[120px] aspect-square relative'>
+                                        <Image
+                                            src={`${CDN_URL}/assets/course-entrypoint-empty-state.png`}
+                                            alt="Course Entrypoint Empty State"
+                                            layout="fill"
+                                            objectFit="cover"
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-3'>
+                                        <h2 className='text-white text-xl font-bold text-center'>
+                                            Kelas Tidak Ditemukan
+                                        </h2>
+                                        <p className='text-[#999999] text-center'>
+                                            Coba gunakan kata kunci lain atau cari topik yang lebih umum.
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+                        ) : (
+                            <CourseList courses={allCourses.data ?? []} />
+                        )}
 
                         {isFetchingMoreCourses && (
                             <div className='mt-8'>
@@ -446,7 +525,7 @@ const ClassContainer = ({
 
             <div className={
                 cn(
-                    "w-full aspect-[1023/459] z-0 absolute opacity-100 rotate-[-10.16deg] top-[-10vh] lg:top-[-20vh]",
+                    "w-full aspect-[1023/459] z-0 absolute opacity-40 rotate-[-10.16deg] top-[-10vh] lg:top-[-20vh]",
                     isAuthenticated? "left-[-50px] md:left-[-100px] lg:left-[-100px] xl:left-[-450px]" : "left-[-50px] md:left-[-200px] lg:left-[-250px] xl:left-[-600px]"
                 )
             }>

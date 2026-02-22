@@ -5,8 +5,13 @@ import Playstore from "commons/components/elements/Icons/Playstore";
 import Appstore from "commons/components/elements/Icons/Appstore";
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from "authentication/redux/selectors/userSelector";
+import { cn } from "commons/utils";
 
 const DownloadsContainer = (): JSX.Element => {
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
     return (
         <div className="w-full pt-16 lg:h-[calc(100vh-64px)] relative">
             <Link href="/kelas" className="z-10 relative">
@@ -66,7 +71,12 @@ const DownloadsContainer = (): JSX.Element => {
                 </div>
             </div>
 
-            <div className='w-full aspect-[1365/1095] absolute opacity-70 top-[238px] md:top-[228px] lg:top-16 right-[-48px] z-0'>
+            <div className={
+                cn(
+                    'w-full aspect-[1365/1095] absolute opacity-70 top-[238px] md:top-[228px] lg:top-16 right-[-48px] z-0',
+                    isAuthenticated ? "right-[-48px]" : "right-[-100px]"
+                )
+            }>
                 <Image
                     src={`${CDN_URL}/assets/course-download-background.png`}
                     alt="Course Download Background"

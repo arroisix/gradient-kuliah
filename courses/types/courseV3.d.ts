@@ -13,4 +13,5 @@ type CourseV3 = {
     lecturers: Lecturer[];
     latest_subchapter_slug?: string;
     slug: string;
+    clusters: string[];
 }

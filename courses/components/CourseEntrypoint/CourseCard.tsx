@@ -3,14 +3,52 @@ import { CDN_URL } from 'commons/constants';
 import Link from 'next/link';
 import Button from 'commons/components/elements/Button';
 
+interface CourseCardProps extends CourseV3 {
+    highlightQuery?: string;
+}
+
 const CourseCard = ({
     course_name,
     thumbnail,
     is_free,
     lecturers,
     slug,
-    latest_subchapter_slug
-}: CourseV3): JSX.Element => {
+    latest_subchapter_slug,
+    highlightQuery
+}: CourseCardProps): JSX.Element => {
+    const hasMultipleLecturers = lecturers.length > 1;
+
+    const renderHighlightedCourseName = (): JSX.Element | string => {
+        const keyword = highlightQuery?.trim();
+
+        if (!keyword) return course_name;
+
+        const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const matcher = new RegExp(`(${escapedKeyword})`, 'ig');
+
+        if (!matcher.test(course_name)) {
+            return course_name;
+        }
+
+        matcher.lastIndex = 0;
+
+        return (
+            <>
+                {course_name.split(matcher).map((part, index) => {
+                    const isMatch = part.toLowerCase() === keyword.toLowerCase();
+
+                    return (
+                        <span
+                            key={`${part}-${index}`}
+                            className={isMatch ? 'text-[#F2C04C]' : undefined}>
+                            {part}
+                        </span>
+                    );
+                })}
+            </>
+        );
+    };
+
     return (
         <Link className="group w-full relative z-10" href={latest_subchapter_slug ? `/kelas/${slug}/${latest_subchapter_slug}` : `/kelas/${slug}`}>
             <div className='w-full rounded-lg border-1 overflow-hidden relative'>
@@ -26,8 +64,39 @@ const CourseCard = ({
 
                 <div className='absolute inset-0 px-4 pb-4 pt-6 w-full h-full flex flex-col justify-end bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)]'>
                     <div className='transition-all duration-400 ease-out group-hover:pb-16'>
-                        <h2 className='font-semibold text-sm line-clamp-2 text-white'>{course_name}</h2>
-                        <h3 className='text-sm mt-4 text-[#DEDEDE]'>{lecturers.map((lecturer) => lecturer.name).join(', ')}</h3>
+                        <h2 className='font-semibold text-sm line-clamp-2 text-white'>
+                            {renderHighlightedCourseName()}
+                        </h2>
+
+                        {hasMultipleLecturers ? (
+                            <div className='mt-4 flex flex-row items-center justify-between gap-3'>
+                                <div className='flex -space-x-2 isolate'>
+                                    {lecturers.slice(0, 3).map((lecturer, index) => (
+                                        <div
+                                            key={lecturer.id}
+                                            className='w-8 h-8 rounded-full border border-[#4B4E5F] overflow-hidden relative shrink-0'
+                                            style={{ zIndex: lecturers.length - index }}>
+                                            <Image
+                                                src={lecturer.photo}
+                                                alt={lecturer.name}
+                                                layout="fill"
+                                                objectFit="cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className='px-3 py-1 rounded-[50px] bg-[linear-gradient(180deg,_rgba(0,0,0,0.4)_4.33%,_rgba(0,0,0,0.6)_100%)]'>
+                                    <h3 className='text-xs font-semibold text-white whitespace-nowrap'>
+                                        {lecturers.length} Pengajar
+                                    </h3>
+                                </div>
+                            </div>
+                        ) : (
+                            <h3 className='text-sm mt-4 text-[#DEDEDE]'>
+                                {lecturers.map((lecturer) => lecturer.name).join(', ')}
+                            </h3>
+                        )}
                     </div>
 
                     <div className='absolute left-4 right-4 bottom-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out'>
