@@ -70,11 +70,7 @@ function InterruptOptions({
         }
     };
 
-    if (usedOptions.length === 0) {
-        return <></>;
-    }
-
-    if (usedOptions) {
+    if (usedOptions.length > 0) {
         return (
             <div className="bg-[#191920] p-6 rounded-2xl w-full max-w-[680px]">
                 <div className={cn('grid gap-3', 'lg:grid-cols-2')}>
@@ -123,8 +119,12 @@ function InterruptOptions({
             initialValues={initialValues}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
                 let name = '';
-                if (Array.isArray(fields) && fields.length > 0) {
-                    name = fields[0].name;
+                for (const [key, value] of Object.entries(values)) {
+                    if (!value) {
+                        continue;
+                    }
+                    name = key;
+                    break;
                 }
 
                 const prompt = values[name];
@@ -157,24 +157,31 @@ function InterruptOptions({
                         {fields?.map((field) => (
                             <button
                                 disabled={isLoadingResponse}
-                                key={field.label}
+                                key={field.label ?? field.name}
                                 onClick={() =>
-                                    setFieldValue(field.name, field.label)
+                                    setFieldValue(
+                                        field.name,
+                                        field.label ?? field.name
+                                    )
                                 }
                                 type="button"
                                 className={cn(
                                     'text-white p-3 rounded-lg border border-[#7D89CC] text-center disabled:opacity-75 transition-colors text-sm',
-                                    values[field.name] === field.label
+                                    values[field.name] ===
+                                        (field.label ?? field.name)
                                         ? 'bg-[#7D89CC]'
                                         : 'bg-[#191920]'
                                 )}>
-                                {field.label}
+                                {field.label ?? field.name}
                                 <input
                                     type="radio"
                                     className="hidden"
                                     name={field.name}
-                                    value={field.label}
-                                    checked={values[field.name] === field.label}
+                                    value={field.label ?? field.name}
+                                    checked={
+                                        values[field.name] ===
+                                        (field.label ?? field.name)
+                                    }
                                     onChange={handleChange}
                                 />
                             </button>
