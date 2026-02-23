@@ -11,6 +11,7 @@ import {
     ChartData
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
+import { abbreviateWords } from 'commons/utils';
 
 ChartJS.register(
     RadialLinearScale,
@@ -77,17 +78,8 @@ function SpiderChart({ labels, scores }: SpiderChartProps): JSX.Element {
                     backdropColor: 'transparent',
                     font: { size: 14, lineHeight: '160%' },
                     callback: function (label) {
-                        // remove text inside parentheses
-                        const cleanedText = label.replace(/\([^)]*\)/g, '');
-
-                        // match words starting with capital letters
-                        const matches = cleanedText.match(/\b[A-Z]\w*/g);
-                        if (!matches) {
-                            return label;
-                        }
-
-                        // map to first letter and join
-                        return matches.map((word) => word[0]).join('');
+                        const abbr = abbreviateWords(label);
+                        return abbr;
                     }
                 },
                 // tick between spiral line

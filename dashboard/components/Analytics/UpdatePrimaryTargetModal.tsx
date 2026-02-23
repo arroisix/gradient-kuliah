@@ -8,10 +8,12 @@ import {
     SetStudentTargetInstitution,
     StudentTargetInstitution
 } from 'dashboard/types/dashboard';
+import { useSetTargetDrawerContext } from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { XIcon } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FaCircleCheck, FaRegCircle } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
+import { useWindowSize } from 'usehooks-ts';
 
 interface UpdatePrimaryTargetModalProps {
     isOpen: boolean;
@@ -26,11 +28,18 @@ function UpdatePrimaryTargetModal({
         Array<StudentTargetInstitution & { isPrimary: boolean }>
     >([]);
 
+    const { width } = useWindowSize();
+    const { setIsDrawerOpened, setIsModalOpened } = useSetTargetDrawerContext();
+
     const { data, isLoading: isLoadingTarget } =
         useGetStudentTargetInstitutionsQuery();
 
     const [updateTarget, { isLoading: isLoadingUpdateTarget }] =
         useSetStudentTargetInstitutionsMutation();
+
+    const handleClickButton = () => {
+        width < 1024 ? setIsModalOpened(true) : setIsDrawerOpened(true);
+    };
 
     const selectTarget = (newPrimaryIdx: number) => {
         setTargetInstitutions((items) =>
@@ -154,7 +163,8 @@ function UpdatePrimaryTargetModal({
                     <button
                         disabled={isLoadingTarget || isLoadingUpdateTarget}
                         type="button"
-                        className="bg-transparent py-2 border border-[#333333] rounded-full text-white font-semibold leading-[140%] hover:opacity-75 disabled:opacity-75 transition-all">
+                        className="bg-transparent py-2 border border-[#333333] rounded-full text-white font-semibold leading-[140%] hover:opacity-75 disabled:opacity-75 transition-all"
+                        onClick={handleClickButton}>
                         Ubah
                     </button>
 

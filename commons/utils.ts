@@ -310,3 +310,18 @@ export function getUTBKRemainingDays(): number {
     );
     return remainingDays;
 }
+
+// abbreviate words like "Pengetahuan Kuantitatif" into "PK"
+export function abbreviateWords(str: string): string {
+    // remove text inside parentheses
+    const cleanedText = str.replace(/\([^)]*\)/g, '');
+
+    // match words starting with capital letters
+    const matches = cleanedText.match(/\b[A-Z]\w*/g);
+    if (!matches) {
+        return str;
+    }
+
+    // map to first letter and join
+    return matches.map((word) => word[0]).join('');
+}

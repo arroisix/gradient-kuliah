@@ -2,14 +2,11 @@ import withAnon from 'commons/withAnon';
 import type { GetStaticProps } from 'next';
 import { Layout } from 'commons/components/Layout';
 import { Analytics } from 'dashboard/components/Analytics';
-import { cn } from 'commons/utils';
 
 const Dashboard = (): JSX.Element => {
     return (
         <Layout>
-            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
-                <Analytics />
-            </div>
+            <Analytics />
         </Layout>
     );
 };
