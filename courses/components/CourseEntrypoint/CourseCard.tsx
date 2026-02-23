@@ -79,7 +79,7 @@ const CourseCard = ({
                                         {lecturers.slice(0, 3).map((lecturer, index) => (
                                             <div
                                                 key={lecturer.id}
-                                                className='w-8 h-8 rounded-full border border-[#4B4E5F] overflow-hidden relative shrink-0'
+                                                className='w-[15%] md:w-[20%] lg:w-[36%] 2xl:w-[30%] aspect-square rounded-full border border-[#4B4E5F] overflow-hidden relative shrink-0'
                                                 style={{ zIndex: lecturers.length - index }}>
                                                 <Image
                                                     src={lecturer.photo}
@@ -102,7 +102,7 @@ const CourseCard = ({
                                     {lecturers.slice(0, 3).map((lecturer, index) => (
                                         <div key={lecturer.id} className='flex items-center gap-2'>
                                             <div
-                                                className='w-8 h-8 rounded-full border border-[#999999] overflow-hidden relative shrink-0'
+                                                className='w-[14%] md:w-[16%] lg:w-[20%] aspect-square rounded-full border border-[#999999] overflow-hidden relative shrink-0'
                                                 style={{ zIndex: lecturers.length - index }}>
                                                 <Image
                                                     src={lecturer.photo}
