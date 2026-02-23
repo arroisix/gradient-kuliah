@@ -1,5 +1,6 @@
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 import { SpiderChart } from 'commons/components/SpiderChart';
+import { cn } from 'commons/utils';
 
 const labels = [
     'P.Umum',
@@ -18,17 +19,21 @@ function SpiderChartCard(): JSX.Element {
     };
 
     return (
-        <div className="bg-[#282B3C] py-4 px-6 rounded-2xl space-y-4 w-full max-w-[288px]">
+        <div
+            className={cn(
+                'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl space-y-4 w-full max-w-[343px] mx-auto',
+                'lg:max-w-[287px] lg:mx-0 lg:px-6'
+            )}>
             <div className="flex justify-between items-center">
-                <h1 className="text-white font-semibold leading-[140%]">
+                <h2 className="text-white font-semibold leading-[140%]">
                     Radar Kekuatan
-                </h1>
+                </h2>
 
                 <button
                     type="button"
                     onClick={handleClickCopilot}
-                    className="shrink-0">
-                    <CopilotSolidIcon className="text-[#B6A6F3] w-4 h-4" />
+                    className="shrink-0 bg-[#5F2BCE] hover:opacity-75 transition-all rounded-full w-8 h-8 grid place-items-center">
+                    <CopilotSolidIcon className="text-white w-4 h-4" />
                 </button>
             </div>
 

@@ -1,13 +1,14 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { cn, getUTBKRemainingDays } from 'commons/utils';
 import { SpiderChartCard } from './SpiderChartCard';
+import { AdmissionChance } from './AdmissionChance';
 
 function Analytics(): JSX.Element {
     const { profile } = useAuth();
     const remainingDays = getUTBKRemainingDays();
 
     return (
-        <div className="w-full max-w-5xl mx-auto">
+        <div className="w-full max-w-[934px] mx-auto">
             <div
                 className={cn(
                     'flex flex-col gap-1 mb-8',
@@ -26,8 +27,12 @@ function Analytics(): JSX.Element {
                 </span>
             </div>
 
-            <div className="flex gap-6">
-                <div className="flex-grow"></div>
+            <div
+                className={cn(
+                    'space-y-6',
+                    'lg:space-y-0 lg:flex lg:justify-center lg:gap-6'
+                )}>
+                <AdmissionChance />
                 <SpiderChartCard />
             </div>
         </div>

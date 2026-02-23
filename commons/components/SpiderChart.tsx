@@ -106,7 +106,7 @@ function SpiderChart({ labels, scores }: SpiderChartProps): JSX.Element {
     };
 
     return (
-        <div className="aspect-square w-full">
+        <div className="aspect-square">
             <Radar data={data} options={options} />
         </div>
     );
