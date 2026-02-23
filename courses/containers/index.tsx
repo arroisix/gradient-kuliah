@@ -24,7 +24,7 @@ import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { BiSearch } from 'react-icons/bi';
 import Link from 'next/link';
-import { MdFileDownload } from 'react-icons/md';
+import { MdClose, MdFileDownload } from 'react-icons/md';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
@@ -58,6 +58,7 @@ const ClassContainer = ({
         : rawCurrentTab;
     const isUserAuthenticated = isAuthenticated || !!currentUser?.id;
     const isSearching = debouncedSearchTerm.trim().length > 0;
+    const hasSearchValue = searchTerm.trim().length > 0;
     const shouldUsePrivateSearch = isSearching && isUserAuthenticated;
     const usePrivateCoursesApi = isSearching ? shouldUsePrivateSearch : isUserAuthenticated;
     const anchorRef = useRef<HTMLDivElement | null>(null);
@@ -65,6 +66,11 @@ const ClassContainer = ({
         isLoading: isLoadingCourseSubscription,
         is_subscribed
     } = useCourseSubscription();
+
+    const clearSearch = () => {
+        setSearchTerm('');
+        setDebouncedSearchTerm('');
+    };
 
     useEffect(() => {
         const timeoutId = window.setTimeout(() => {
@@ -393,6 +399,17 @@ const ClassContainer = ({
                                 className="w-full bg-[#222222] border-none focus:ring-0 text-white placeholder:text-[#666666]"
                                 placeholder="Cari kelas"
                             />
+                            <div className='h-[18px] w-[18px] shrink-0 flex items-center justify-center'>
+                                {hasSearchValue && (
+                                    <button
+                                        type='button'
+                                        onClick={clearSearch}
+                                        className='text-[#B6A6F3] hover:text-white transition-colors'
+                                        aria-label='Reset search'>
+                                        <MdClose size={18} />
+                                    </button>
+                                )}
+                            </div>
                         </label>
 
                         <Link href="/kelas/downloads" className='w-[42px] h-[34px] bg-[#333333] rounded-full flex items-center justify-center'>
@@ -428,6 +445,17 @@ const ClassContainer = ({
                                 className="w-full bg-transparent border-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0 text-white placeholder:text-[#666666]"
                                 placeholder="Cari kelas"
                             />
+                            <div className='h-[18px] w-[18px] shrink-0 flex items-center justify-center'>
+                                {hasSearchValue && (
+                                    <button
+                                        type='button'
+                                        onClick={clearSearch}
+                                        className='text-[#B6A6F3] hover:text-white transition-colors'
+                                        aria-label='Reset search'>
+                                        <MdClose size={18} />
+                                    </button>
+                                )}
+                            </div>
                         </label>
 
                         <Link href="/kelas/downloads" className='w-[38px] h-[38px] bg-[#333333] rounded-full flex items-center justify-center shrink-0'>

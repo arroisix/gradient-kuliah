@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import Link from 'next/link';
 import Button from 'commons/components/elements/Button';
+import { cn } from 'commons/utils';
 
 interface CourseCardProps extends CourseV3 {
     highlightQuery?: string;
@@ -51,7 +52,10 @@ const CourseCard = ({
 
     return (
         <Link className="group w-full relative z-10" href={latest_subchapter_slug ? `/kelas/${slug}/${latest_subchapter_slug}` : `/kelas/${slug}`}>
-            <div className='w-full rounded-lg border-1 overflow-hidden relative'>
+            <div className={cn(
+                'w-full rounded-lg overflow-hidden relative border border-transparent',
+                hasMultipleLecturers && 'group-hover:border-2 group-hover:border-[#5F2BCE] group-hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15)]'
+            )}>
                 <div className='w-full aspect-[22/30]'>
                     <Image
                         src={thumbnail ? thumbnail : `${CDN_URL}/assets/course-entrypoint-default-thumbnail.png`}
@@ -63,35 +67,58 @@ const CourseCard = ({
                 </div>
 
                 <div className='absolute inset-0 px-4 pb-4 pt-6 w-full h-full flex flex-col justify-end bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)]'>
-                    <div className='transition-all duration-400 ease-out group-hover:pb-16'>
+                    <div className='transition-all duration-400 ease-out group-hover:pb-14'>
                         <h2 className='font-semibold text-sm line-clamp-2 text-white'>
                             {renderHighlightedCourseName()}
                         </h2>
 
                         {hasMultipleLecturers ? (
-                            <div className='mt-4 flex flex-row items-center justify-between gap-3'>
-                                <div className='flex -space-x-2 isolate'>
+                            <>
+                                <div className='mt-4 flex flex-row items-center justify-between gap-3 group-hover:hidden'>
+                                    <div className='flex -space-x-2 isolate w-full'>
+                                        {lecturers.slice(0, 3).map((lecturer, index) => (
+                                            <div
+                                                key={lecturer.id}
+                                                className='w-8 h-8 rounded-full border border-[#4B4E5F] overflow-hidden relative shrink-0'
+                                                style={{ zIndex: lecturers.length - index }}>
+                                                <Image
+                                                    src={lecturer.photo}
+                                                    alt={lecturer.name}
+                                                    layout="fill"
+                                                    objectFit="cover"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className='px-3 py-1 rounded-[50px] bg-[linear-gradient(180deg,_rgba(0,0,0,0.4)_4.33%,_rgba(0,0,0,0.6)_100%)]'>
+                                        <h3 className='text-xs font-semibold text-white whitespace-nowrap'>
+                                            {lecturers.length} Pengajar
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div className='mt-4 hidden group-hover:flex flex-col gap-2'>
                                     {lecturers.slice(0, 3).map((lecturer, index) => (
-                                        <div
-                                            key={lecturer.id}
-                                            className='w-8 h-8 rounded-full border border-[#4B4E5F] overflow-hidden relative shrink-0'
-                                            style={{ zIndex: lecturers.length - index }}>
-                                            <Image
-                                                src={lecturer.photo}
-                                                alt={lecturer.name}
-                                                layout="fill"
-                                                objectFit="cover"
-                                            />
+                                        <div key={lecturer.id} className='flex items-center gap-2'>
+                                            <div
+                                                className='w-8 h-8 rounded-full border border-[#999999] overflow-hidden relative shrink-0'
+                                                style={{ zIndex: lecturers.length - index }}>
+                                                <Image
+                                                    src={lecturer.photo}
+                                                    alt={lecturer.name}
+                                                    layout="fill"
+                                                    objectFit="cover"
+                                                />
+                                            </div>
+
+                                            <h3 className='text-xs leading-[160%] text-[#DEDEDE] line-clamp-2'>
+                                                {lecturer.name}
+                                            </h3>
                                         </div>
                                     ))}
                                 </div>
-
-                                <div className='px-3 py-1 rounded-[50px] bg-[linear-gradient(180deg,_rgba(0,0,0,0.4)_4.33%,_rgba(0,0,0,0.6)_100%)]'>
-                                    <h3 className='text-xs font-semibold text-white whitespace-nowrap'>
-                                        {lecturers.length} Pengajar
-                                    </h3>
-                                </div>
-                            </div>
+                            </>
                         ) : (
                             <h3 className='text-sm mt-4 text-[#DEDEDE]'>
                                 {lecturers.map((lecturer) => lecturer.name).join(', ')}
