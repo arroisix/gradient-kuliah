@@ -217,6 +217,7 @@ const ChatSection = ({
                         ) : message.interrupt?.data.type === 'options' ? (
                             <InterruptOptions
                                 fields={message.interrupt.data.fields}
+                                options={message.interrupt.data.options}
                                 isLoadingResponse={isLoadingResponse}
                                 sendMessage={sendMessage}
                             />

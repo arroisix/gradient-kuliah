@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
+import { cn } from 'commons/utils';
 import { CopilotInterrupt } from 'copilot/types/copilot';
 import { Formik, FormikValues } from 'formik';
 import { toast } from 'react-toastify';
@@ -28,7 +29,7 @@ function InterruptInput({
                 let prompt = '';
                 const entries = Object.entries(values);
                 if (entries.length > 1) {
-                    for (const [key, value] of Object.entries(values)) {
+                    for (const [key, value] of entries) {
                         prompt += `- ${key}: ${value}\n`;
                     }
                 } else if (entries.length === 1) {
@@ -85,7 +86,10 @@ function InterruptInput({
                         disabled={!dirty || isLoadingResponse}
                         type="submit"
                         variant="primary"
-                        className="!px-6 !py-2 mt-6 block ml-auto">
+                        className={cn(
+                            '!px-5 !py-2 mt-6 block w-full',
+                            'lg:min-w-fit lg:w-48 lg:ml-auto'
+                        )}>
                         Submit
                     </Button>
                 </form>
