@@ -5,6 +5,8 @@ import { MenuSolidIcon } from 'commons/components/elements/Icons/MenuSolidIcon';
 import { PrediksiSolidIcon } from 'commons/components/elements/Icons/PrediksiSolidIcon';
 import { ThumbsUpSolidIcon } from 'commons/components/elements/Icons/ThumbsUpSolidIcon';
 import { cn } from 'commons/utils';
+import { useState } from 'react';
+import { UpdatePrimaryTargetModal } from './UpdatePrimaryTargetModal';
 
 function generateHexTextColor(score: number): string {
     return score < 300
@@ -23,6 +25,7 @@ function generateHexBgColor(score: number): string {
 }
 
 function AdmissionChance(): JSX.Element {
+    const [isUpdateTargetOpen, setIsUpdateTargetOpen] = useState(false);
     const score = 250;
     const passingGrade = 720;
     const maxScore = 1000;
@@ -63,10 +66,20 @@ function AdmissionChance(): JSX.Element {
                         </button>
 
                         <button
+                            onClick={() => setIsUpdateTargetOpen(true)}
                             type="button"
                             className="shrink-0 bg-[#282B3C] hover:opacity-75 transition-all w-6 h-6 rounded-full grid place-items-center">
                             <MenuSolidIcon className="text-[#B6A6F3] w-4 h-4" />
                         </button>
+
+                        {isUpdateTargetOpen ? (
+                            <UpdatePrimaryTargetModal
+                                isOpen={isUpdateTargetOpen}
+                                setIsOpen={setIsUpdateTargetOpen}
+                            />
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
 
