@@ -15,19 +15,14 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Spinner from 'commons/components/elements/Spinner';
-import { FaRegCalendar } from 'react-icons/fa6';
-import Modal from 'commons/components/modules/Modal';
-import AddToCalendarModal from 'liveClasses/components/AddToCalendarModal';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 function OngoingLiveClass(): JSX.Element {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
-    const [showAddToCalendarModal, setShowAddToCalendarModal] =
-        useState<boolean>(false);
-    const [
-        register,
-        { isLoading: isRegistering, isSuccess: isRegisterSuccess }
-    ] = useRegisterLiveClassMutation();
+    const [register, { isLoading: isRegistering }] =
+        useRegisterLiveClassMutation();
+    const { is_subscribed, subscribedFeatures } = useCourseSubscription();
     const { data: liveClassPublicData, isLoading: isLoadingLiveClassPublic } =
         useGetListLiveClassPublicQuery(
             {
@@ -39,17 +34,20 @@ function OngoingLiveClass(): JSX.Element {
                 skip: isAuthenticated
             }
         );
-    const { data: liveClassPrivateData, isLoading: isLoadingLiveClassPrivate } =
-        useGetListLiveClassPrivateQuery(
-            {
-                limit: 1,
-                page: 1,
-                type: 'ongoing'
-            },
-            {
-                skip: !isAuthenticated
-            }
-        );
+    const {
+        data: liveClassPrivateData,
+        isLoading: isLoadingLiveClassPrivate,
+        refetch: refetchLiveClassPrivate
+    } = useGetListLiveClassPrivateQuery(
+        {
+            limit: 1,
+            page: 1,
+            type: 'ongoing'
+        },
+        {
+            skip: !isAuthenticated
+        }
+    );
     const liveClass = isAuthenticated
         ? liveClassPrivateData
         : liveClassPublicData;
@@ -78,30 +76,87 @@ function OngoingLiveClass(): JSX.Element {
         }
     }, [liveClass]);
 
-    const handleRegister = async () => {
-        if (!isAuthenticated) {
-            router.push('/langganan');
+    const hasLiveClassAccess =
+        isAuthenticated &&
+        is_subscribed &&
+        !!subscribedFeatures?.includes('live_class');
+
+    const extractMeetLink = (
+        payload?: { data?: Array<Record<string, unknown>> }
+    ): string => {
+        const firstItem = payload?.data?.[0];
+
+        if (!firstItem || !('meet_link' in firstItem)) {
+            return '';
         }
 
-        if (liveClass && liveClass.data.length > 0) {
-            if (isRegistered) {
-                setShowAddToCalendarModal(true);
-            } else {
-                register({ slug: liveClass.data[0].slug });
-            }
+        const meetLink = firstItem.meet_link;
+
+        return typeof meetLink === 'string' && meetLink ? meetLink : '';
+    };
+
+    const resolveMeetLink = async (): Promise<string> => {
+        const currentMeetLink = extractMeetLink(liveClass);
+
+        if (currentMeetLink || !isAuthenticated) {
+            return currentMeetLink;
+        }
+
+        try {
+            const refreshedLiveClass = await refetchLiveClassPrivate().unwrap();
+            return extractMeetLink(refreshedLiveClass);
+        } catch {
+            return currentMeetLink;
         }
     };
 
-    useEffect(() => {
-        if (isRegisterSuccess) {
+    const redirectToMeetLink = async (): Promise<void> => {
+        const meetLink = await resolveMeetLink();
+
+        if (!meetLink) {
+            toast.error('Link meeting belum tersedia.', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true
+            });
+            return;
+        }
+
+        window.open(meetLink, '_blank');
+    };
+
+    const handleRegister = async () => {
+        if (!liveClass || liveClass.data.length === 0) {
+            return;
+        }
+
+        if (isRegistered) {
+            await redirectToMeetLink();
+            return;
+        }
+
+        if (!hasLiveClassAccess) {
+            router.push('/langganan');
+            return;
+        }
+
+        try {
+            await register({ slug: liveClass.data[0].slug }).unwrap();
             setIsRegistered(true);
             toast.success('Daftar Live Class berhasil.', {
                 position: 'top-center',
                 theme: 'colored',
                 hideProgressBar: true
             });
+            await redirectToMeetLink();
+        } catch {
+            toast.error('Daftar Live Class gagal.', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true
+            });
         }
-    }, [isRegisterSuccess]);
+    };
 
     if (isLoadingLiveClass || !liveClass || liveClass.count_items === 0)
         return <></>;
@@ -170,38 +225,19 @@ function OngoingLiveClass(): JSX.Element {
                     onClick={handleRegister}>
                     {isRegistering ? (
                         <Spinner size="small" />
-                    ) : isRegistered ? (
-                        <FaRegCalendar className="text-white" />
                     ) : (
                         <></>
                     )}
                     {isRegistering
                         ? 'Mendaftar...'
                         : isRegistered
-                        ? 'Tambahkan ke Kalendar'
+                        ? 'Gabung Sekarang'
                         : 'Daftar Sekarang'}
-                    {!isRegistered && !isRegistering && (
+                    {!isRegistering && (
                         <LuArrowUpRight className="w-5 h-5" />
                     )}
                 </Button>
             </div>
-
-            <Modal
-                isOpen={showAddToCalendarModal}
-                setOpen={setShowAddToCalendarModal}
-                variant="dark">
-                <AddToCalendarModal
-                    liveClassName={liveClass.data[0].name}
-                    liveClassDescription={liveClass.data[0].description}
-                    startTime={new Date(liveClass.data[0].starts_at)}
-                    duration={liveClass.data[0].duration}
-                    meetLink={
-                        'meet_link' in liveClass.data[0]
-                            ? (liveClass.data[0].meet_link as string)
-                            : ''
-                    }
-                />
-            </Modal>
         </>
     );
 }
