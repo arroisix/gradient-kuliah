@@ -19,7 +19,7 @@ import { CgInfo } from 'react-icons/cg';
 import ztable from 'ztable';
 import { cn } from 'commons/utils';
 import html2canvas from 'html2canvas-pro';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import axios from 'axios';
 import config from 'redux/api/config';

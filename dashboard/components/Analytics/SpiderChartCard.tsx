@@ -22,7 +22,7 @@ function SpiderChartCard(): JSX.Element {
         <div
             className={cn(
                 'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl space-y-4 w-full max-w-[343px] mx-auto',
-                'lg:max-w-[287px] lg:mx-0 lg:px-6'
+                'lg:col-span-4 lg:max-w-full lg:mx-0 lg:px-6'
             )}>
             <div className="flex justify-between items-center">
                 <h2 className="text-white font-semibold leading-[140%]">

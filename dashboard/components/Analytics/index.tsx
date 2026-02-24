@@ -59,11 +59,17 @@ function Analytics(): JSX.Element {
                 <div
                     className={cn(
                         'space-y-6',
-                        'lg:space-y-0 lg:flex lg:justify-center lg:gap-6'
+                        'lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-6'
                     )}>
-                    <SetTargetDrawer>
-                        <AdmissionChance />
-                    </SetTargetDrawer>
+                    <div
+                        className={cn(
+                            'w-full max-w-[343px] mx-auto',
+                            'lg:col-span-8 lg:max-w-full lg:mx-0'
+                        )}>
+                        <SetTargetDrawer>
+                            <AdmissionChance />
+                        </SetTargetDrawer>
+                    </div>
 
                     <SpiderChartCard />
                 </div>
