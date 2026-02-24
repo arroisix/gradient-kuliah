@@ -28,7 +28,9 @@ function Analytics(): JSX.Element {
     ) {
         return (
             <SetTargetDrawer>
-                <AnalyticsWall />
+                <div className="w-full h-full grid place-items-center py-6 px-4">
+                    <AnalyticsWall />
+                </div>
             </SetTargetDrawer>
         );
     }
