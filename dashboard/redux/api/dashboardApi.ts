@@ -304,7 +304,8 @@ export const dashboardApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [
                 { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' },
-                { type: 'ANALYTICS', id: 'ADMISSION_CHANCE' }
+                { type: 'ANALYTICS', id: 'ADMISSION_CHANCE' },
+                { type: 'ANALYTICS', id: 'COMPETITION_MAP' }
             ]
         }),
         getAdmissionChance: builder.query<GetAdmissionChanceResponse, void>({

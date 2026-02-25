@@ -197,6 +197,12 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             query: (params: { slug: string }) => ({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/bank-soal/problems/${params.slug}/`
             })
+        }),
+        getCompetitionMap: builder.query<GetCompetitionMapResponse, void>({
+            query: () => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/competition-map/`
+            }),
+            providesTags: [{ type: 'ANALYTICS', id: 'COMPETITION_MAP' }]
         })
     }),
     overrideExisting: false
@@ -219,7 +225,8 @@ export const {
     useGetCodingProgressQuery,
     useTrackCodingProgressMutation,
     useGetBookRecommendationsQuery,
-    useGetVideoRecommendationsQuery
+    useGetVideoRecommendationsQuery,
+    useGetCompetitionMapQuery
 } = learningExperienceApi;
 
 export const {

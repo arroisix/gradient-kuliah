@@ -223,3 +223,17 @@ interface GetCourseRecommendationResponse {
     related_courses: CourseRecommendation[];
     other_courses: CourseRecommendation[];
 }
+
+interface Histogram {
+    range: string;
+    total_participants: number;
+}
+
+interface GetCompetitionMapResponse {
+    total_participants: number;
+    user_score?: number;
+    user_bar_index?: number;
+    passing_grade?: number;
+    passing_grade_bar_index?: number;
+    histogram: Histogram[];
+}
