@@ -11,9 +11,7 @@ import { EmptyPassingGrade } from './EmptyPassingGrade';
 function AdmissionChance(): JSX.Element {
     const [isUpdateTargetOpen, setIsUpdateTargetOpen] = useState(false);
     const { data, isLoading } = useGetAdmissionChanceQuery();
-
     const tryoutScore = data?.highest_tryout_score ?? 0;
-    const percentage = Math.round((tryoutScore / 1000) * 100);
 
     if (isLoading) {
         return (
@@ -35,54 +33,56 @@ function AdmissionChance(): JSX.Element {
             <div
                 className={cn(
                     'p-4 space-y-4',
-                    'lg:w-full lg:max-w-[254px] lg:px-6 lg:flex lg:flex-col lg:justify-between'
+                    'lg:space-y-0 lg:w-full lg:max-w-[254px] lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-4'
                 )}>
-                <div className="flex justify-between items-center">
-                    <h2
-                        className={cn(
-                            'text-white font-semibold text-sm leading-tight',
-                            'lg:text-base'
-                        )}>
-                        Target Kampus
-                    </h2>
-
-                    <div className="flex items-center gap-2">
-                        <button
-                            type="button"
+                <div className={cn('space-y-4', 'lg:space-y-10')}>
+                    <div className="flex justify-between items-center">
+                        <h2
                             className={cn(
-                                'shrink-0 bg-[#282B3C] hover:opacity-75 transition-all w-6 h-6 rounded-full grid place-items-center',
-                                'lg:hidden'
+                                'text-white font-semibold text-sm leading-tight',
+                                'lg:text-base'
                             )}>
-                            <BlockOutlineIcon className="text-white w-4 h-4" />
-                        </button>
+                            Target Kampus
+                        </h2>
 
-                        <button
-                            onClick={() => setIsUpdateTargetOpen(true)}
-                            type="button"
-                            className="shrink-0 bg-[#282B3C] hover:opacity-75 transition-all w-6 h-6 rounded-full grid place-items-center">
-                            <MenuSolidIcon className="text-[#B6A6F3] w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                className={cn(
+                                    'shrink-0 bg-[#282B3C] hover:opacity-75 transition-all w-6 h-6 rounded-full grid place-items-center',
+                                    'lg:hidden'
+                                )}>
+                                <BlockOutlineIcon className="text-white w-4 h-4" />
+                            </button>
 
-                        {isUpdateTargetOpen ? (
-                            <UpdatePrimaryTargetModal
-                                isOpen={isUpdateTargetOpen}
-                                setIsOpen={setIsUpdateTargetOpen}
-                            />
-                        ) : (
-                            <></>
-                        )}
+                            <button
+                                onClick={() => setIsUpdateTargetOpen(true)}
+                                type="button"
+                                className="shrink-0 bg-[#282B3C] hover:opacity-75 transition-all w-6 h-6 rounded-full grid place-items-center">
+                                <MenuSolidIcon className="text-[#B6A6F3] w-4 h-4" />
+                            </button>
+
+                            {isUpdateTargetOpen ? (
+                                <UpdatePrimaryTargetModal
+                                    isOpen={isUpdateTargetOpen}
+                                    setIsOpen={setIsUpdateTargetOpen}
+                                />
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                     </div>
-                </div>
 
-                <div className="space-y-2">
-                    <h3 className="text-white font-semibold text-xl leading-[140%]">
-                        {data?.major_name}
-                    </h3>
+                    <div className="space-y-2">
+                        <h3 className="text-white font-semibold text-xl leading-[140%]">
+                            {data?.major_name}
+                        </h3>
 
-                    <p className="text-white text-sm leading-[160%] flex items-center gap-2">
-                        <PrediksiSolidIcon className="shrink-0 text-white w-6 h-6" />
-                        {data?.institution_name}
-                    </p>
+                        <p className="text-white text-sm leading-[160%] flex items-center gap-2">
+                            <PrediksiSolidIcon className="shrink-0 text-white w-6 h-6" />
+                            {data?.institution_name}
+                        </p>
+                    </div>
                 </div>
 
                 <button
@@ -96,7 +96,6 @@ function AdmissionChance(): JSX.Element {
             {data?.passing_grade ? (
                 <NonEmptyPassingGrade
                     tryoutScore={tryoutScore}
-                    percentage={percentage}
                     passing_grade={data.passing_grade}
                 />
             ) : (
