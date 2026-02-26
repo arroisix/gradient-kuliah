@@ -59,6 +59,14 @@ function SpiderChart({ labels, scores }: SpiderChartProps): JSX.Element {
     const options: ChartOptions<'radar'> = {
         responsive: true,
         maintainAspectRatio: false,
+        // make cursor pointer on hover
+        onHover: (event, chartElement) => {
+            if (event.native?.target) {
+                const target = event.native.target as HTMLElement;
+                target.style.cursor =
+                    chartElement.length > 0 ? 'pointer' : 'default';
+            }
+        },
         scales: {
             r: {
                 // radial line
