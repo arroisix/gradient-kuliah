@@ -203,6 +203,11 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/competition-map/`
             }),
             providesTags: [{ type: 'ANALYTICS', id: 'COMPETITION_MAP' }]
+        }),
+        getSpiderChart: builder.query<GetSpiderChartResponse[], void>({
+            query: () => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/spider-chart/`
+            })
         })
     }),
     overrideExisting: false
@@ -226,7 +231,8 @@ export const {
     useTrackCodingProgressMutation,
     useGetBookRecommendationsQuery,
     useGetVideoRecommendationsQuery,
-    useGetCompetitionMapQuery
+    useGetCompetitionMapQuery,
+    useGetSpiderChartQuery
 } = learningExperienceApi;
 
 export const {

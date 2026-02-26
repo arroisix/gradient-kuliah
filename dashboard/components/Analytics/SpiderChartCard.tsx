@@ -1,22 +1,42 @@
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 import { SpiderChart } from 'commons/components/SpiderChart';
 import { cn } from 'commons/utils';
-
-const labels = [
-    'P.Umum',
-    'B.Inggris',
-    'Kuantitatif',
-    'B.Indonesia',
-    'Matematika',
-    'Bacaan & Menulis'
-];
-
-const data = [775, 575, 975, 675, 875, 475];
+import { useGetSpiderChartQuery } from 'courses/redux/api/learningExperienceApi';
+import { useMemo } from 'react';
 
 function SpiderChartCard(): JSX.Element {
+    const { data: spiderChart, isLoading } = useGetSpiderChartQuery();
+
+    const { labels, data } = useMemo(() => {
+        if (!spiderChart) {
+            return { labels: [], data: [] };
+        }
+
+        const result = spiderChart.reduce(
+            (acc: { labels: string[]; data: number[] }, item) => {
+                acc.labels.push(item.title);
+                acc.data.push(item.average_score);
+                return acc;
+            },
+            { labels: [], data: [] }
+        );
+
+        return result;
+    }, [spiderChart]);
+
     const handleClickCopilot = () => {
         // TODO
     };
+
+    if (isLoading) {
+        return (
+            <div
+                className={cn(
+                    'animate-pulse bg-[#333333] rounded-2xl w-full max-w-[343px] h-96 mx-auto',
+                    'lg:col-span-4 lg:max-w-full lg:mx-0'
+                )}></div>
+        );
+    }
 
     return (
         <div

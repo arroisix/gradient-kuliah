@@ -237,3 +237,9 @@ interface GetCompetitionMapResponse {
     passing_grade_bar_index?: number;
     histogram: Histogram[];
 }
+
+interface GetSpiderChartResponse {
+    id: string;
+    title: string;
+    average_score: number;
+}
