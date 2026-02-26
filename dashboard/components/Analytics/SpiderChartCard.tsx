@@ -3,6 +3,7 @@ import { SpiderChart } from 'commons/components/SpiderChart';
 import { cn } from 'commons/utils';
 import { useGetSpiderChartQuery } from 'courses/redux/api/learningExperienceApi';
 import { useMemo } from 'react';
+import { EmptyChart } from './EmptyChart';
 
 function SpiderChartCard(): JSX.Element {
     const { data: spiderChart, isLoading } = useGetSpiderChartQuery();
@@ -32,9 +33,37 @@ function SpiderChartCard(): JSX.Element {
         return (
             <div
                 className={cn(
-                    'animate-pulse bg-[#333333] rounded-2xl w-full max-w-[343px] h-96 mx-auto',
-                    'lg:col-span-4 lg:max-w-full lg:mx-0'
+                    'animate-pulse bg-[#333333] rounded-2xl w-full max-w-[343px] min-h-[384px] mx-auto',
+                    'lg:col-span-4 lg:max-w-full lg:max-h-full lg:mx-0'
                 )}></div>
+        );
+    }
+
+    if (!spiderChart || spiderChart.length < 3) {
+        return (
+            <div
+                className={cn(
+                    'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] min-h-[384px] mx-auto flex flex-col',
+                    'lg:col-span-4 lg:max-w-full lg:max-h-full lg:mx-0 lg:px-6'
+                )}>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-white font-semibold leading-[140%]">
+                        Radar Kekuatan
+                    </h2>
+
+                    <button
+                        disabled
+                        type="button"
+                        onClick={handleClickCopilot}
+                        className="shrink-0">
+                        <CopilotSolidIcon className="text-[#333333] w-4 h-4" />
+                    </button>
+                </div>
+
+                <div className="flex-grow h-full grid place-items-center">
+                    <EmptyChart />
+                </div>
+            </div>
         );
     }
 

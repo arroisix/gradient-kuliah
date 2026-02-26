@@ -177,8 +177,8 @@ function CompetitionMap(): JSX.Element {
         return (
             <div
                 className={cn(
-                    'animate-pulse bg-[#333333] rounded-2xl w-full max-w-[343px] h-96 mx-auto',
-                    'lg:col-span-5 lg:max-w-full lg:mx-0'
+                    'animate-pulse bg-[#333333] rounded-2xl w-full max-w-[343px] min-h-[384px] mx-auto',
+                    'lg:col-span-5 lg:max-w-full lg:max-h-full lg:mx-0'
                 )}></div>
         );
     }
@@ -187,10 +187,22 @@ function CompetitionMap(): JSX.Element {
         return (
             <div
                 className={cn(
-                    'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
-                    'lg:col-span-5 lg:max-w-full lg:mx-0 lg:px-6'
+                    'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] min-h-[384px] mx-auto flex flex-col',
+                    'lg:col-span-5 lg:max-w-full lg:max-h-full lg:mx-0 lg:px-6'
                 )}>
-                <EmptyChart />
+                <div className="space-y-1 mb-6">
+                    <h2 className="text-white font-semibold leading-[140%]">
+                        Peta Persaingan
+                    </h2>
+
+                    <p className="text-[#999999] text-sm leading-[160%]">
+                        Posisimu vs {'<total_peserta>'} pesaing
+                    </p>
+                </div>
+
+                <div className="flex-grow h-full grid place-items-center">
+                    <EmptyChart />
+                </div>
             </div>
         );
     }
@@ -202,7 +214,7 @@ function CompetitionMap(): JSX.Element {
                 'lg:col-span-5 lg:max-w-full lg:mx-0 lg:px-6'
             )}>
             <h2 className="text-white font-semibold leading-[140%] mb-1">
-                Radar Kekuatan
+                Peta Persaingan
             </h2>
 
             <p className="text-[#999999] text-sm leading-[160%] mb-6">
