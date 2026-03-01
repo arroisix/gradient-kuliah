@@ -243,3 +243,13 @@ interface GetSpiderChartResponse {
     title: string;
     average_score: number;
 }
+
+interface GetLineChartResponse {
+    trend_scores: number[];
+    line_chart_data: {
+        exercise_slug: string;
+        title: string;
+        average_score: number;
+        latest_started_at: string;
+    }[];
+}

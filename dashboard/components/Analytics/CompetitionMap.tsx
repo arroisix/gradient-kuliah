@@ -129,41 +129,48 @@ function CompetitionMap(): JSX.Element {
                     padding: 12,
 
                     titleAlign: 'center',
-                    titleFont: { size: 14, weight: 600 },
+                    titleFont: { size: 12, lineHeight: 1.6 },
+                    titleColor: '#FFFFFF',
+
                     bodyAlign: 'center',
-                    bodyFont: { size: 12, weight: 500 },
+                    bodyFont: { size: 14, weight: 600, lineHeight: 1.4 },
+                    bodyColor: '#FFFFFF',
+                    bodySpacing: 4,
+
+                    footerAlign: 'center',
+                    footerFont: { size: 12, weight: 500, lineHeight: 1.25 },
+                    footerColor: '#FFFFFF',
 
                     callbacks: {
-                        beforeTitle: function (items) {
-                            if (items.length === 0) {
+                        title: function (ctx) {
+                            if (ctx.length === 0) {
                                 return '';
                             }
 
-                            const item = items[0];
                             if (
-                                item.dataIndex === competitionMap.user_bar_index
+                                ctx[0].dataIndex ===
+                                competitionMap.user_bar_index
                             ) {
                                 return 'Nilai Kamu';
                             }
 
                             return 'Skor Try Out';
                         },
-                        title: function (items) {
-                            if (items.length === 0) {
-                                return '';
-                            }
-
-                            const item = items[0];
+                        label: function (ctx) {
                             if (
-                                item.dataIndex === competitionMap.user_bar_index
+                                ctx.dataIndex === competitionMap.user_bar_index
                             ) {
                                 return `${competitionMap.user_score}`;
                             }
 
-                            return item.label;
+                            return ctx.label;
                         },
-                        label: function (ctx) {
-                            return `Dari ${ctx.formattedValue} peserta`;
+                        footer: function (ctx) {
+                            if (ctx.length === 0) {
+                                return '';
+                            }
+
+                            return `Dari ${ctx[0].formattedValue} peserta`;
                         }
                     }
                 }
@@ -211,96 +218,98 @@ function CompetitionMap(): JSX.Element {
         <div
             className={cn(
                 'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
-                'lg:col-span-5 lg:max-w-full lg:mx-0 lg:px-6'
+                'lg:col-span-5 lg:max-w-full lg:mx-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
             )}>
-            <h2 className="text-white font-semibold leading-[140%] mb-1">
-                Peta Persaingan
-            </h2>
+            <div>
+                <h2 className="text-white font-semibold leading-[140%] mb-1">
+                    Peta Persaingan
+                </h2>
 
-            <p className="text-[#999999] text-sm leading-[160%] mb-6">
-                Posisimu vs {competitionMap.total_participants} pesaing
-            </p>
+                <p className="text-[#999999] text-sm leading-[160%] mb-6">
+                    Posisimu vs {competitionMap.total_participants} pesaing
+                </p>
 
-            <div className="aspect-[4/3]">
-                <Bar data={chartData} options={chartOptions} />
-            </div>
-
-            <div className="flex justify-center items-center gap-4 mt-6">
-                <div className="flex flex-col gap-1 items-center">
-                    <div className="w-3 h-3 bg-transparent border-2 border-[#F2C04C] rounded-sm"></div>
-                    <span className="text-[#999999] font-medium text-xs leading-tight">
-                        Posisimu
-                    </span>
+                <div className="aspect-[4/3]">
+                    <Bar data={chartData} options={chartOptions} />
                 </div>
-                <div
-                    className={cn(
-                        'flex flex-col gap-1 items-center',
-                        competitionMap.passing_grade ? '' : 'opacity-20'
-                    )}>
-                    <div className="w-3 h-3 bg-[#B6A6F3] rounded-sm"></div>
-                    <span className="text-[#999999] font-medium text-xs leading-tight">
-                        Passing Grade
-                    </span>
-                </div>
-            </div>
 
-            <div className="bg-[#20222E] border border-[#282B3C] p-3 rounded-xl flex justify-between items-center mt-6">
-                <div className="flex flex-col gap-1">
-                    <span className="text-[#999999] text-sm leading-[160%]">
-                        Status
-                    </span>
-
-                    {competitionMap.passing_grade ? (
-                        <span className="text-white font-semibold leading-[140%]">
-                            {(competitionMap.user_score ?? 0) >=
-                            competitionMap.passing_grade
-                                ? 'Aman'
-                                : 'Belum Aman'}
+                <div className="flex justify-center items-center gap-4 mt-6">
+                    <div className="flex flex-col gap-1 items-center">
+                        <div className="w-3 h-3 bg-transparent border-2 border-[#F2C04C] rounded-sm"></div>
+                        <span className="text-[#999999] font-medium text-xs leading-tight">
+                            Posisimu
                         </span>
-                    ) : (
-                        <div className="w-fit h-[22px] grid place-items-center">
-                            <span className="bg-white w-2 h-0.5"></span>
-                        </div>
-                    )}
+                    </div>
+                    <div
+                        className={cn(
+                            'flex flex-col gap-1 items-center',
+                            competitionMap.passing_grade ? '' : 'opacity-20'
+                        )}>
+                        <div className="w-3 h-3 bg-[#B6A6F3] rounded-sm"></div>
+                        <span className="text-[#999999] font-medium text-xs leading-tight">
+                            Passing Grade
+                        </span>
+                    </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                    {competitionMap.passing_grade ? (
-                        <>
-                            <span
-                                className={cn(
-                                    'font-semibold text-2xl leading-tight text-right',
-                                    (competitionMap.user_score ?? 0) >=
-                                        competitionMap.passing_grade
-                                        ? 'text-[#03AC5C]'
-                                        : 'text-[#F2C04C]'
-                                )}>
-                                {(competitionMap.user_score ?? 0) >=
-                                competitionMap.passing_grade
-                                    ? '+'
-                                    : ''}
-                                {Math.abs(
-                                    competitionMap.passing_grade -
-                                        (competitionMap.user_score ?? 0)
-                                ).toFixed()}
-                            </span>
+                <div className="bg-[#20222E] border border-[#282B3C] p-3 rounded-xl flex justify-between items-center mt-6">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[#999999] text-sm leading-[160%]">
+                            Status
+                        </span>
 
-                            <span className="text-[#999999] font-medium text-xs leading-tight">
+                        {competitionMap.passing_grade ? (
+                            <span className="text-white font-semibold leading-[140%]">
                                 {(competitionMap.user_score ?? 0) >=
                                 competitionMap.passing_grade
-                                    ? 'Lebih Poin'
-                                    : 'Kurang Poin'}
+                                    ? 'Aman'
+                                    : 'Belum Aman'}
                             </span>
-                        </>
-                    ) : (
-                        <div className="w-fit h-[30px] grid place-items-center">
-                            <span className="bg-[#999999] w-3 h-0.5"></span>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="w-fit h-[22px] grid place-items-center">
+                                <span className="bg-white w-2 h-0.5"></span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        {competitionMap.passing_grade ? (
+                            <>
+                                <span
+                                    className={cn(
+                                        'font-semibold text-2xl leading-tight text-right',
+                                        (competitionMap.user_score ?? 0) >=
+                                            competitionMap.passing_grade
+                                            ? 'text-[#03AC5C]'
+                                            : 'text-[#F2C04C]'
+                                    )}>
+                                    {(competitionMap.user_score ?? 0) >=
+                                    competitionMap.passing_grade
+                                        ? '+'
+                                        : ''}
+                                    {Math.abs(
+                                        competitionMap.passing_grade -
+                                            (competitionMap.user_score ?? 0)
+                                    ).toFixed()}
+                                </span>
+
+                                <span className="text-[#999999] font-medium text-xs leading-tight">
+                                    {(competitionMap.user_score ?? 0) >=
+                                    competitionMap.passing_grade
+                                        ? 'Lebih Poin'
+                                        : 'Kurang Poin'}
+                                </span>
+                            </>
+                        ) : (
+                            <div className="w-fit h-[30px] grid place-items-center">
+                                <span className="bg-[#999999] w-3 h-0.5"></span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
-            <div className="bg-[#20222E] border border-[#282B3C] px-3 py-2 rounded-xl flex justify-between items-center gap-2 mt-6">
+            <div className="bg-[#20222E] border border-[#282B3C] px-3 py-2 rounded-xl flex justify-between items-center gap-2">
                 <StarsSolidIcon className="shrink-0 text-[#F2C04C] w-4 h-4" />
                 <p className="text-white text-sm leading-[160%]">
                     Copilot bisa bantu baca posisimu.

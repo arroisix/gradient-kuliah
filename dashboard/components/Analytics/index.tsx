@@ -8,6 +8,7 @@ import LoadingIndicator from './LoadingIndicator';
 import { AnalyticsWall } from './AnalyticsWall';
 import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
 import { CompetitionMap } from './CompetitionMap';
+import { LineChart } from './LineChart';
 
 function Analytics(): JSX.Element {
     const { profile } = useAuth();
@@ -80,11 +81,7 @@ function Analytics(): JSX.Element {
                         'space-y-6',
                         'lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-6'
                     )}>
-                    <div
-                        className={cn(
-                            'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
-                            'lg:col-span-7 lg:max-w-full lg:mx-0 lg:px-6'
-                        )}></div>
+                    <LineChart />
                     <CompetitionMap />
                 </div>
             </div>

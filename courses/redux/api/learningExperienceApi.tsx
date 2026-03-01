@@ -208,6 +208,15 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/spider-chart/`
             })
+        }),
+        getLineChart: builder.query<
+            GetLineChartResponse,
+            { course_id?: string }
+        >({
+            query: (params) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/line-chart/`,
+                params
+            })
         })
     }),
     overrideExisting: false
@@ -232,7 +241,8 @@ export const {
     useGetBookRecommendationsQuery,
     useGetVideoRecommendationsQuery,
     useGetCompetitionMapQuery,
-    useGetSpiderChartQuery
+    useGetSpiderChartQuery,
+    useGetLineChartQuery
 } = learningExperienceApi;
 
 export const {
