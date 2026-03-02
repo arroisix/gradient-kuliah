@@ -139,7 +139,8 @@ function LineChart(): JSX.Element {
                 },
                 y: {
                     grid: { color: '#4B4E5F', drawTicks: false },
-                    ticks: { color: '#666666', maxTicksLimit: 5 }
+                    ticks: { color: '#666666', maxTicksLimit: 5 },
+                    beginAtZero: true
                 }
             },
             plugins: {
