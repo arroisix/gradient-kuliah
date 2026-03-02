@@ -15,12 +15,10 @@ import {
 import { Line } from 'react-chartjs-2';
 import { cn, formatDate } from 'commons/utils';
 import { useGetLineChartQuery } from 'courses/redux/api/learningExperienceApi';
-import { EmptyChart } from './EmptyChart';
+import { EmptyChart } from '../EmptyChart';
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 import { StarsSolidIcon } from 'commons/components/elements/Icons/StarsSolidIcon';
-import { DropdownMenu } from 'radix-ui';
-import { ChevronDown } from 'lucide-react';
-import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { CourseDropdown } from './CourseDropdown';
 
 ChartJS.register(
     CategoryScale,
@@ -43,18 +41,6 @@ function LineChart(): JSX.Element {
     } = useGetLineChartQuery({
         course_id: selectedCourseId
     });
-
-    const { data: courses, isLoading: isLoadingCourses } =
-        useGetPrivateListCoursesV2Query({});
-
-    const selectedCourseName = useMemo(() => {
-        if (courses?.data.length === 0) {
-            return 'Semua Materi';
-        }
-
-        const course = courses?.data.find((v) => v.id === selectedCourseId);
-        return course ? course.course_name : 'Semua Materi';
-    }, [courses?.data, selectedCourseId]);
 
     const { labels, data } = useMemo(() => {
         if (!response) {
@@ -201,7 +187,7 @@ function LineChart(): JSX.Element {
         return options;
     }, [response]);
 
-    if (isLoadingChart || isLoadingCourses) {
+    if (isLoadingChart) {
         return (
             <div
                 className={cn(
@@ -211,22 +197,37 @@ function LineChart(): JSX.Element {
         );
     }
 
-    if (!response) {
+    if (
+        !response ||
+        response.line_chart_data.length === 0 ||
+        response.trend_scores.length === 0
+    ) {
         return (
             <div
                 className={cn(
-                    'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] min-h-[384px] mx-auto flex flex-col',
-                    'lg:col-span-7 lg:max-w-full lg:max-h-full lg:mx-0 lg:px-6'
+                    'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto space-y-6',
+                    'lg:col-span-7 lg:max-w-full lg:mx-0 lg:space-y-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
                 )}>
-                <div className="space-y-1 mb-6">
-                    <h2 className="text-white font-semibold leading-[140%]">
-                        Perjalanan Skor Try Out Kamu
-                    </h2>
+                <div
+                    className={cn(
+                        'flex flex-col gap-3',
+                        'lg:justify-between lg:flex-row lg:gap-0'
+                    )}>
+                    <div className="space-y-1">
+                        <h2 className="text-white font-semibold leading-[140%]">
+                            Perjalanan Skor Try Out Kamu
+                        </h2>
 
-                    <p className="text-[#999999] text-sm leading-[160%]">
-                        Lihat gimana Skor Rata-rata mu mu dari TO pertama ke TO
-                        terakhir
-                    </p>
+                        <p className="text-[#999999] text-sm leading-[160%]">
+                            Lihat gimana Skor Rata-rata mu mu dari TO pertama ke
+                            TO terakhir
+                        </p>
+                    </div>
+
+                    <CourseDropdown
+                        selectedCourseId={selectedCourseId}
+                        setSelectedCourseId={setSelectedCourseId}
+                    />
                 </div>
 
                 <div className="flex-grow h-full grid place-items-center">
@@ -239,8 +240,8 @@ function LineChart(): JSX.Element {
     return (
         <div
             className={cn(
-                'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
-                'lg:col-span-7 lg:max-w-full lg:mx-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
+                'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto space-y-6',
+                'lg:col-span-7 lg:max-w-full lg:mx-0 lg:space-y-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
             )}>
             <div className="space-y-6">
                 <div
@@ -259,33 +260,10 @@ function LineChart(): JSX.Element {
                         </p>
                     </div>
 
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger
-                            type="button"
-                            className="shrink-0 text-white bg-[#20222E] py-2 px-4 rounded-full font-bold text-sm leading-tight flex justify-center items-center gap-2 outline-none h-fit">
-                            {selectedCourseName}{' '}
-                            <ChevronDown className="shrink-0 text-white w-5 h-5" />
-                        </DropdownMenu.Trigger>
-
-                        <DropdownMenu.Content
-                            align="end"
-                            className="animate-fade-down animate-duration-300 bg-[#2C2C2C] border border-[#666666] rounded-lg min-w-[--radix-popper-anchor-width] max-w-full mt-2 mr-auto overflow-hidden">
-                            {courses?.data.map((v) => (
-                                <DropdownMenu.Item
-                                    key={v.id}
-                                    onClick={() =>
-                                        setSelectedCourseId(
-                                            selectedCourseId === v.id
-                                                ? ''
-                                                : v.id
-                                        )
-                                    }
-                                    className="text-white text-sm leading-tight py-2 px-4 outline-none hover:opacity-75 cursor-pointer border-b border-b-[#666666] last-of-type:border-b-0">
-                                    {v.course_name}
-                                </DropdownMenu.Item>
-                            ))}
-                        </DropdownMenu.Content>
-                    </DropdownMenu.Root>
+                    <CourseDropdown
+                        selectedCourseId={selectedCourseId}
+                        setSelectedCourseId={setSelectedCourseId}
+                    />
                 </div>
 
                 {isFetchingChart ? (
