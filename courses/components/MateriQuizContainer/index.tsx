@@ -18,13 +18,13 @@ function MateriQuizContainer({
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
-    const { isAuthenticated } = useAuth();
+    const { profile } = useAuth();
     const { is_subscribed, subscribedFeatures } =
         useCourseSubscription(slug_subtest);
 
     const { data: exercise, isLoading } = useGetExerciseDetailV2Query(
         { exercise_slug: subchapter.exercise?.slug as string },
-        { skip: !subchapter.exercise?.slug || !isAuthenticated }
+        { skip: !subchapter.exercise?.slug || !profile }
     );
 
     const isShowPayWall =
@@ -39,7 +39,7 @@ function MateriQuizContainer({
         );
     }
 
-    if (!isAuthenticated) {
+    if (!profile) {
         return <AuthWall />;
     }
 
