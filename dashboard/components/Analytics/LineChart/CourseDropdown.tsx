@@ -37,14 +37,15 @@ function CourseDropdown({
             <DropdownMenu.Content
                 align="end"
                 className="z-[9999] animate-fade-down animate-duration-300 bg-[#2C2C2C] border border-[#666666] rounded-lg min-w-[--radix-popper-anchor-width] max-w-full mt-2 mr-auto overflow-hidden">
+                <DropdownMenu.Item
+                    onClick={() => setSelectedCourseId('')}
+                    className="text-white text-sm leading-tight py-2 px-4 outline-none hover:opacity-75 cursor-pointer border-b border-b-[#666666] last-of-type:border-b-0">
+                    Semua Materi
+                </DropdownMenu.Item>
                 {courses?.data.map((v) => (
                     <DropdownMenu.Item
                         key={v.id}
-                        onClick={() =>
-                            setSelectedCourseId(
-                                selectedCourseId === v.id ? '' : v.id
-                            )
-                        }
+                        onClick={() => setSelectedCourseId(v.id)}
                         className="text-white text-sm leading-tight py-2 px-4 outline-none hover:opacity-75 cursor-pointer border-b border-b-[#666666] last-of-type:border-b-0">
                         {v.course_name}
                     </DropdownMenu.Item>

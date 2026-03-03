@@ -165,6 +165,13 @@ function LineChart(): JSX.Element {
                     },
 
                     callbacks: {
+                        title: function (ctx) {
+                            if (ctx.length === 0) {
+                                return 'Unknown';
+                            }
+                            const value = ctx[0];
+                            return value.label.split(',')[0];
+                        },
                         label: function (ctx) {
                             return `Skor rata-rata mu: ${ctx.formattedValue}`;
                         },

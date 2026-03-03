@@ -52,7 +52,7 @@ function NonEmptyPassingGrade({
                     <div
                         className={cn(
                             'font-bold text-[40px] leading-[120%]',
-                            generateHexTextColor(tryoutScore)
+                            generateHexTextColor(probability * 10)
                         )}>
                         {probability}%
                     </div>
@@ -85,7 +85,7 @@ function NonEmptyPassingGrade({
                             Skor Tryout kamu
                         </h4>
                         <div className="text-white font-semibold text-xl leading-[140%]">
-                            {tryoutScore}
+                            {tryoutScore.toFixed(2)}
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@ function NonEmptyPassingGrade({
                             Passing Grade 2024
                         </h4>
                         <div className="text-white font-semibold text-xl leading-[140%]">
-                            {passing_grade}
+                            {passing_grade.toFixed(2)}
                         </div>
                     </div>
                 </div>

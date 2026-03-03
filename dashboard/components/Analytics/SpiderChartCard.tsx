@@ -16,7 +16,7 @@ function SpiderChartCard(): JSX.Element {
         const result = spiderChart.reduce(
             (acc: { labels: string[]; data: number[] }, item) => {
                 acc.labels.push(item.title);
-                acc.data.push(item.average_score);
+                acc.data.push(Number(item.average_score.toFixed(2)));
                 return acc;
             },
             { labels: [], data: [] }
