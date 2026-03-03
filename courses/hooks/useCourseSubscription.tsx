@@ -18,7 +18,7 @@ const useCourseSubscription = (slug?: string) => {
     } = useGetActiveSubscriptionQuery(!isAuthenticated ? skipToken : undefined);
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
         useGetLearningProgressQuery(slug as string, {
-            skip: !isAuthenticated || slug === undefined,
+            skip: !isAuthenticated || !slug,
             refetchOnMountOrArgChange: true
         });
     const [expiryDay, setExpiryDay] = useState(0);
@@ -40,7 +40,7 @@ const useCourseSubscription = (slug?: string) => {
 
     const is_subscribed = checkIsSubscribed();
     const { data: coursePreview } = useGetCoursePreviewQuery(
-        slug === undefined || checkIsSubscribed() ? skipToken : { slug }
+        !slug || checkIsSubscribed() ? skipToken : { slug }
     );
 
     const { data: allTransaction, isLoading: isTransactionLoading } =

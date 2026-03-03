@@ -5,7 +5,7 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { MateriLearnNavigation } from 'courses/components/utbk/MateriLearnNavigation';
 import dynamic from 'next/dynamic';
@@ -13,6 +13,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { BelajarPageProps } from 'pages/utbk/materi/[slug_subtest]/[slug_chapter]/[slug_subchapter]';
 import MateriArticleContainer from 'courses/components/MateriArticleContainer';
 import MateriQuizContainer from 'courses/components/MateriQuizContainer';
+import { ShareButton } from 'courses/components/utbk/ShareButton';
 
 const MateriDetailBox = dynamic(
     () => import('courses/components/utbk/MateriDetailBox')
@@ -37,26 +38,26 @@ function MateriLearnContainer({
     content
 }: BelajarPageProps): JSX.Element {
     const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
+    const [hasMounted, setHasMounted] = useState(false);
 
     const router = useRouter();
-    const { slug_subtest, slug_subchapter } = useMemo(() => {
-        if (!router.isReady) {
-            return { slug_subtest: '', slug_subchapter: '' };
-        }
-
-        const parts = router.asPath
-            .split('?')[0]
-            .split('/')
-            .filter((v) => v !== '');
-
-        return {
-            slug_subtest: parts[2] ?? '',
-            slug_subchapter: parts[4] ?? ''
-        };
-    }, [router.asPath, router.isReady]);
+    const isKelasRoute = router.pathname.startsWith('/kelas/');
+    const slug_subtest =
+        (router.query.id as string) ||
+        (router.query.slug_subtest as string) ||
+        '';
+    const slug_subchapter =
+        (router.query.slug as string) ||
+        (router.query.slug_subchapter as string) ||
+        ssrSubchapter?.subchapter_slug ||
+        '';
 
     const { isAuthenticated } = useAuth();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: slug_subchapter },
@@ -79,10 +80,10 @@ function MateriLearnContainer({
 
     const course = csrCourse?.course_detail ?? ssrCourse;
     const subchapter = csrSubchapter ?? ssrSubchapter;
+    const effectiveCourseSlug = slug_subtest;
 
-    const { is_subscribed, subscribedFeatures } = useCourseSubscription(
-        slug_subtest as string
-    );
+    const { is_subscribed, subscribedFeatures } =
+        useCourseSubscription(effectiveCourseSlug);
 
     const isExercise = subchapter?.type_name === 'exercise';
     const isShowPaywall = useMemo((): boolean => {
@@ -94,6 +95,18 @@ function MateriLearnContainer({
         );
     }, [is_subscribed, subchapter?.video?.is_free, subscribedFeatures]);
 
+    const backHref =
+        isKelasRoute && effectiveCourseSlug
+            ? `/kelas/${effectiveCourseSlug}`
+            : '/utbk/materi';
+    const nextHref = subchapter?.next_subchapter_slug
+        ? isKelasRoute
+            ? `/kelas/${effectiveCourseSlug}/${subchapter.next_subchapter_slug}`
+            : effectiveCourseSlug
+            ? `/utbk/materi/${effectiveCourseSlug}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
+            : '/utbk/materi'
+        : backHref;
+
     return (
         <div
             className={`${
@@ -104,16 +117,29 @@ function MateriLearnContainer({
                     isExercise ? 'mx-4' : 'mx-0'
                 } flex justify-between items-center mb-4`}>
                 <Button
-                    href="/utbk/materi"
+                    href={backHref}
                     variant="secondary"
                     className="rounded-full flex items-center gap-1.5 w-fit text-sm !p-2 lg:!py-2 lg:!px-4">
                     <FaChevronLeft className="text-white w-3.5 h-3.5 lg:w-4 lg:h-4" />{' '}
                     <span className="hidden lg:block">Kembali</span>
                 </Button>
 
-                <MateriLearnNavigation />
+                <MateriLearnNavigation
+                    isKelasRoute={isKelasRoute}
+                    courseName={course?.course_name}
+                />
 
-                <div></div>
+                {isKelasRoute ? (
+                    <div className="flex-shrink-0">
+                        <ShareButton
+                            disabled={!course || !subchapter}
+                            typeCopy="COURSE VIDEO"
+                            shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                        />
+                    </div>
+                ) : (
+                    <div></div>
+                )}
             </div>
 
             <div
@@ -144,6 +170,7 @@ function MateriLearnContainer({
                                     subchapter={subchapter}
                                     isTranscriptOpen={isTranscriptOpen}
                                     setIsTranscriptOpen={setIsTranscriptOpen}
+                                    isKelasRoute={isKelasRoute}
                                 />
                             ) : (
                                 <></>
@@ -164,44 +191,44 @@ function MateriLearnContainer({
                     )}
                 </div>
 
-                {isDesktopBreakpoints ? (
-                    course && subchapter ? (
-                        <MateriDetailBox
-                            course={course}
-                            transcript={subchapter.video?.transcript}
-                            isTranscriptOpen={isTranscriptOpen}
-                            setIsTranscriptOpen={setIsTranscriptOpen}
-                        />
-                    ) : (
-                        <div className="col-span-3 animate-pulse w-full bg-[#333333] h-[calc(100vh-32px-36px-16px)] rounded-2xl" />
-                    )
-                ) : (
-                    <></>
-                )}
-
-                {!isDesktopBreakpoints ? (
-                    course && subchapter ? (
-                        <MateriDetailSheet
-                            isLastSubchapter={!subchapter.next_subchapter_slug}
-                            isFinished={
-                                subchapter.is_finished ??
-                                subchapter.status === 'COMPLETED'
-                            }
-                            course_name={course.course_name}
-                            href={
-                                subchapter.next_subchapter_slug
-                                    ? `/utbk/materi/${slug_subtest}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
-                                    : '/utbk/materi'
-                            }
-                            next_subchapter_name={
-                                subchapter.next_subchapter_name as string
-                            }
-                        />
-                    ) : (
+                {!hasMounted ? (
+                    <>
+                        <div className="col-span-3 hidden lg:block animate-pulse w-full bg-[#333333] h-[calc(100vh-32px-36px-16px)] rounded-2xl" />
                         <div className="animate-pulse fixed bottom-0 left-0 right-0 h-[72px] bg-[#333333] rounded-tl-2xl rounded-tr-2xl lg:hidden" />
-                    )
+                    </>
                 ) : (
-                    <></>
+                    <>
+                        {isDesktopBreakpoints ? (
+                            course && subchapter ? (
+                                <MateriDetailBox
+                                    course={course}
+                                    transcript={subchapter.video?.transcript}
+                                    isTranscriptOpen={isTranscriptOpen}
+                                    setIsTranscriptOpen={setIsTranscriptOpen}
+                                />
+                            ) : (
+                                <div className="col-span-3 animate-pulse w-full bg-[#333333] h-[calc(100vh-32px-36px-16px)] rounded-2xl" />
+                            )
+                        ) : course && subchapter ? (
+                            <MateriDetailSheet
+                                isLastSubchapter={
+                                    !subchapter.next_subchapter_slug
+                                }
+                                isFinished={
+                                    subchapter.is_finished ??
+                                    subchapter.status === 'COMPLETED'
+                                }
+                                course_name={course.course_name}
+                                course_slug={effectiveCourseSlug}
+                                href={nextHref}
+                                next_subchapter_name={
+                                    subchapter.next_subchapter_name
+                                }
+                            />
+                        ) : (
+                            <div className="animate-pulse fixed bottom-0 left-0 right-0 h-[72px] bg-[#333333] rounded-tl-2xl rounded-tr-2xl lg:hidden" />
+                        )}
+                    </>
                 )}
             </div>
         </div>

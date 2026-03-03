@@ -4,9 +4,12 @@ import { ShareButton } from './ShareButton';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import dynamic from 'next/dynamic';
 import { LecturerProfile } from './LecturerProfile';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useWindowSize } from 'usehooks-ts';
+import { MdFileDownload } from 'react-icons/md';
+import { useRouter } from 'next/router';
+import { AiFillStar } from 'react-icons/ai';
 
 const Modal = dynamic(() => import('commons/components/modules/Modal'));
 const CopilotModal = dynamic(() => import('copilot/components/CopilotModal'));
@@ -18,6 +21,7 @@ const RatingButton = dynamic(
 interface MateriVideoProfileProps {
     course: CourseDetail;
     subchapter: SubChapter;
+    isKelasRoute: boolean;
     isTranscriptOpen: boolean;
     setIsTranscriptOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -25,14 +29,21 @@ interface MateriVideoProfileProps {
 function MateriVideoProfile({
     course,
     subchapter,
+    isKelasRoute,
     isTranscriptOpen,
     setIsTranscriptOpen
 }: MateriVideoProfileProps): JSX.Element {
+    const router = useRouter();
     const [isCopilotModalOpen, setIsCopilotModalOpen] =
         useState<boolean>(false);
+    const [isClient, setIsClient] = useState(false);
 
     const { isAuthenticated } = useAuth();
     const { width } = useWindowSize();
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const currentVideoContext =
         subchapter?.video && subchapter?.subchapter_name
@@ -45,11 +56,19 @@ function MateriVideoProfile({
               }
             : undefined;
 
+    const videoDescription = (
+        subchapter?.video as Video & {
+            description?: string;
+        }
+    )?.description;
+
     return (
         <div className="mx-4 mt-4 lg:mx-0 lg:mt-10">
-            <p className="text-white text-xs lg:text-base">
-                Kelas Persiapan UTBK SNBT - {course.course_name}
-            </p>
+            {!isKelasRoute && (
+                <p className="text-white text-xs lg:text-base">
+                    Kelas Persiapan UTBK SNBT - {course.course_name}
+                </p>
+            )}
 
             <h1 className="text-white font-bold text-base mt-3 lg:text-2xl lg:mt-4">
                 {subchapter.subchapter_name}
@@ -78,13 +97,23 @@ function MateriVideoProfile({
                         <></>
                     )}
 
-                    <div className="flex-shrink-0">
-                        <ShareButton
-                            disabled={!course || !subchapter}
-                            typeCopy="COURSE VIDEO"
-                            shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
-                        />
-                    </div>
+                    {isKelasRoute ? (
+                        <Button
+                            onClick={() => router.push('/kelas/downloads')}
+                            variant="neutral"
+                            size="small"
+                            className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
+                            <MdFileDownload className="text-white w-4 h-4" />
+                        </Button>
+                    ) : (
+                        <div className="flex-shrink-0">
+                            <ShareButton
+                                disabled={!course || !subchapter}
+                                typeCopy="COURSE VIDEO"
+                                shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                            />
+                        </div>
+                    )}
 
                     <Button
                         disabled={!course || !subchapter}
@@ -105,12 +134,34 @@ function MateriVideoProfile({
                     />
                 </div>
 
+                {isKelasRoute && videoDescription && (
+                    <div className="order-3 mt-6 flex flex-col gap-3">
+                        <h4 className="text-xs text-[#999999] font-semibold">
+                            DEKSRIPSI
+                        </h4>
+                        <p className="text-white text-sm">{videoDescription}</p>
+                    </div>
+                )}
+
+                {isKelasRoute && !!course.rating && course.rating > 0 && (
+                    <div className="order-4 mt-4 mb-20 inline-flex items-center ">
+                        <div className="gap-1 px-2 py-[6px] bg-[#F2C04C80] w-fit rounded-[32px] flex flex-row items-center">
+                            <AiFillStar className="w-4 h-4 text-[#F2C04C]" />
+                            <span className="font-semibold text-white">
+                                {typeof course?.rating === 'number'
+                                    ? course.rating.toFixed(1)
+                                    : '-'}
+                            </span>
+                        </div>
+                    </div>
+                )}
+
                 <div className="order-1 mt-3 lg:order-2 lg:mt-10">
                     <LecturerProfile lecturers={subchapter.video?.lecturers} />
                 </div>
             </div>
 
-            {width < 1024 ? (
+            {isClient && width < 1024 ? (
                 <Modal
                     isOpen={isTranscriptOpen}
                     setOpen={(value) => setIsTranscriptOpen(value)}

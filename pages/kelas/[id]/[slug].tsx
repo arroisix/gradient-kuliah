@@ -1,50 +1,65 @@
-import { LearningProvider } from 'courses/contexts/LearningProvider';
-import VideoLearnContainer from 'courses/containers/learn/video';
-import LearnLayout from 'commons/learnLayout';
-import withAnon from 'commons/withAnon';
-import type { GetStaticPaths, GetStaticPropsResult } from 'next';
 import axios from 'axios';
-import config from 'redux/api/config';
+import CryptoJS from 'crypto-js';
 import { VideoJsonLd } from 'next-seo';
 import moment from 'moment';
+import type { GetStaticPaths, GetStaticPropsResult } from 'next';
+import config from 'redux/api/config';
+import LearnLayout from 'commons/learnLayout';
+import VideoLearnContainer from 'courses/containers/learn/video';
+import { LearningProvider } from 'courses/contexts/LearningProvider';
 import { VideoTranscriptProvider } from 'courses/contexts/VideoTranscriptProvider';
+import { MateriLearnContainer } from 'courses/containers/utbk/MateriLearnContainer';
 
 interface BelajarPageProps {
-    subchapter: SubChapter;
-    course: CourseDetail;
-    description: string;
-    recommendations: GetVideoRecommendationResponse;
+    subchapter: SubChapter | null;
+    course: CourseDetail | null;
+    book: BookDetailInterface | null;
+    content: string | null;
+    recommendations: GetVideoRecommendationResponse | null;
 }
 
 const Belajar = ({
     subchapter,
     course,
-    description,
+    book,
+    content,
     recommendations
 }: BelajarPageProps): JSX.Element => {
     return (
         <>
             <LearningProvider>
                 <VideoTranscriptProvider>
-                    <LearnLayout noPadding showSubscriptionReminder>
-                        <VideoLearnContainer
+                    <div className="w-screen min-h-screen bg-black py-4 lg:hidden">
+                        <MateriLearnContainer
                             subchapter={subchapter}
                             course={course}
-                            recommendations={recommendations}
+                            book={book}
+                            content={content}
                         />
-                    </LearnLayout>
+                    </div>
+
+                    <div className="hidden lg:block">
+                        <LearnLayout noPadding showSubscriptionReminder>
+                            <VideoLearnContainer
+                                subchapter={subchapter as SubChapter}
+                                course={course as CourseDetail}
+                                recommendations={
+                                    recommendations as GetVideoRecommendationResponse
+                                }
+                            />
+                        </LearnLayout>
+                    </div>
                 </VideoTranscriptProvider>
             </LearningProvider>
 
             <VideoJsonLd
                 name={subchapter?.subchapter_name}
-                description={description}
                 learningResourceType="Concept Overview"
                 contentUrl={subchapter?.video?.video_url}
-                thumbnailUrls={[subchapter?.video?.thumbnail]}
-                uploadDate={moment(new Date(subchapter?.created_at)).format(
-                    'YYYY-MM-DD'
-                )}
+                thumbnailUrls={[subchapter?.video?.thumbnail as string]}
+                uploadDate={moment(
+                    new Date(subchapter?.created_at ?? new Date())
+                ).format('YYYY-MM-DD')}
             />
         </>
     );
@@ -61,16 +76,7 @@ export const getStaticProps = async ({
     params
 }: {
     params: { id: string; slug: string };
-}): Promise<
-    GetStaticPropsResult<
-        BelajarPageProps & {
-            title: string;
-            description: string;
-            canonical: string;
-            openGraph: { [key: string]: unknown };
-        }
-    >
-> => {
+}): Promise<GetStaticPropsResult<BelajarPageProps>> => {
     const { id, slug } = params;
 
     try {
@@ -90,40 +96,56 @@ export const getStaticProps = async ({
         const subchapter = subchapterResponse.data;
         const course = courseResponse.data.course_detail;
         const recommendations = recommendationResponse.data;
+        let book: BookDetailInterface | null = null;
+        let content: string | null = null;
 
         if (!subchapter) {
-            // resource not found -> show 404
             return { notFound: true };
         }
 
-        const META_TITLE = `Materi ${course.course_name}: ${subchapter.subchapter_name}`;
-        const META_DESCRIPTION = `Video pembelajaran ${subchapter.subchapter_name}. Tingkatkan pemahaman kamu dengan materi berkualitas tinggi dari para ahli.`;
+        if (subchapter.type_name === 'notebook') {
+            const page = subchapter.notebook?.page;
+            const bookSlug = subchapter.notebook?.book_slug;
+            const FRONTEND_ACCESS_TOKEN = process.env.FRONTEND_ACCESS_TOKEN;
+
+            const [getBookContent, getBookDetail] = await Promise.all([
+                page === 1
+                    ? axios.get<GetAstronotesContentResponse>(
+                          `${config.API_BASE_URL}books/public/${bookSlug}/preview/`
+                      )
+                    : axios.get<GetAstronotesContentResponse>(
+                          `${config.API_BASE_URL}books/${bookSlug}?page=${page}`,
+                          {
+                              headers: {
+                                  'X-Special-Request': FRONTEND_ACCESS_TOKEN
+                              }
+                          }
+                      ),
+                axios.get<GetBookDetailResponse>(
+                    `${config.API_BASE_URL}books/${bookSlug}/detail/`
+                )
+            ]);
+
+            const encryptedContent = CryptoJS.AES.encrypt(
+                JSON.stringify(getBookContent.data),
+                FRONTEND_ACCESS_TOKEN as string
+            );
+
+            book = getBookDetail.data.book;
+            content =
+                page === 1
+                    ? JSON.stringify(getBookContent.data)
+                    : encryptedContent.toString();
+        }
 
         return {
-            props: {
-                subchapter,
-                course,
-                recommendations,
-                canonical: `https://gradient.academy/kelas/${id}/${slug}`,
-                title: META_TITLE,
-                description: META_DESCRIPTION,
-                openGraph: {
-                    type: 'video.other',
-                    title: META_TITLE,
-                    description: META_DESCRIPTION,
-                    url: `https://gradient.academy/kelas/${id}/${slug}`,
-                    video: subchapter.video?.video_url,
-                    image: subchapter.thumbnail
-                }
-            },
-            // normal ISR interval
+            props: { subchapter, course, book, content, recommendations },
             revalidate: 60 * 60
         };
-    } catch (err: any) {
-        console.error('getStaticProps error for', { id, slug }, err);
+    } catch (error: any) {
+        console.error('getStaticProps error for', { id, slug }, error);
 
-        // If the API returned 404-like status, surface as notFound
-        const status = err?.response?.status;
+        const status = error?.response?.status;
         if (status === 404) {
             return {
                 redirect: {
@@ -133,21 +155,18 @@ export const getStaticProps = async ({
             };
         }
 
-        // Transient error (network, 5xx, timeouts) -> return a safe fallback props
-        // and a short revalidate so ISR retries soon
         return {
             props: {
-                // minimal props the page expects — be explicit in the page component
-                subchapter: null as any,
-                course: null as any,
-                recommendations: null as any,
-                // you can pass an error flag/message to the page
+                subchapter: null,
+                course: null,
+                book: null,
+                content: null,
+                recommendations: null,
                 __errorMessage: 'Could not load data, please try again later'
             } as any,
-            revalidate: 30 // retry in 30s
+            revalidate: 30
         };
     }
 };
 
-Belajar.displayName = 'Watch Video';
-export default withAnon(Belajar);
+export default Belajar;
