@@ -1,4 +1,4 @@
-import { BlockOutlineIcon } from 'commons/components/elements/Icons/BlockOutlineIcon';
+// import { BlockOutlineIcon } from 'commons/components/elements/Icons/BlockOutlineIcon';
 import { MenuSolidIcon } from 'commons/components/elements/Icons/MenuSolidIcon';
 import { PrediksiSolidIcon } from 'commons/components/elements/Icons/PrediksiSolidIcon';
 import { cn } from 'commons/utils';
@@ -46,14 +46,15 @@ function AdmissionChance(): JSX.Element {
                         </h2>
 
                         <div className="flex items-center gap-2">
-                            <button
+                            {/* "Atur Strategi" for mobile */}
+                            {/* <button
                                 type="button"
                                 className={cn(
                                     'shrink-0 bg-[#282B3C] hover:opacity-75 transition-all w-6 h-6 rounded-full grid place-items-center',
                                     'lg:hidden'
                                 )}>
                                 <BlockOutlineIcon className="text-white w-4 h-4" />
-                            </button>
+                            </button> */}
 
                             <button
                                 onClick={() => setIsUpdateTargetOpen(true)}
@@ -85,7 +86,7 @@ function AdmissionChance(): JSX.Element {
                     </div>
                 </div>
 
-                <div></div>
+                {/* "Atur Strategi" for desktop */}
                 {/* <button
                     type="button"
                     className="text-white font-semibold text-sm leading-tight w-full py-2 border border-white rounded-full hover:opacity-75 transition-all">
