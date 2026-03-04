@@ -108,8 +108,8 @@ function CopilotSummarizer({
                 onValueChange={(value) => setSelectedAccordionItem(value)}>
                 <Accordion.Item
                     value="copilot"
-                    className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] p-0.5 rounded-xl">
-                    <div className="bg-[#20222E] rounded-xl">
+                    className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] p-0.5 rounded-xl max-h-[calc(100%-32px)] overflow-hidden flex">
+                    <div className="bg-[#20222E] rounded-xl flex-grow overflow-y-scroll scrollbar-none">
                         <Accordion.Header>
                             <Accordion.Trigger className="group flex justify-between items-center gap-2 w-full py-2 px-3">
                                 <div className="min-w-0 flex items-center gap-2">

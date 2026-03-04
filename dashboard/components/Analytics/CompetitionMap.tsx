@@ -247,7 +247,7 @@ function CompetitionMap(): JSX.Element {
     return (
         <div
             className={cn(
-                'relative bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
+                'relative bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto space-y-6',
                 'lg:col-span-5 lg:max-w-full lg:mx-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
             )}>
             <div>

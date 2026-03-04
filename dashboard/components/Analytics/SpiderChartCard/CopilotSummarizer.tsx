@@ -127,13 +127,13 @@ function CopilotSummarizer({ context }: CopilotSummarizerProps): JSX.Element {
                         value="copilot"
                         className={
                             selectedAccordionItem === 'copilot'
-                                ? 'absolute top-4 left-4 right-4 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] p-0.5 rounded-xl'
+                                ? 'absolute top-4 left-4 right-4 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] p-0.5 rounded-xl max-h-[calc(100%-32px)] overflow-hidden flex'
                                 : ''
                         }>
                         <div
                             className={
                                 selectedAccordionItem === 'copilot'
-                                    ? 'bg-[#20222E] rounded-xl'
+                                    ? 'bg-[#20222E] rounded-xl flex-grow overflow-y-scroll scrollbar-none'
                                     : ''
                             }>
                             <Accordion.Header>

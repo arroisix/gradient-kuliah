@@ -85,11 +85,12 @@ function AdmissionChance(): JSX.Element {
                     </div>
                 </div>
 
-                <button
+                <div></div>
+                {/* <button
                     type="button"
                     className="text-white font-semibold text-sm leading-tight w-full py-2 border border-white rounded-full hover:opacity-75 transition-all">
                     Atur Strategi
-                </button>
+                </button> */}
             </div>
 
             {/* second part */}
