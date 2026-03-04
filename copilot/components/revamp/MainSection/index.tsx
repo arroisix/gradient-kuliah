@@ -74,23 +74,23 @@ const MainSection = ({
 
                         <div className="space-y-1">
                             <h3 className="text-white font-semibold text-sm">
-                                {data?.is_has_latest_result
+                                {data?.is_has_ongoing_tryout
+                                    ? `TO Berlangsung: ${data.latest_result_tryout_title}`
+                                    : data?.is_has_latest_result
                                     ? `TO Terakhir: ${formatDate(
                                           data.latest_result_date ??
                                               new Date().toISOString()
                                       )} - Skor: ${
                                           data.latest_result_score ?? 0
                                       }`
-                                    : data?.is_has_ongoing_tryout
-                                    ? `TO Berlangsung: ${data.latest_result_tryout_title}`
                                     : 'Hai! Kamu belum pernah ikut Try Out ya'}
                             </h3>
 
                             <p className="text-white text-xs">
-                                {data?.is_has_latest_result
-                                    ? 'Coba Try Out dulu untuk lihat kelebihan dan kekuranganmu.'
-                                    : data?.is_has_ongoing_tryout
+                                {data?.is_has_ongoing_tryout
                                     ? 'Yuk, lihat kelebihan dan kekuranganmu dengan menyelesaikan Try Out.'
+                                    : data?.is_has_latest_result
+                                    ? 'Coba Try Out dulu untuk lihat kelebihan dan kekuranganmu.'
                                     : 'Yuk coba Try out biar Copilot bisa kasih rekomendasi yang lebih pas.'}
                             </p>
                         </div>
