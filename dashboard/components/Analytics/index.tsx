@@ -45,7 +45,7 @@ function Analytics(): JSX.Element {
                         'flex flex-col gap-1 mb-8',
                         'lg:flex-row lg:justify-between lg:items-center'
                     )}>
-                    <h1 className="text-white font-bold leading-tight text-2xl w-full max-w-[192px] truncate">
+                    <h1 className="text-white font-bold leading-tight text-2xl w-full max-w-[256px] truncate">
                         Halo, {profile?.username}
                     </h1>
 
