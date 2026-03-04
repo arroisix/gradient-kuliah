@@ -301,3 +301,27 @@ export function formatDate(isoStr: string): string {
         year: 'numeric'
     });
 }
+
+export function getUTBKRemainingDays(): number {
+    const now = new Date();
+    const utbkDay = new Date(now.getFullYear(), 3, 21);
+    const remainingDays = Math.round(
+        (utbkDay.getTime() / 1000 - now.getTime() / 1000) / (60 * 60 * 24)
+    );
+    return remainingDays;
+}
+
+// abbreviate words like "Pengetahuan Kuantitatif" into "PK"
+export function abbreviateWords(str: string): string {
+    // remove text inside parentheses
+    const cleanedText = str.replace(/\([^)]*\)/g, '');
+
+    // match words starting with capital letters
+    const matches = cleanedText.match(/\b[A-Z]\w*/g);
+    if (!matches) {
+        return str;
+    }
+
+    // map to first letter and join
+    return matches.map((word) => word[0]).join('');
+}

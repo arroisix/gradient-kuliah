@@ -197,6 +197,26 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             query: (params: { slug: string }) => ({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/bank-soal/problems/${params.slug}/`
             })
+        }),
+        getCompetitionMap: builder.query<GetCompetitionMapResponse, void>({
+            query: () => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/competition-map/`
+            }),
+            providesTags: [{ type: 'ANALYTICS', id: 'COMPETITION_MAP' }]
+        }),
+        getSpiderChart: builder.query<GetSpiderChartResponse[], void>({
+            query: () => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/spider-chart/`
+            })
+        }),
+        getLineChart: builder.query<
+            GetLineChartResponse,
+            { course_id?: string }
+        >({
+            query: (params) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}analytics/line-chart/`,
+                params
+            })
         })
     }),
     overrideExisting: false
@@ -219,7 +239,10 @@ export const {
     useGetCodingProgressQuery,
     useTrackCodingProgressMutation,
     useGetBookRecommendationsQuery,
-    useGetVideoRecommendationsQuery
+    useGetVideoRecommendationsQuery,
+    useGetCompetitionMapQuery,
+    useGetSpiderChartQuery,
+    useGetLineChartQuery
 } = learningExperienceApi;
 
 export const {

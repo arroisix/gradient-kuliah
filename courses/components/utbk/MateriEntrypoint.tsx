@@ -6,16 +6,21 @@ import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourse
 import { cn } from 'commons/utils';
 
 function MateriEntrypoint() {
-    const { isAuthenticated } = useAuth();
+    const { profile, isLoadingProfile } = useAuth();
 
     const { isLoading: isPublicCoursesLoading, data: publicCourses } =
         useGetPublicListCoursesV2Query(
             { type: 'UTBK' },
-            { skip: isAuthenticated }
+            {
+                skip:
+                    !!profile ||
+                    isLoadingProfile === undefined ||
+                    isLoadingProfile
+            }
         );
 
     const { isLoading: isPrivateCoursesLoading, data: privateCourses } =
-        useGetPrivateListCoursesV2Query({}, { skip: !isAuthenticated });
+        useGetPrivateListCoursesV2Query({}, { skip: !profile });
 
     const courses = publicCourses
         ? publicCourses.data

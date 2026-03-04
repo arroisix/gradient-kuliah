@@ -11,7 +11,7 @@ import {
     ChartData
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import { PerformanceAnalysis } from 'copilot/types/copilot';
+import { abbreviateWords } from 'commons/utils';
 
 ChartJS.register(
     RadialLinearScale,
@@ -22,23 +22,18 @@ ChartJS.register(
     Legend
 );
 
-function SpiderChart({
-    problemset_results
-}: Pick<PerformanceAnalysis, 'problemset_results'>): JSX.Element {
-    const labelsWithScore = problemset_results.reduce(
-        (acc: Record<string, number>, label) => {
-            acc[label.problemset_title] = label.score;
-            return acc;
-        },
-        {}
-    );
+interface SpiderChartProps {
+    labels: string[];
+    scores: number[];
+}
 
+function SpiderChart({ labels, scores }: SpiderChartProps): JSX.Element {
     const data: ChartData<'radar'> = {
-        labels: Object.keys(labelsWithScore),
+        labels,
         datasets: [
             {
                 label: 'Skor Kamu',
-                data: Object.values(labelsWithScore),
+                data: scores,
                 backgroundColor: 'rgba(95,43,206,0.2)', // background fill
                 borderColor: '#B6A6F3', // line color
                 borderWidth: 2, // line width
@@ -64,6 +59,14 @@ function SpiderChart({
     const options: ChartOptions<'radar'> = {
         responsive: true,
         maintainAspectRatio: false,
+        // make cursor pointer on hover
+        onHover: (event, chartElement) => {
+            if (event.native?.target) {
+                const target = event.native.target as HTMLElement;
+                target.style.cursor =
+                    chartElement.length > 0 ? 'pointer' : 'default';
+            }
+        },
         scales: {
             r: {
                 // radial line
@@ -83,17 +86,8 @@ function SpiderChart({
                     backdropColor: 'transparent',
                     font: { size: 14, lineHeight: '160%' },
                     callback: function (label) {
-                        // remove text inside parentheses
-                        const cleanedText = label.replace(/\([^)]*\)/g, '');
-
-                        // match words starting with capital letters
-                        const matches = cleanedText.match(/\b[A-Z]\w*/g);
-                        if (!matches) {
-                            return label;
-                        }
-
-                        // map to first letter and join
-                        return matches.map((word) => word[0]).join('');
+                        const abbr = abbreviateWords(label);
+                        return abbr;
                     }
                 },
                 // tick between spiral line
@@ -112,7 +106,7 @@ function SpiderChart({
     };
 
     return (
-        <div className="aspect-square w-full">
+        <div className="aspect-square">
             <Radar data={data} options={options} />
         </div>
     );

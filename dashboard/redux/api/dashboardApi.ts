@@ -3,6 +3,7 @@ import {
     AnnouncementItem,
     BannerResponse,
     FreeForYouResponse,
+    GetAdmissionChanceResponse,
     GetClassProgressResponse,
     GetDashboardContentResponse,
     LearnRecommendationResponse,
@@ -302,8 +303,17 @@ export const dashboardApi = baseApi.injectEndpoints({
                 body
             }),
             invalidatesTags: [
-                { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' }
+                { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' },
+                { type: 'ANALYTICS', id: 'ADMISSION_CHANCE' },
+                { type: 'ANALYTICS', id: 'COMPETITION_MAP' }
             ]
+        }),
+        getAdmissionChance: builder.query<GetAdmissionChanceResponse, void>({
+            query: () => ({
+                url: `${LEARNING_BASE_URL}analytics/admission-chance/`,
+                method: 'GET'
+            }),
+            providesTags: [{ type: 'ANALYTICS', id: 'ADMISSION_CHANCE' }]
         })
     })
 });
@@ -335,5 +345,6 @@ export const {
     useGetAnnouncementsQuery,
     useStoreUserAnnouncementMutation,
     useGetStudentTargetInstitutionsQuery,
-    useSetStudentTargetInstitutionsMutation
+    useSetStudentTargetInstitutionsMutation,
+    useGetAdmissionChanceQuery
 } = dashboardApi;

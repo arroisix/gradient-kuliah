@@ -391,6 +391,15 @@ export type AnnouncementItem = {
     href_mobile?: string;
 };
 
+export interface GetAdmissionChanceResponse {
+    institution_id: string;
+    institution_name: string;
+    major_id: string;
+    major_name: string;
+    passing_grade?: number;
+    highest_tryout_score?: number;
+}
+
 export type {
     StudentLearningProgress,
     StudentLearningProgressResponse,

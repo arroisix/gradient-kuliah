@@ -1,128 +1,122 @@
-import { useState, useRef, useEffect } from 'react';
-import MainSection from 'copilot/components/revamp/MainSection';
-import ChatSection from 'copilot/components/revamp/ChatSection';
+import { chatApi } from 'copilot/redux/api/copilotApi';
 import {
+    ChatHistoryContextItem,
+    ChatInput,
     ChatMessage,
     ContextReference,
-    ChatInput,
-    ChatHistoryContextItem,
-    ReferenceContentType,
-    SelectedReference,
-    Reasoning,
-    PerformanceAnalysis,
-    ExerciseQuestion,
+    CopilotAttachment,
     CopilotContentRecommendation,
     CopilotInterrupt,
-    CopilotAttachment,
-    CopilotReference
+    CopilotReference,
+    ExerciseQuestion,
+    PerformanceAnalysis,
+    Reasoning,
+    ReferenceContentType,
+    SelectedReference
 } from 'copilot/types/copilot';
-import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
-import { chatApi } from 'copilot/redux/api/copilotApi';
-import { useDispatch } from 'react-redux';
-import ReferenceModal from 'copilot/components/revamp/Reference/ReferenceModal';
-import ReferenceContentModal from 'copilot/components/revamp/Reference/ReferenceContentModal';
-import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
-import { cn } from 'commons/utils';
-import { FaArrowDown } from 'react-icons/fa6';
-import { toast } from 'react-toastify';
-import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { baseApi } from 'redux/api/baseApi';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 
-interface CopilotContainerProps {
-    sessionId?: string;
+function buildChatContextFromReferences(
+    references: SelectedReference[]
+): ChatInput['context'] {
+    if (references.length === 0) return undefined;
+
+    const context: ChatInput['context'] = {
+        textbook_problem: [],
+        book_pages: [],
+        video: [],
+        bank_soal_problem: []
+    };
+
+    references.forEach((ref) => {
+        const contextReference: ContextReference = {
+            id: ref.id,
+            title: ref.title,
+            subtitle: ref.subtitle || '',
+            header: ref.header
+        };
+
+        switch (ref.contentType) {
+            case 'textbook_problem':
+                context.textbook_problem.push(contextReference);
+                break;
+            case 'course':
+                context.video.push(contextReference);
+                break;
+            case 'astronotes_content':
+                context.book_pages.push(contextReference);
+                break;
+            case 'bank_soal_problem':
+                context.bank_soal_problem.push(contextReference);
+                break;
+        }
+    });
+
+    return Object.values(context).some((arr) => arr.length > 0)
+        ? context
+        : undefined;
 }
 
-const CopilotContainer = ({
-    sessionId
-}: CopilotContainerProps): JSX.Element => {
+function convertHistoryContextToSelectedReferences(historyContext?: {
+    data: ChatHistoryContextItem[];
+}): SelectedReference[] {
+    if (!historyContext?.data) return [];
+
+    return historyContext.data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        subtitle: item.subtitle,
+        header: item.header,
+        contentType:
+            item.content_type === 'course_video'
+                ? 'course'
+                : (item.content_type as ReferenceContentType)
+    }));
+}
+
+interface UseCopilotProps {
+    withSilentRedirect?: boolean;
+}
+
+function useCopilot({ withSilentRedirect = true }: UseCopilotProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const dispatch = useDispatch();
-    const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
-    const [isReferenceContentModalOpen, setIsReferenceContentModalOpen] =
-        useState(false);
-    const [isUsedReferencesModalOpen, setIsUsedReferencesModalOpen] =
-        useState(false);
+    const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+    const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [selectedReferences, setSelectedReferences] = useState<
         SelectedReference[]
     >([]);
-    const [viewingUsedReferences, setViewingUsedReferences] = useState<
-        SelectedReference[]
-    >([]);
-    const [isLoadingHistory, setIsLoadingHistory] = useState(true);
-    const [isLoadingResponse, setIsLoadingResponse] = useState(false);
-    const [showScrollButton, setShowScrollButton] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState<
         string | undefined
     >();
-    const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [reasoning, setReasoning] = useState<Reasoning>({
         thoughts: [],
         isFinished: false
     });
 
     const router = useRouter();
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const { profile } = useAuth();
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (isReferenceModalOpen) {
-            const originalBodyOverflow = document.body.style.overflow;
-            const originalHtmlOverflow =
-                document.documentElement.style.overflow;
-            const scrollY = window.scrollY;
-
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.width = '100%';
-
-            return () => {
-                document.body.style.overflow = originalBodyOverflow;
-                document.documentElement.style.overflow = originalHtmlOverflow;
-                document.body.style.position = '';
-                document.body.style.top = '';
-                document.body.style.width = '';
-                window.scrollTo(0, scrollY);
-            };
-        }
-        return undefined;
-    }, [isReferenceModalOpen]);
-
-    const convertHistoryContextToSelectedReferences = (historyContext?: {
-        data: ChatHistoryContextItem[];
-    }): SelectedReference[] => {
-        if (!historyContext?.data) return [];
-
-        return historyContext.data.map((item) => ({
-            id: item.id,
-            title: item.title,
-            subtitle: item.subtitle,
-            header: item.header,
-            contentType:
-                item.content_type === 'course_video'
-                    ? 'course'
-                    : (item.content_type as ReferenceContentType)
-        }));
+    const handleClearReferences = () => {
+        setSelectedReferences([]);
     };
 
     useEffect(() => {
+        if (currentSessionId && messages.length > 0) {
+            return;
+        }
+
+        if (!currentSessionId) {
+            setIsLoadingHistory(false);
+            return;
+        }
+
         const loadChatHistory = async () => {
-            if (sessionId && isLoadingResponse) {
-                return;
-            }
-
-            if (!sessionId) {
-                setMessages([]);
-                setCurrentSessionId(undefined);
-                setIsLoadingHistory(false);
-                return;
-            }
-
             try {
-                const response = await chatApi.getChatHistory(sessionId);
+                const response = await chatApi.getChatHistory(currentSessionId);
                 if (response.history?.length > 0) {
                     const convertedMessages: ChatMessage[] =
                         response.history.map((item) => ({
@@ -141,7 +135,7 @@ const CopilotContainer = ({
                             interrupt: item.interrupt
                         }));
                     setMessages(convertedMessages);
-                    setCurrentSessionId(sessionId);
+                    setCurrentSessionId(currentSessionId);
                 }
             } catch (error) {
                 console.error('Error loading chat history:', error);
@@ -151,72 +145,7 @@ const CopilotContainer = ({
         };
 
         loadChatHistory();
-    }, [sessionId]);
-
-    useEffect(() => {
-        if (messages.length > 0) {
-            scrollToBottom();
-        }
-    }, [messages]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [reasoning]);
-
-    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-        const target = e.target as HTMLDivElement;
-        const isNearBottom =
-            target.scrollHeight - target.scrollTop - target.clientHeight < 100;
-        setShowScrollButton(!isNearBottom);
-    };
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({
-            block: 'nearest',
-            behavior: 'smooth'
-        });
-    };
-
-    const buildChatContextFromReferences = (
-        references: SelectedReference[]
-    ): ChatInput['context'] => {
-        if (references.length === 0) return undefined;
-
-        const context: ChatInput['context'] = {
-            textbook_problem: [],
-            book_pages: [],
-            video: [],
-            bank_soal_problem: []
-        };
-
-        references.forEach((ref) => {
-            const contextReference: ContextReference = {
-                id: ref.id,
-                title: ref.title,
-                subtitle: ref.subtitle || '',
-                header: ref.header
-            };
-
-            switch (ref.contentType) {
-                case 'textbook_problem':
-                    context.textbook_problem.push(contextReference);
-                    break;
-                case 'course':
-                    context.video.push(contextReference);
-                    break;
-                case 'astronotes_content':
-                    context.book_pages.push(contextReference);
-                    break;
-                case 'bank_soal_problem':
-                    context.bank_soal_problem.push(contextReference);
-                    break;
-            }
-        });
-
-        return Object.values(context).some((arr) => arr.length > 0)
-            ? context
-            : undefined;
-    };
+    }, [currentSessionId, messages.length]);
 
     const handleSendMessage = async (prompt: string, imageUrl?: string) => {
         if (!prompt.trim()) return;
@@ -337,9 +266,11 @@ const CopilotContainer = ({
                     setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
-                        router.push(`/copilot/${sessionId}`, undefined, {
-                            shallow: true
-                        });
+                        if (withSilentRedirect) {
+                            router.push(`/copilot/${sessionId}`, undefined, {
+                                shallow: true
+                            });
+                        }
                     }
                     if (messageId) {
                         // use timeout to show the finished state of the reasoning
@@ -503,9 +434,11 @@ const CopilotContainer = ({
                     setReasoning((v) => ({ ...v, isFinished: true }));
                     if (sessionId) {
                         setCurrentSessionId(sessionId);
-                        router.push(`/copilot/${sessionId}`, undefined, {
-                            shallow: true
-                        });
+                        if (withSilentRedirect) {
+                            router.push(`/copilot/${sessionId}`, undefined, {
+                                shallow: true
+                            });
+                        }
                     }
                     if (messageId) {
                         // use timeout to show the finished state of the reasoning
@@ -560,175 +493,16 @@ const CopilotContainer = ({
         }
     };
 
-    const handleClearReferences = () => {
-        setSelectedReferences([]);
+    return {
+        isLoadingResponse,
+        isLoadingHistory,
+        messages,
+        reasoning,
+        currentSessionId,
+        handleSendMessage,
+        handleRetry,
+        setCurrentSessionId
     };
+}
 
-    const handleOpenReferenceModal = () => {
-        setIsReferenceModalOpen(true);
-    };
-
-    const handleCloseReferenceModal = () => {
-        setIsReferenceModalOpen(false);
-    };
-
-    const handleOpenReferenceContentModal = () => {
-        setIsReferenceContentModalOpen(true);
-    };
-
-    const handleCloseReferenceContentModal = () => {
-        setIsReferenceContentModalOpen(false);
-    };
-
-    const handleOpenUsedReferencesModal = (references: SelectedReference[]) => {
-        setViewingUsedReferences(references);
-        setIsUsedReferencesModalOpen(true);
-    };
-
-    const handleCloseUsedReferencesModal = () => {
-        setIsUsedReferencesModalOpen(false);
-        setViewingUsedReferences([]);
-    };
-
-    const handleReferenceSelect = (
-        referenceId: string,
-        referenceTitle: string,
-        referenceSubtitle: string,
-        referenceHeader: string,
-        contentType: ReferenceContentType
-    ) => {
-        const newReference: SelectedReference = {
-            id: referenceId,
-            title: referenceTitle,
-            subtitle: referenceSubtitle,
-            header: referenceHeader,
-            contentType
-        };
-
-        setSelectedReferences((prev) => {
-            const exists = prev.find(
-                (ref) =>
-                    ref.id === referenceId && ref.contentType === contentType
-            );
-            return exists ? prev : [...prev, newReference];
-        });
-    };
-
-    const handleRemoveReference = (
-        referenceId: string,
-        contentType: ReferenceContentType
-    ) => {
-        setSelectedReferences((prev) =>
-            prev.filter(
-                (ref) =>
-                    !(ref.id === referenceId && ref.contentType === contentType)
-            )
-        );
-    };
-
-    return (
-        <>
-            <div
-                className={cn(
-                    'h-full flex flex-col overflow-hidden',
-                    'lg:px-4'
-                )}>
-                <div
-                    onScroll={handleScroll}
-                    className={cn(
-                        'flex-grow overflow-scroll scrollbar-none px-4 pt-4',
-                        'lg:px-0',
-                        isLoadingHistory ? 'grid place-items-center' : '',
-                        messages.length > 0 ? '' : 'pb-4'
-                    )}>
-                    {isLoadingHistory ? (
-                        <LoadingIndicator />
-                    ) : messages.length > 0 ? (
-                        <div
-                            className={cn(
-                                'space-y-4',
-                                'lg:w-full lg:max-w-[720px] lg:mx-auto'
-                            )}>
-                            <ChatSection
-                                reasoning={reasoning}
-                                messages={messages}
-                                setMessages={setMessages}
-                                onRetry={handleRetry}
-                                isLoading={isLoadingResponse}
-                                currentSessionId={currentSessionId}
-                                isLoadingResponse={isLoadingResponse}
-                                sendMessage={handleSendMessage}
-                                onOpenUsedReferencesModal={
-                                    handleOpenUsedReferencesModal
-                                }
-                            />
-                            <div ref={messagesEndRef} />
-                        </div>
-                    ) : (
-                        <MainSection onSendMessage={handleSendMessage} />
-                    )}
-                </div>
-
-                <div
-                    className={cn(
-                        'relative',
-                        'lg:w-full lg:max-w-[720px] lg:mx-auto'
-                    )}>
-                    {showScrollButton && !isEditorOpen ? (
-                        <button
-                            type="button"
-                            onClick={scrollToBottom}
-                            className="bg-[#5F2BCE] hover:opacity-80 transition-all w-8 h-8 grid place-items-center rounded-full absolute -top-4 left-1/2 -translate-x-1/2">
-                            <FaArrowDown className="text-white w-4 h-4" />
-                            <span className="sr-only">scroll to bottom</span>
-                        </button>
-                    ) : (
-                        <></>
-                    )}
-
-                    <PromptBar
-                        onSend={handleSendMessage}
-                        isLoading={isLoadingResponse}
-                        onStateChange={({ isEditorOpen }) =>
-                            setIsEditorOpen(isEditorOpen)
-                        }
-                        onOpenReferenceModal={handleOpenReferenceModal}
-                        onOpenReferenceContentModal={
-                            handleOpenReferenceContentModal
-                        }
-                        referenceCount={selectedReferences.length}
-                    />
-                </div>
-            </div>
-
-            {!profile ? <CopilotAuthPrompt /> : <></>}
-
-            <ReferenceModal
-                isOpen={isReferenceModalOpen}
-                onClose={handleCloseReferenceModal}
-                onReferenceSelect={handleReferenceSelect}
-            />
-
-            <ReferenceContentModal
-                isOpen={isReferenceContentModalOpen}
-                onClose={handleCloseReferenceContentModal}
-                selectedReferences={selectedReferences}
-                onRemoveReference={handleRemoveReference}
-                onOpenReferenceModal={() => {
-                    setIsReferenceContentModalOpen(false);
-                    setIsReferenceModalOpen(true);
-                }}
-                isViewOnly={false}
-            />
-
-            <ReferenceContentModal
-                isOpen={isUsedReferencesModalOpen}
-                onClose={handleCloseUsedReferencesModal}
-                selectedReferences={viewingUsedReferences}
-                isViewOnly={true}
-            />
-        </>
-    );
-};
-
-export default CopilotContainer;
+export { useCopilot };

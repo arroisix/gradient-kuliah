@@ -223,3 +223,33 @@ interface GetCourseRecommendationResponse {
     related_courses: CourseRecommendation[];
     other_courses: CourseRecommendation[];
 }
+
+interface Histogram {
+    range: string;
+    total_participants: number;
+}
+
+interface GetCompetitionMapResponse {
+    total_participants: number;
+    user_score?: number;
+    user_bar_index?: number;
+    passing_grade?: number;
+    passing_grade_bar_index?: number;
+    histogram: Histogram[];
+}
+
+interface GetSpiderChartResponse {
+    id: string;
+    title: string;
+    average_score: number;
+}
+
+interface GetLineChartResponse {
+    trend_scores: number[];
+    line_chart_data: {
+        exercise_slug: string;
+        title: string;
+        average_score: number;
+        latest_started_at: string;
+    }[];
+}

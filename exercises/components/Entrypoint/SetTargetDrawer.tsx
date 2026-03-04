@@ -83,7 +83,7 @@ function SetTargetDrawer({
 
     return (
         <SetTargetDrawerContext.Provider value={value}>
-            <div className="drawer drawer-end">
+            <div className="drawer drawer-end w-full h-full">
                 <input
                     checked={isDrawerOpened}
                     type="checkbox"

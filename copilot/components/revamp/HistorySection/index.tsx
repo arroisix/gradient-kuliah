@@ -20,6 +20,7 @@ import RenameDialog from './RenameDialog';
 import { HiOutlineChatAlt } from 'react-icons/hi';
 import { BsBookmark } from 'react-icons/bs';
 import { useTracker } from 'tracker/tracker';
+import { COPILOT_SUMMARIZER_KEY } from 'dashboard/utils';
 
 interface HistorySectionProps {
     isOpen: boolean;
@@ -241,6 +242,28 @@ const HistorySection = ({
             tracker?.genericTrack('Delete Chat History Session', {
                 SESSION_ID: sessionId
             });
+
+            const lineChartSessionId = localStorage.getItem(
+                COPILOT_SUMMARIZER_KEY.LINE_CHART
+            );
+            if (lineChartSessionId) {
+                localStorage.removeItem(COPILOT_SUMMARIZER_KEY.LINE_CHART);
+            }
+
+            const barChartSessionId = localStorage.getItem(
+                COPILOT_SUMMARIZER_KEY.BAR_CHART
+            );
+            if (barChartSessionId) {
+                localStorage.removeItem(COPILOT_SUMMARIZER_KEY.BAR_CHART);
+            }
+
+            const spiderChartSessionId = localStorage.getItem(
+                COPILOT_SUMMARIZER_KEY.SPIDER_CHART
+            );
+            if (spiderChartSessionId) {
+                localStorage.removeItem(COPILOT_SUMMARIZER_KEY.SPIDER_CHART);
+            }
+
             await chatApi.deleteSession(sessionId);
 
             setSessionHistory((prev) =>

@@ -6,8 +6,8 @@ import { TargetIcon } from 'lucide-react';
 import { SubtestsAccordion } from './SubtestsAccordion';
 import { useState } from 'react';
 import { LearningPath } from './LearningPath';
-import { cn, formatDate } from 'commons/utils';
-import { SpiderChart } from './SpiderChart';
+import { cn, formatDate, getUTBKRemainingDays } from 'commons/utils';
+import { SpiderChart } from 'commons/components/SpiderChart';
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 
 interface PerformanceAnalysisProps {
@@ -27,16 +27,19 @@ function PerformanceAnalysis({
         PerformanceAnalysisType['problemset_results'][number] | null
     >(null);
 
-    const now = new Date();
-    const utbkDay = new Date(now.getFullYear(), 3, 21);
-    const remainingUTBKDays = Math.round(
-        (utbkDay.getTime() / 1000 - now.getTime() / 1000) / (60 * 60 * 24)
-    );
-
+    const remainingDays = getUTBKRemainingDays();
     const percentage_progress =
         (performance_analysis.total_score /
             performance_analysis.passing_grade) *
         100;
+
+    const labelsWithScore = performance_analysis.problemset_results.reduce(
+        (acc: Record<string, number>, label) => {
+            acc[label.problemset_title] = label.score;
+            return acc;
+        },
+        {}
+    );
 
     const handleClickPromptBtn = () => {
         sendMessage(
@@ -62,7 +65,7 @@ function PerformanceAnalysis({
             )}>
             {/* utbk countdown */}
             <div className="bg-[#282B3C] text-[#E9D5FF] font-bold text-xs leading-tight px-6 py-2 text-center uppercase tracking-[1.1px]">
-                UTBK {remainingUTBKDays} hari lagi
+                UTBK {remainingDays} hari lagi
             </div>
 
             {/* header */}
@@ -176,9 +179,8 @@ function PerformanceAnalysis({
                             </h3>
 
                             <SpiderChart
-                                problemset_results={
-                                    performance_analysis.problemset_results
-                                }
+                                labels={Object.keys(labelsWithScore)}
+                                scores={Object.values(labelsWithScore)}
                             />
                         </div>
                     </div>
