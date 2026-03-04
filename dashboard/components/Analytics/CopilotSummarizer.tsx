@@ -10,7 +10,6 @@ import remarkGfm from 'remark-gfm';
 import { Accordion } from 'radix-ui';
 import { ChevronDownIcon } from 'lucide-react';
 import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
-import { ChatMessage } from 'copilot/types/copilot';
 import Link from 'next/link';
 
 function generateMessage(context: string): string {
@@ -35,22 +34,12 @@ function CopilotSummarizer({
     const {
         messages,
         reasoning,
+        isLoadingHistory,
         isLoadingResponse,
         currentSessionId,
         setCurrentSessionId,
-        handleSendMessage,
-        handleRetry
+        handleSendMessage
     } = useCopilot({ withSilentRedirect: false });
-
-    const handleClickRetry = (message: ChatMessage) => {
-        const messageIndex = messages.findIndex((m) => m.id === message.id);
-        if (messageIndex > 0) {
-            const userMessage = messages[messageIndex - 1];
-            if (userMessage && userMessage.role === 'User') {
-                handleRetry(userMessage);
-            }
-        }
-    };
 
     useEffect(() => {
         const sessionId = localStorage.getItem(
@@ -70,6 +59,12 @@ function CopilotSummarizer({
             );
         }
     }, [chart_type, currentSessionId]);
+
+    if (isLoadingHistory) {
+        return (
+            <div className="animate-pulse h-12 bg-[#333333] rounded-xl"></div>
+        );
+    }
 
     if (isLoadingResponse) {
         return (
@@ -147,9 +142,7 @@ function CopilotSummarizer({
 
                             <button
                                 onClick={() =>
-                                    handleClickRetry(
-                                        messages[messages.length - 1]
-                                    )
+                                    handleSendMessage(generateMessage(context))
                                 }
                                 type="button"
                                 className="text-[#B6A6F3] font-semibold text-sm leading-tight py-2 px-3 block ml-auto">

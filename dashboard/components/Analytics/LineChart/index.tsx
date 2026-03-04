@@ -30,6 +30,26 @@ ChartJS.register(
     Filler
 );
 
+// format tryout title into "TO 1 (Gratis)"
+function formatTryoutTitle(title: string): string {
+    const regex = /^(.*?)\s*#(\d+)\s*\((.*?)\)$/;
+    const match = title.match(regex);
+    let formattedTitle = 'Unknown';
+    if (match) {
+        const tryoutNumber = match[2];
+        const tryoutAccessType = match[3];
+
+        const tryoutWord = match[1].toLowerCase();
+        const formattedTryoutWord = (
+            tryoutWord.includes('tryout') ? 'TO' : ''
+        ).toUpperCase();
+
+        formattedTitle = `${formattedTryoutWord} ${tryoutNumber} (${tryoutAccessType})`;
+    }
+
+    return formattedTitle;
+}
+
 // find highest and lowest tryout
 function findMinMaxTryout(data: GetLineChartResponse['line_chart_data']): {
     minTryout: string;
@@ -44,12 +64,12 @@ function findMinMaxTryout(data: GetLineChartResponse['line_chart_data']): {
     for (const v of data) {
         if (minScore === 0 || v.average_score < minScore) {
             minScore = v.average_score;
-            minTryout = v.title;
+            minTryout = formatTryoutTitle(v.title);
         }
 
         if (maxScore === 0 || v.average_score > maxScore) {
             maxScore = v.average_score;
-            maxTryout = v.title;
+            maxTryout = formatTryoutTitle(v.title);
         }
     }
 
@@ -68,7 +88,7 @@ function generateContext(data: GetLineChartResponse): string {
     Data grafik area:
     ${line_chart_data.map(
         (v, index) =>
-            `- ${v.title}: ${v.average_score}${
+            `- ${formatTryoutTitle(v.title)}: ${v.average_score}${
                 line_chart_data.length - 1 === index ? '' : '\n'
             }`
     )}
@@ -76,7 +96,7 @@ function generateContext(data: GetLineChartResponse): string {
     Data trendline:
     ${line_chart_data.map(
         (v, index) =>
-            `- ${v.title}: ${
+            `- ${formatTryoutTitle(v.title)}: ${
                 trend_scores.length < line_chart_data.length
                     ? index > trend_scores.length - 1
                         ? 'Unknown'
@@ -124,23 +144,8 @@ function LineChart(): JSX.Element {
 
         return {
             labels: labels.map((label) => {
-                const regex = /^(.*?)\s*#(\d+)\s*\((.*?)\)$/;
                 const [title, isoStr] = label.split('_');
-
-                const match = title.match(regex);
-                let formattedTitle = 'Unknown';
-                if (match) {
-                    const tryoutNumber = match[2];
-                    const tryoutAccessType = match[3];
-
-                    const tryoutWord = match[1].toLowerCase();
-                    const formattedTryoutWord = (
-                        tryoutWord.includes('tryout') ? 'TO' : ''
-                    ).toUpperCase();
-
-                    formattedTitle = `${formattedTryoutWord} ${tryoutNumber} (${tryoutAccessType})`;
-                }
-
+                const formattedTitle = formatTryoutTitle(title);
                 return [formattedTitle, formatDate(isoStr)];
             }),
             datasets: [

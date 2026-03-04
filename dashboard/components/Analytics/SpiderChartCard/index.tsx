@@ -1,9 +1,57 @@
 import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
 import { SpiderChart } from 'commons/components/SpiderChart';
-import { cn } from 'commons/utils';
+import { abbreviateWords, cn } from 'commons/utils';
 import { useGetSpiderChartQuery } from 'courses/redux/api/learningExperienceApi';
 import { useMemo } from 'react';
-import { EmptyChart } from './EmptyChart';
+import { EmptyChart } from '../EmptyChart';
+import { CopilotSummarizer } from './CopilotSummarizer';
+
+// find highest and lowest tryout
+function findMinMaxSubtest(data: GetSpiderChartResponse[]): {
+    minSubtest: string;
+    maxSubtest: string;
+} {
+    let minSubtest = '';
+    let minScore = 0;
+
+    let maxSubtest = '';
+    let maxScore = 0;
+
+    for (const v of data) {
+        if (minScore === 0 || v.average_score < minScore) {
+            minScore = v.average_score;
+            minSubtest = abbreviateWords(v.title);
+        }
+
+        if (maxScore === 0 || v.average_score > maxScore) {
+            maxScore = v.average_score;
+            maxSubtest = abbreviateWords(v.title);
+        }
+    }
+
+    return { minSubtest, maxSubtest };
+}
+
+function generateContext(data: GetSpiderChartResponse[]): string {
+    const { minSubtest, maxSubtest } = findMinMaxSubtest(data);
+
+    return `
+    - Jenis grafik: Grafik radar
+    - Jari-jari: Nama subtes UTBK
+    - Titik data: Rata-rata skor subtest dari setiap tryout yang dikerjakan
+
+    Jari-jari beserta titik data:
+    ${data.map(
+        (v, index) =>
+            `- ${abbreviateWords(v.title)}: ${v.average_score}${
+                data.length - 1 === index ? '' : '\n'
+            }`
+    )}
+
+    - Nilai subtes tertinggi: ${maxSubtest}
+    - Nilai subtes terendah: ${minSubtest}
+    `;
+}
 
 function SpiderChartCard(): JSX.Element {
     const { data: spiderChart, isLoading } = useGetSpiderChartQuery();
@@ -24,10 +72,6 @@ function SpiderChartCard(): JSX.Element {
 
         return result;
     }, [spiderChart]);
-
-    const handleClickCopilot = () => {
-        // TODO
-    };
 
     if (isLoading) {
         return (
@@ -51,11 +95,7 @@ function SpiderChartCard(): JSX.Element {
                         Radar Kekuatan
                     </h2>
 
-                    <button
-                        disabled
-                        type="button"
-                        onClick={handleClickCopilot}
-                        className="shrink-0">
+                    <button disabled type="button" className="shrink-0">
                         <CopilotSolidIcon className="text-[#333333] w-4 h-4" />
                     </button>
                 </div>
@@ -70,7 +110,7 @@ function SpiderChartCard(): JSX.Element {
     return (
         <div
             className={cn(
-                'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl space-y-4 w-full max-w-[343px] mx-auto',
+                'relative bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl space-y-4 w-full max-w-[343px] mx-auto',
                 'lg:col-span-4 lg:max-w-full lg:mx-0 lg:px-6'
             )}>
             <div className="flex justify-between items-center">
@@ -78,12 +118,7 @@ function SpiderChartCard(): JSX.Element {
                     Radar Kekuatan
                 </h2>
 
-                <button
-                    type="button"
-                    onClick={handleClickCopilot}
-                    className="shrink-0 bg-[#5F2BCE] hover:opacity-75 transition-all rounded-full w-8 h-8 grid place-items-center">
-                    <CopilotSolidIcon className="text-white w-4 h-4" />
-                </button>
+                <CopilotSummarizer context={generateContext(spiderChart)} />
             </div>
 
             <SpiderChart labels={labels} scores={data} />
