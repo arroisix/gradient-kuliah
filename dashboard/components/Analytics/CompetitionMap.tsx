@@ -15,8 +15,7 @@ import { Bar } from 'react-chartjs-2';
 import { cn } from 'commons/utils';
 import { useGetCompetitionMapQuery } from 'courses/redux/api/learningExperienceApi';
 import { EmptyChart } from './EmptyChart';
-import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
-import { StarsSolidIcon } from 'commons/components/elements/Icons/StarsSolidIcon';
+import { CopilotSummarizer } from './CopilotSummarizer';
 
 ChartJS.register(
     CategoryScale,
@@ -27,6 +26,37 @@ ChartJS.register(
     Legend,
     SubTitle
 );
+
+function generateContext(data: GetCompetitionMapResponse): string {
+    const { histogram, total_participants, passing_grade, user_score } = data;
+
+    return `
+    - Jenis grafik: Histogram
+    - Sumbu x: Rentang skor
+    - Sumbu y: Total peserta tiap rentang skor
+
+    Data sumbu x dan y:
+    ${histogram.map(
+        (v, index) =>
+            `- ${v.range} (rentang skor): ${
+                v.total_participants
+            } total peserta${histogram.length - 1 === index ? '' : '\n'}`
+    )}
+
+    - Total peserta: ${total_participants}
+    - Passing grade: ${passing_grade}
+    - Skor user saat ini: ${user_score}
+    ${
+        user_score && passing_grade
+            ? `- Skor user saat ini ${
+                  user_score >= passing_grade ? 'lebih besar' : 'lebih kecil'
+              } dari passing grade sebesar ${Math.abs(
+                  passing_grade - user_score
+              ).toFixed()} poin`
+            : ''
+    }
+    `;
+}
 
 function CompetitionMap(): JSX.Element {
     const { data: competitionMap, isLoading } = useGetCompetitionMapQuery();
@@ -217,7 +247,7 @@ function CompetitionMap(): JSX.Element {
     return (
         <div
             className={cn(
-                'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
+                'relative bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto',
                 'lg:col-span-5 lg:max-w-full lg:mx-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
             )}>
             <div>
@@ -309,17 +339,10 @@ function CompetitionMap(): JSX.Element {
                 </div>
             </div>
 
-            <div className="bg-[#20222E] border border-[#282B3C] px-3 py-2 rounded-xl flex justify-between items-center gap-2">
-                <StarsSolidIcon className="shrink-0 text-[#F2C04C] w-4 h-4" />
-                <p className="text-white text-sm leading-[160%]">
-                    Copilot bisa bantu baca posisimu.
-                </p>
-                <button
-                    type="button"
-                    className="shrink-0 bg-[#5F2BCE] hover:opacity-75 transition-all rounded-full w-8 h-8 grid place-items-center">
-                    <CopilotSolidIcon className="text-white w-4 h-4" />
-                </button>
-            </div>
+            <CopilotSummarizer
+                context={generateContext(competitionMap)}
+                chart_type="bar"
+            />
         </div>
     );
 }

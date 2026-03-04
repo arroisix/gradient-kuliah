@@ -16,9 +16,8 @@ import { Line } from 'react-chartjs-2';
 import { cn, formatDate } from 'commons/utils';
 import { useGetLineChartQuery } from 'courses/redux/api/learningExperienceApi';
 import { EmptyChart } from '../EmptyChart';
-import { CopilotSolidIcon } from 'commons/components/elements/Icons/CopilotSolidIcon';
-import { StarsSolidIcon } from 'commons/components/elements/Icons/StarsSolidIcon';
 import { CourseDropdown } from './CourseDropdown';
+import { CopilotSummarizer } from '../CopilotSummarizer';
 
 ChartJS.register(
     CategoryScale,
@@ -30,6 +29,66 @@ ChartJS.register(
     Legend,
     Filler
 );
+
+// find highest and lowest tryout
+function findMinMaxTryout(data: GetLineChartResponse['line_chart_data']): {
+    minTryout: string;
+    maxTryout: string;
+} {
+    let minTryout = '';
+    let minScore = 0;
+
+    let maxTryout = '';
+    let maxScore = 0;
+
+    for (const v of data) {
+        if (minScore === 0 || v.average_score < minScore) {
+            minScore = v.average_score;
+            minTryout = v.title;
+        }
+
+        if (maxScore === 0 || v.average_score > maxScore) {
+            maxScore = v.average_score;
+            maxTryout = v.title;
+        }
+    }
+
+    return { minTryout, maxTryout };
+}
+
+function generateContext(data: GetLineChartResponse): string {
+    const { line_chart_data, trend_scores } = data;
+    const { minTryout, maxTryout } = findMinMaxTryout(line_chart_data);
+
+    return `
+    - Jenis grafik: Grafik area dengan trendline
+    - Sumbu x: Nama dan tanggal pengerjaan tryout
+    - Sumbu y: Rata-rata skor tryout untuk setiap percobaan tryout beserta skor trend
+
+    Data grafik area:
+    ${line_chart_data.map(
+        (v, index) =>
+            `- ${v.title}: ${v.average_score}${
+                line_chart_data.length - 1 === index ? '' : '\n'
+            }`
+    )}
+
+    Data trendline:
+    ${line_chart_data.map(
+        (v, index) =>
+            `- ${v.title}: ${
+                trend_scores.length < line_chart_data.length
+                    ? index > trend_scores.length - 1
+                        ? 'Unknown'
+                        : trend_scores[index]
+                    : trend_scores[index]
+            }${line_chart_data.length - 1 === index ? '' : '\n'}`
+    )}
+
+    - Nilai tryout tertinggi: ${maxTryout}
+    - Nilai tryout terendah: ${minTryout}
+    `;
+}
 
 function LineChart(): JSX.Element {
     const [selectedCourseId, setSelectedCourseId] = useState('');
@@ -248,7 +307,7 @@ function LineChart(): JSX.Element {
     return (
         <div
             className={cn(
-                'bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto space-y-6',
+                'relative bg-[#191920] border border-[#282B3C] py-4 px-4 rounded-2xl w-full max-w-[343px] mx-auto space-y-6',
                 'lg:col-span-7 lg:max-w-full lg:mx-0 lg:space-y-0 lg:px-6 lg:flex lg:flex-col lg:justify-between lg:gap-6'
             )}>
             <div className="space-y-6">
@@ -283,17 +342,10 @@ function LineChart(): JSX.Element {
                 )}
             </div>
 
-            <div className="bg-[#20222E] border border-[#282B3C] px-3 py-2 rounded-xl flex justify-between items-center gap-2">
-                <StarsSolidIcon className="shrink-0 text-[#F2C04C] w-4 h-4" />
-                <p className="text-white text-sm leading-[160%]">
-                    Copilot bisa jelasin naik turun Skor Rata-rata mu mu.
-                </p>
-                <button
-                    type="button"
-                    className="shrink-0 bg-[#5F2BCE] hover:opacity-75 transition-all rounded-full w-8 h-8 grid place-items-center">
-                    <CopilotSolidIcon className="text-white w-4 h-4" />
-                </button>
-            </div>
+            <CopilotSummarizer
+                context={generateContext(response)}
+                chart_type="line"
+            />
         </div>
     );
 }

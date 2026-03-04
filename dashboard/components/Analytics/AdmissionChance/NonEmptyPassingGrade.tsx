@@ -85,7 +85,7 @@ function NonEmptyPassingGrade({
                             Skor Tryout kamu
                         </h4>
                         <div className="text-white font-semibold text-xl leading-[140%]">
-                            {tryoutScore.toFixed(2)}
+                            {tryoutScore}
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@ function NonEmptyPassingGrade({
                             Passing Grade 2024
                         </h4>
                         <div className="text-white font-semibold text-xl leading-[140%]">
-                            {passing_grade.toFixed(2)}
+                            {passing_grade}
                         </div>
                     </div>
                 </div>
