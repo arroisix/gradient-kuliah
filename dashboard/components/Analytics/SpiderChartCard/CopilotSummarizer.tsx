@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useLottie } from 'lottie-react';
 import copilotAnimation from 'copilot/data/copilot-animation.json';
 import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
+import { COPILOT_SUMMARIZER_KEY } from 'dashboard/utils';
 
 function generateMessage(context: string): string {
     return `Berdasarkan data di bawah ini:
@@ -48,7 +49,9 @@ function CopilotSummarizer({ context }: CopilotSummarizerProps): JSX.Element {
     } = useCopilot({ withSilentRedirect: false });
 
     useEffect(() => {
-        const sessionId = localStorage.getItem('spider_chart:copilot');
+        const sessionId = localStorage.getItem(
+            COPILOT_SUMMARIZER_KEY.SPIDER_CHART
+        );
         if (sessionId && validate(sessionId)) {
             setCurrentSessionId(sessionId);
         }
@@ -56,7 +59,10 @@ function CopilotSummarizer({ context }: CopilotSummarizerProps): JSX.Element {
 
     useEffect(() => {
         if (currentSessionId) {
-            localStorage.setItem('spider_chart:copilot', currentSessionId);
+            localStorage.setItem(
+                COPILOT_SUMMARIZER_KEY.SPIDER_CHART,
+                currentSessionId
+            );
         }
     }, [currentSessionId]);
 

@@ -18,8 +18,7 @@ import {
 } from 'copilot/types/copilot';
 import PromptBar from 'copilot/components/revamp/MainSection/PromptBar';
 import { chatApi } from 'copilot/redux/api/copilotApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useDispatch } from 'react-redux';
 import ReferenceModal from 'copilot/components/revamp/Reference/ReferenceModal';
 import ReferenceContentModal from 'copilot/components/revamp/Reference/ReferenceContentModal';
 import { LoadingIndicator } from 'copilot/components/LoadingIndicator';
@@ -29,6 +28,7 @@ import { toast } from 'react-toastify';
 import CopilotAuthPrompt from 'copilot/components/revamp/AuthPrompt';
 import { useRouter } from 'next/router';
 import { baseApi } from 'redux/api/baseApi';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -64,7 +64,7 @@ const CopilotContainer = ({
 
     const router = useRouter();
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { profile } = useAuth();
 
     useEffect(() => {
         if (isReferenceModalOpen) {
@@ -701,7 +701,7 @@ const CopilotContainer = ({
                 </div>
             </div>
 
-            {!isAuthenticated ? <CopilotAuthPrompt /> : <></>}
+            {!profile ? <CopilotAuthPrompt /> : <></>}
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}

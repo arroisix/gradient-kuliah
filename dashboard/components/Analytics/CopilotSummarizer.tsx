@@ -11,6 +11,7 @@ import { Accordion } from 'radix-ui';
 import { ChevronDownIcon } from 'lucide-react';
 import { ReasoningIndicator } from 'copilot/components/ReasoningIndicator';
 import Link from 'next/link';
+import { COPILOT_SUMMARIZER_KEY } from 'dashboard/utils';
 
 function generateMessage(context: string): string {
     return `Berdasarkan data di bawah ini:
@@ -43,7 +44,9 @@ function CopilotSummarizer({
 
     useEffect(() => {
         const sessionId = localStorage.getItem(
-            `${chart_type === 'line' ? 'line_chart' : 'bar_chart'}:copilot`
+            chart_type === 'line'
+                ? COPILOT_SUMMARIZER_KEY.LINE_CHART
+                : COPILOT_SUMMARIZER_KEY.BAR_CHART
         );
 
         if (sessionId && validate(sessionId)) {
@@ -54,7 +57,9 @@ function CopilotSummarizer({
     useEffect(() => {
         if (currentSessionId) {
             localStorage.setItem(
-                `${chart_type === 'line' ? 'line_chart' : 'bar_chart'}:copilot`,
+                chart_type === 'line'
+                    ? COPILOT_SUMMARIZER_KEY.LINE_CHART
+                    : COPILOT_SUMMARIZER_KEY.BAR_CHART,
                 currentSessionId
             );
         }
