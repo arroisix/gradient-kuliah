@@ -86,7 +86,7 @@ const TiptapViewer = ({
             <EditorContent
                 editor={editor}
                 className={cn(
-                    'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes w-full',
+                    'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes w-full [&_p]:font-normal [&_p]:text-white',
                     className
                 )}
                 spellCheck="false"
