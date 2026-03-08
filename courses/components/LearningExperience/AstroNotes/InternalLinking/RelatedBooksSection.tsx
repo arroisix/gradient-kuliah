@@ -47,7 +47,7 @@ const RelatedBooksSection = ({
                     isSubscribed &&
                     'md:w-[calc(100vw-250px)]'
             )}>
-            <h2 className="font-bold">{title}</h2>
+            <h2 className="text-white font-bold">{title}</h2>
             <div
                 className={cn(
                     'grid gap-4',

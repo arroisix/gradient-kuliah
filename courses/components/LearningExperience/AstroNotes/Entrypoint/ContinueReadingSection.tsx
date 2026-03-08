@@ -47,7 +47,7 @@ const ContinueReadingSection = (): JSX.Element => {
     return (
         <div className="relative pt-6 pb-4 mb-6 sm:pb-6 space-y-4 z-[1] overflow-x-visible">
             <div className="absolute h-full -z-[1] -inset-x-full bg-neutral-900 top-0 "></div>
-            <b>Terakhir Dibaca</b>
+            <b className="text-white">Terakhir Dibaca</b>
             <div
                 className={cn(
                     'w-screen relative gap-4 carousel carousel-center right-4 md:right-8 lg:right-12',

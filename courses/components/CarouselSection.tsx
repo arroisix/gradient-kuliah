@@ -110,14 +110,14 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                             disabled={!canScrollLeft}
                             className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
                             aria-label="Scroll left">
-                            <FiChevronLeft size={20} />
+                            <FiChevronLeft size={20} className="text-white" />
                         </button>
                         <button
                             onClick={next}
                             disabled={!canScrollRight}
                             className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
                             aria-label="Scroll right">
-                            <FiChevronRight size={20} />
+                            <FiChevronRight size={20} className="text-white" />
                         </button>
                     </div>
                 </div>

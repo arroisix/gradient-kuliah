@@ -207,7 +207,7 @@ const AstronotesDetail = ({
                     <div
                         id="contents"
                         className="flex flex-col gap-2 scroll-mt-32 md:gap-3">
-                        <span className="text-sm font-bold font-body lg:text-base">
+                        <span className="text-white text-sm font-bold font-body lg:text-base">
                             Daftar Isi
                         </span>
                         {astronotes ? (
