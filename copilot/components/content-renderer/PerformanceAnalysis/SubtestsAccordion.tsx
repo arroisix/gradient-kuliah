@@ -1,20 +1,11 @@
 import { Accordion } from 'radix-ui';
 import { PerformanceAnalysis } from 'copilot/types/copilot';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { cn } from 'commons/utils';
+import { cn, generateHexTextColor } from 'commons/utils';
 import { ChevronDownIcon } from 'lucide-react';
 import { FaCircleCheck, FaCircleInfo } from 'react-icons/fa6';
 import Button from 'commons/components/elements/Button';
 import { LearningPathIcon } from 'copilot/assets/LearningPathIcon';
-
-// generate text color based on subtest score
-function generateHexTextColor(score: number): string {
-    return score < 300
-        ? 'text-[#DB4A3B]'
-        : score >= 300 && score < 550
-        ? 'text-[#F2C04C]'
-        : 'text-[#03AC5C]';
-}
 
 interface SubtestsAccordionProps
     extends Pick<PerformanceAnalysis, 'problemset_results'> {

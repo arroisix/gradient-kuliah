@@ -397,7 +397,16 @@ export interface GetAdmissionChanceResponse {
     major_id: string;
     major_name: string;
     passing_grade?: number;
-    highest_tryout_score?: number;
+    highest_tryout?: {
+        exercise_slug: string;
+        exercise_title: string;
+        score: number;
+        problemsets: {
+            score: number;
+            course_name: string;
+            course_cover: string;
+        }[];
+    };
 }
 
 export type {

@@ -11,7 +11,7 @@ import { EmptyPassingGrade } from './EmptyPassingGrade';
 function AdmissionChance(): JSX.Element {
     const [isUpdateTargetOpen, setIsUpdateTargetOpen] = useState(false);
     const { data, isLoading } = useGetAdmissionChanceQuery();
-    const tryoutScore = data?.highest_tryout_score ?? 0;
+    const tryoutScore = data?.highest_tryout?.score ?? 0;
 
     if (isLoading) {
         return (

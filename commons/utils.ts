@@ -2,6 +2,7 @@ import { isValidElement, Children } from 'react';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import moment from 'moment';
+import ztable from 'ztable';
 
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
@@ -324,4 +325,24 @@ export function abbreviateWords(str: string): string {
 
     // map to first letter and join
     return matches.map((word) => word[0]).join('');
+}
+
+// calculate the probability to enter a major based on user's tryout score and passing grade
+export function calculateTryoutPrediction(
+    avg_score: number,
+    passing_grade: number
+): string {
+    const std = 60;
+    const z = (avg_score - passing_grade) / std;
+    const probability = ztable(z);
+    return (probability * 100).toFixed(2);
+}
+
+// generate text color based on user's tryout score
+export function generateHexTextColor(score: number): string {
+    return score < 300
+        ? 'text-[#DB4A3B]'
+        : score >= 300 && score < 550
+        ? 'text-[#F2C04C]'
+        : 'text-[#03AC5C]';
 }
