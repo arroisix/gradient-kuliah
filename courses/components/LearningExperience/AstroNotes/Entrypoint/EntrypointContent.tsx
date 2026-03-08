@@ -44,7 +44,7 @@ export const EntrypointContent = ({
                     alt="Buku tidak ditemukan"
                     className="w-36"
                 />
-                <p className="text-sm font-bold text-center">
+                <p className="text-white text-sm font-bold text-center">
                     Tidak ada buku yang sesuai
                 </p>
             </div>

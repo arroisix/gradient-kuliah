@@ -42,11 +42,11 @@ const Sort = ({
                 )}
                 aria-hidden>
                 {!iconOnly && (
-                    <span className="overflow-hidden whitespace-nowrap text-ellipsis">
+                    <span className="text-white overflow-hidden whitespace-nowrap text-ellipsis">
                         {selected?.label}
                     </span>
                 )}
-                <BiFilter size={18} />
+                <BiFilter size={18} className="text-white" />
             </button>
             <ul
                 tabIndex={0}
@@ -59,7 +59,7 @@ const Sort = ({
                     <li key={value}>
                         <Link
                             id={value}
-                            className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0"
+                            className="text-white flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0"
                             href={{ query: { ...router.query, sort: value } }}
                             replace
                             scroll={false}

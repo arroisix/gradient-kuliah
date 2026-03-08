@@ -69,7 +69,7 @@ const HorizontalProductCard = ({
                         !product.inProgress || isReference ? 'hidden' : 'flex',
                         'items-center text-xs mb-2',
                         product.latestProgress == 100
-                            ? 'text-[#282b29]'
+                            ? 'text-[#03AC5C] bg-[#03AC5C]/25 pl-1 pr-2 py-0.5 font-medium rounded w-max'
                             : 'text-accent-yellow items-center pl-1 pr-2 py-0.5 font-medium rounded bg-accent-yellow/25 w-max'
                     )}>
                     {product.latestProgress == 100 ? (
@@ -88,7 +88,7 @@ const HorizontalProductCard = ({
                     <FreeBadge className="mb-2 badge-sm" />
                 )}
 
-                <TitleLabel className="font-sans text-sm font-bold text-balance line-clamp-2">
+                <TitleLabel className="text-white font-sans text-sm font-bold text-balance line-clamp-2">
                     {product.title}
                 </TitleLabel>
                 {!isReference && product.inProgress ? (
@@ -125,7 +125,7 @@ const Info = ({ product }: { product: Product }): JSX.Element => {
         <>
             <p
                 className={cn(
-                    'w-full mt-1 text-xs truncate',
+                    'text-white w-full mt-1 text-xs truncate',
                     authors.length === 0 && 'hidden'
                 )}>
                 {product.authors?.map((author, index) => (

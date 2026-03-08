@@ -276,12 +276,14 @@ function ExerciseQuestionList({
                             isForModal ? '' : 'lg:mt-8'
                         )}>
                         <div className="flex flex-col justify-center items-center gap-3 p-3 rounded-lg border border-[#7D89CC] mb-4">
-                            <span className="flex items-center gap-2 leading-[160%]">
+                            <span className="text-white text-sm flex items-center gap-2 leading-[160%]">
                                 <FaCircleCheck className="text-[#00C8B3] shrink-0 w-4 h-4" />{' '}
                                 Jawaban Benar
                             </span>
 
-                            <span>{correctAnswer?.value}</span>
+                            <span className="text-white font-semibold leading-[140%]">
+                                {correctAnswer?.value}
+                            </span>
                         </div>
 
                         <h3 className="text-white font-semibold leading-[140%] mb-4">

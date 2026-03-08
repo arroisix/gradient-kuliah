@@ -138,7 +138,9 @@ const Paginator = ({
                     )}>
                     1
                 </PageButton>
-                {totalPages > 6 && page > 4 && <p>...</p>}
+                {totalPages > 6 && page > 4 && (
+                    <p className="text-white">...</p>
+                )}
                 {pageButtons.map((pageNav) => (
                     <PageButton
                         href={getHref(pageNav)}
@@ -158,7 +160,9 @@ const Paginator = ({
                         {pageNav}
                     </PageButton>
                 ))}
-                {totalPages > 6 && page < totalPages - 2 && <p>...</p>}
+                {totalPages > 6 && page < totalPages - 2 && (
+                    <p className="text-white">...</p>
+                )}
                 {totalPages > 5 && (
                     <PageButton
                         href={getHref(totalPages)}
