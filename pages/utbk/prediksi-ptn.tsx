@@ -83,7 +83,7 @@ function MateriCard({
                         event.currentTarget.value as any
                     )
                 }
-                className="hide-input-number-icon !py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
+                className="hidden-input-number-icon !py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
             />
         </div>
     );

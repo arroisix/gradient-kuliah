@@ -123,9 +123,12 @@ function SpiderChartCard(): JSX.Element {
 
             <SpiderChart labels={labels} scores={data} />
 
-            <span className="text-[#B6A6F3] font-semibold leading-tight text-xs text-center block">
-                Skor rata-rata mu
-            </span>
+            <div className="flex flex-col justify-center items-center gap-1">
+                <div className="bg-[#B6A6F3] w-6 h-0.5"></div>
+                <span className="text-[#B6A6F3] font-semibold leading-tight text-xs">
+                    Skor rata-rata mu
+                </span>
+            </div>
         </div>
     );
 }

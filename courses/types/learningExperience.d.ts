@@ -233,6 +233,7 @@ interface GetCompetitionMapResponse {
     total_participants: number;
     user_score?: number;
     user_bar_index?: number;
+    user_position?: number;
     passing_grade?: number;
     passing_grade_bar_index?: number;
     histogram: Histogram[];

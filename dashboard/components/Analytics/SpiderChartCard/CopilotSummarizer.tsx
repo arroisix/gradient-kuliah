@@ -179,8 +179,10 @@ function CopilotSummarizer({ context }: CopilotSummarizerProps): JSX.Element {
                                     </ReactMarkdown>{' '}
                                     <Link
                                         href="/utbk/materi"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className="text-white text-sm font-body underline inline">
-                                        Akses materi disini
+                                        Akses materi di sini
                                     </Link>
                                 </div>
 
