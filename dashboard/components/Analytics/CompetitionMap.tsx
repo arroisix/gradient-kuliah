@@ -9,13 +9,16 @@ import {
     Legend,
     SubTitle,
     ChartOptions,
-    ChartData
+    ChartData,
+    ScriptableContext
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { cn } from 'commons/utils';
 import { useGetCompetitionMapQuery } from 'courses/redux/api/learningExperienceApi';
 import { EmptyChart } from './EmptyChart';
 import { CopilotSummarizer } from './CopilotSummarizer';
+import { InfoSolidIcon } from 'commons/components/elements/Icons/InfoSolidIcon';
+import { ThumbsUpSolidIcon } from 'commons/components/elements/Icons/ThumbsUpSolidIcon';
 
 ChartJS.register(
     CategoryScale,
@@ -28,7 +31,13 @@ ChartJS.register(
 );
 
 function generateContext(data: GetCompetitionMapResponse): string {
-    const { histogram, total_participants, passing_grade, user_score } = data;
+    const {
+        histogram,
+        total_participants,
+        passing_grade,
+        user_score,
+        user_position
+    } = data;
 
     return `
     - Jenis grafik: Histogram
@@ -55,6 +64,7 @@ function generateContext(data: GetCompetitionMapResponse): string {
               ).toFixed()} poin`
             : ''
     }
+    - Peringkat user diantara semua user berdasarkan skornya: ${user_position}
     `;
 }
 
@@ -90,20 +100,44 @@ function CompetitionMap(): JSX.Element {
                     borderRadius: { topLeft: 8, topRight: 8 },
                     borderSkipped: 'bottom',
                     hoverBackgroundColor: '#36236A',
-                    backgroundColor: (context) => {
+                    backgroundColor: (context: ScriptableContext<'bar'>) => {
                         if (
-                            competitionMap.passing_grade &&
-                            context.dataIndex ===
+                            !competitionMap.passing_grade ||
+                            context.dataIndex !==
                                 competitionMap.passing_grade_bar_index
                         ) {
-                            return '#B6A6F3';
+                            return '#5F2BCE';
                         }
-                        return '#5F2BCE';
+
+                        const { ctx, chartArea } = context.chart;
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        const element = context.element;
+
+                        if (!chartArea || !element || !element.width) {
+                            return '#5331c2';
+                        }
+
+                        const leftEdge = element.x - element.width / 2;
+                        const rightEdge = element.x + element.width / 2;
+
+                        const gradient = ctx.createLinearGradient(
+                            leftEdge,
+                            0,
+                            rightEdge,
+                            0
+                        );
+
+                        gradient.addColorStop(0, '#F2C04C');
+                        gradient.addColorStop(0.5, '#E48E0D');
+                        gradient.addColorStop(1, '#E4B50D');
+
+                        return gradient;
                     },
                     borderColor: (context) => {
                         return context.dataIndex ===
                             competitionMap.user_bar_index
-                            ? '#F2C04C'
+                            ? '#EF7F73'
                             : 'transparent';
                     },
                     borderWidth: (context) => {
@@ -161,46 +195,18 @@ function CompetitionMap(): JSX.Element {
                     titleAlign: 'center',
                     titleFont: { size: 12, lineHeight: 1.6 },
                     titleColor: '#FFFFFF',
+                    titleMarginBottom: 2,
 
                     bodyAlign: 'center',
-                    bodyFont: { size: 14, weight: 600, lineHeight: 1.4 },
+                    bodyFont: { size: 16, weight: 600, lineHeight: 1.4 },
                     bodyColor: '#FFFFFF',
-                    bodySpacing: 4,
-
-                    footerAlign: 'center',
-                    footerFont: { size: 12, weight: 500, lineHeight: 1.25 },
-                    footerColor: '#FFFFFF',
 
                     callbacks: {
-                        title: function (ctx) {
-                            if (ctx.length === 0) {
-                                return '';
-                            }
-
-                            if (
-                                ctx[0].dataIndex ===
-                                competitionMap.user_bar_index
-                            ) {
-                                return 'Nilai Kamu';
-                            }
-
-                            return 'Skor Try Out';
+                        title: function () {
+                            return 'Jumlah Peserta';
                         },
                         label: function (ctx) {
-                            if (
-                                ctx.dataIndex === competitionMap.user_bar_index
-                            ) {
-                                return `${competitionMap.user_score}`;
-                            }
-
-                            return ctx.label;
-                        },
-                        footer: function (ctx) {
-                            if (ctx.length === 0) {
-                                return '';
-                            }
-
-                            return `Dari ${ctx[0].formattedValue} peserta`;
+                            return ctx.formattedValue;
                         }
                     }
                 }
@@ -229,11 +235,11 @@ function CompetitionMap(): JSX.Element {
                 )}>
                 <div className="space-y-1 mb-6">
                     <h2 className="text-white font-semibold leading-[140%]">
-                        Peta Persaingan
+                        Peta Persaingan Skor Try Out
                     </h2>
 
                     <p className="text-[#999999] text-sm leading-[160%]">
-                        Posisimu vs {'<total_peserta>'} pesaing
+                        Posisimu {'<posisi>'} dari {'<total_peserta>'} peserta
                     </p>
                 </div>
 
@@ -252,11 +258,12 @@ function CompetitionMap(): JSX.Element {
             )}>
             <div>
                 <h2 className="text-white font-semibold leading-[140%] mb-1">
-                    Peta Persaingan
+                    Peta Persaingan Skor Try Out
                 </h2>
 
                 <p className="text-[#999999] text-sm leading-[160%] mb-6">
-                    Posisimu vs {competitionMap.total_participants} pesaing
+                    Posisimu {competitionMap.user_position} dari{' '}
+                    {competitionMap.total_participants} peserta
                 </p>
 
                 <div className="aspect-[4/3]">
@@ -265,7 +272,7 @@ function CompetitionMap(): JSX.Element {
 
                 <div className="flex justify-center items-center gap-4 mt-6">
                     <div className="flex flex-col gap-1 items-center">
-                        <div className="w-3 h-3 bg-transparent border-2 border-[#F2C04C] rounded-sm"></div>
+                        <div className="w-3 h-3 bg-transparent border-2 border-[#EF7F73] rounded-sm"></div>
                         <span className="text-[#999999] font-medium text-xs leading-tight">
                             Posisimu
                         </span>
@@ -275,65 +282,90 @@ function CompetitionMap(): JSX.Element {
                             'flex flex-col gap-1 items-center',
                             competitionMap.passing_grade ? '' : 'opacity-20'
                         )}>
-                        <div className="w-3 h-3 bg-[#B6A6F3] rounded-sm"></div>
+                        <div className="bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] rounded-sm w-3 h-3"></div>
                         <span className="text-[#999999] font-medium text-xs leading-tight">
                             Passing Grade
                         </span>
                     </div>
                 </div>
 
-                <div className="bg-[#20222E] border border-[#282B3C] p-3 rounded-xl flex justify-between items-center mt-6">
-                    <div className="flex flex-col gap-1">
-                        <span className="text-[#999999] text-sm leading-[160%]">
-                            Status
-                        </span>
-
-                        {competitionMap.passing_grade ? (
-                            <span className="text-white font-semibold leading-[140%]">
-                                {(competitionMap.user_score ?? 0) >=
-                                competitionMap.passing_grade
-                                    ? 'Aman'
-                                    : 'Belum Aman'}
-                            </span>
+                <div className="bg-[#20222E] border border-[#4B4E5F] rounded-xl overflow-hidden mt-6">
+                    <div className="bg-[#20222E] py-2 flex justify-center items-center gap-2">
+                        {(competitionMap.user_score ?? 0) <
+                        (competitionMap.passing_grade ?? 0) ? (
+                            <InfoSolidIcon className="shrink-0 text-[#F2C04C] w-4 h-4" />
                         ) : (
-                            <div className="w-fit h-[22px] grid place-items-center">
-                                <span className="bg-white w-2 h-0.5"></span>
-                            </div>
+                            <ThumbsUpSolidIcon className="shrink-0 text-[#03AC5C] w-4 h-4" />
                         )}
+
+                        <span className="text-white text-xs">
+                            {(competitionMap.user_score ?? 0) <
+                            (competitionMap.passing_grade ?? 0)
+                                ? 'Yuk tingkatkan lagi!'
+                                : 'Mantep sih ini!'}
+                        </span>
                     </div>
 
-                    <div className="flex flex-col gap-1">
+                    <div className="bg-[#282B3C] rounded-xl flex justify-between items-center py-3 px-4">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[#999999] font-medium text-xs leading-tight">
+                                Skor Tryout
+                            </span>
+
+                            <span className="text-white font-semibold text-xl leading-[140%] text-center">
+                                {competitionMap.user_score}
+                            </span>
+                        </div>
+
                         {competitionMap.passing_grade ? (
                             <>
-                                <span
-                                    className={cn(
-                                        'font-semibold text-2xl leading-tight text-right',
-                                        (competitionMap.user_score ?? 0) >=
-                                            competitionMap.passing_grade
-                                            ? 'text-[#03AC5C]'
-                                            : 'text-[#F2C04C]'
-                                    )}>
-                                    {(competitionMap.user_score ?? 0) >=
-                                    competitionMap.passing_grade
-                                        ? '+'
-                                        : ''}
-                                    {Math.abs(
-                                        competitionMap.passing_grade -
-                                            (competitionMap.user_score ?? 0)
-                                    ).toFixed()}
-                                </span>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-[#999999] font-medium text-xs leading-tight">
+                                        Passing Grade
+                                    </span>
 
-                                <span className="text-[#999999] font-medium text-xs leading-tight">
-                                    {(competitionMap.user_score ?? 0) >=
-                                    competitionMap.passing_grade
-                                        ? 'Lebih Poin'
-                                        : 'Kurang Poin'}
-                                </span>
+                                    <span className="text-white font-semibold text-xl leading-[140%] text-center">
+                                        {competitionMap.passing_grade}
+                                    </span>
+                                </div>
+
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-[#999999] font-medium text-xs leading-tight">
+                                        {(competitionMap.user_score ?? 0) >=
+                                        competitionMap.passing_grade
+                                            ? 'Lebih Poin'
+                                            : 'Kurang Poin'}
+                                    </span>
+
+                                    <span
+                                        className={cn(
+                                            'font-semibold text-xl leading-[140%] text-center',
+                                            (competitionMap.user_score ?? 0) >=
+                                                competitionMap.passing_grade
+                                                ? 'text-[#03AC5C]'
+                                                : 'text-[#F2C04C]'
+                                        )}>
+                                        {(competitionMap.user_score ?? 0) >=
+                                        competitionMap.passing_grade
+                                            ? '+'
+                                            : ''}
+                                        {Math.abs(
+                                            competitionMap.passing_grade -
+                                                (competitionMap.user_score ?? 0)
+                                        ).toFixed()}
+                                    </span>
+                                </div>
                             </>
                         ) : (
-                            <div className="w-fit h-[30px] grid place-items-center">
-                                <span className="bg-[#999999] w-3 h-0.5"></span>
-                            </div>
+                            <>
+                                <div className="w-fit h-[30px] grid place-items-center">
+                                    <span className="bg-[#999999] w-3 h-0.5"></span>
+                                </div>
+
+                                <div className="w-fit h-[30px] grid place-items-center">
+                                    <span className="bg-[#999999] w-3 h-0.5"></span>
+                                </div>
+                            </>
                         )}
                     </div>
                 </div>

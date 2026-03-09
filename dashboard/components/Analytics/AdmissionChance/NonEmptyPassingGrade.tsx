@@ -1,26 +1,11 @@
 import { InfoOutlineIcon } from 'commons/components/elements/Icons/InfoOutlineIcon';
 import { InfoSolidIcon } from 'commons/components/elements/Icons/InfoSolidIcon';
 import { ThumbsUpSolidIcon } from 'commons/components/elements/Icons/ThumbsUpSolidIcon';
-import { cn } from 'commons/utils';
-import ztable from 'ztable';
-
-function calculatePrediction(
-    tryoutScore: number,
-    passingGrade: number
-): number {
-    const std = 60;
-    const z = (tryoutScore - passingGrade) / std;
-    const probability = ztable(z);
-    return probability * 100;
-}
-
-function generateHexTextColor(score: number): string {
-    return score < 300
-        ? 'text-[#DB4A3B]'
-        : score >= 300 && score < 550
-        ? 'text-[#F2C04C]'
-        : 'text-[#03AC5C]';
-}
+import {
+    calculateTryoutPrediction,
+    cn,
+    generateHexTextColor
+} from 'commons/utils';
 
 interface NonEmptyPassingGradeProps {
     tryoutScore: number;
@@ -31,7 +16,7 @@ function NonEmptyPassingGrade({
     tryoutScore,
     passing_grade
 }: NonEmptyPassingGradeProps): JSX.Element {
-    const probability = calculatePrediction(tryoutScore, passing_grade);
+    const probability = calculateTryoutPrediction(tryoutScore, passing_grade);
 
     return (
         <div
@@ -52,7 +37,7 @@ function NonEmptyPassingGrade({
                     <div
                         className={cn(
                             'font-bold text-[40px] leading-[120%]',
-                            generateHexTextColor(probability * 10)
+                            generateHexTextColor(Number(probability) * 10)
                         )}>
                         {probability}%
                     </div>

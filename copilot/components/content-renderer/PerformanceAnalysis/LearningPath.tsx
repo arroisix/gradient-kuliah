@@ -1,5 +1,5 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import { cn, formatDuration } from 'commons/utils';
+import { cn, formatDuration, generateHexTextColor } from 'commons/utils';
 import { LearningPathIcon } from 'copilot/assets/LearningPathIcon';
 import { useGetProblemsetLearningPathQuery } from 'copilot/redux/api/copilotApi';
 import {
@@ -15,15 +15,6 @@ import {
 import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { FaRegDotCircle } from 'react-icons/fa';
-
-// generate text color based on subtest score
-function generateHexTextColor(score: number): string {
-    return score < 300
-        ? 'text-[#DB4A3B]'
-        : score >= 300 && score < 550
-        ? 'text-[#F2C04C]'
-        : 'text-[#03AC5C]';
-}
 
 interface LearningPathProps {
     isForModal?: boolean;
