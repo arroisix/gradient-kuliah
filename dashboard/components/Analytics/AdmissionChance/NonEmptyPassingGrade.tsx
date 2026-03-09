@@ -39,7 +39,7 @@ function NonEmptyPassingGrade({
                             'font-bold text-[40px] leading-[120%]',
                             generateHexTextColor(Number(probability) * 10)
                         )}>
-                        {probability}%
+                        {Number(probability) > 0 ? probability : 0}%
                     </div>
 
                     <div className="w-fit bg-[#20222E] border border-[#4B4E5F] rounded-full flex items-center gap-1 py-1 px-2">

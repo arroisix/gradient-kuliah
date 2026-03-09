@@ -154,8 +154,10 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                         isHistoryOpen={isHistoryOpen}
                         setIsHistoryOpen={setIsHistoryOpen}
                     />
-                ) : (
+                ) : router.pathname !== '/utbk/dashboard/atur-strategi' ? (
                     <MobileTopbar />
+                ) : (
+                    <></>
                 )}
             </div>
 
@@ -169,7 +171,9 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                     'lg:pb-0 lg:flex-grow lg:overflow-y-scroll lg:scrollbar-none',
                     router.pathname.includes('/copilot')
                         ? 'h-screen flex flex-col pt-12 lg:pt-0'
-                        : 'pt-14 lg:pt-0'
+                        : router.pathname !== '/utbk/dashboard/atur-strategi'
+                        ? 'pt-14 lg:pt-0'
+                        : ''
                 )}>
                 {/* copilot sidebar trigger */}
                 {router.pathname.includes('/copilot') ? (
