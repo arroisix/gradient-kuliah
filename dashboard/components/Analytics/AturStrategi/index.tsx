@@ -75,8 +75,8 @@ function AturStrategi(): JSX.Element {
             {/* top bar */}
             <div
                 className={cn(
-                    'flex justify-between items-center mb-4',
-                    'lg:flex-col lg:gap-6 lg:items-start lg:mb-8'
+                    'flex justify-between items-center mb-8',
+                    'lg:flex-col lg:gap-6 lg:items-start'
                 )}>
                 <Link
                     href="/utbk/dashboard"
