@@ -162,7 +162,7 @@ const VerticalProductCard = ({
                 </p>
                 <TitleLabel
                     className={cn(
-                        'text-sm grow font-bold line-clamp-2 text-balance'
+                        'text-sm grow font-bold line-clamp-2 text-balance text-white'
                     )}>
                     {product.title}
                 </TitleLabel>

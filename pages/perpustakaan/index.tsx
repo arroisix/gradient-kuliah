@@ -1,6 +1,6 @@
 import LearnLayout from 'commons/learnLayout';
 import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
 import { Layout } from 'commons/components/Layout';
