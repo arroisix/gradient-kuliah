@@ -1,9 +1,17 @@
 import withAnon from 'commons/withAnon';
 import type { GetStaticProps } from 'next';
 import { AturStrategi } from 'dashboard/components/Analytics/AturStrategi';
+import { Layout } from 'commons/components/Layout';
+import { cn } from 'commons/utils';
 
 const AturStrategiPage = (): JSX.Element => {
-    return <AturStrategi />;
+    return (
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <AturStrategi />
+            </div>
+        </Layout>
+    );
 };
 
 export default withAnon(AturStrategiPage);
