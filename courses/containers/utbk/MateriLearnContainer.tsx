@@ -1,4 +1,5 @@
 import Button from 'commons/components/elements/Button';
+import FreeBadge from 'commons/components/elements/FreeBadge';
 import { FaChevronLeft } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
@@ -109,9 +110,9 @@ function MateriLearnContainer({
 
     return (
         <div
-            className={`${
-                isExercise ? 'px-0' : 'px-4'
-            } w-full max-w-[1368px] mx-auto lg:h-[calc(100vh-32px)] lg:overflow-hidden`}>
+            className={`${isExercise ? 'px-0' : 'px-4'} w-full ${
+                isKelasRoute ? 'max-w-[1472px]' : 'max-w-[1368px]'
+            } mx-auto lg:h-[calc(100vh-32px)] lg:overflow-hidden`}>
             <div
                 className={`${
                     isExercise ? 'mx-4' : 'mx-0'
@@ -131,11 +132,21 @@ function MateriLearnContainer({
 
                 {isKelasRoute ? (
                     <div className="flex-shrink-0">
-                        <ShareButton
-                            disabled={!course || !subchapter}
-                            typeCopy="COURSE VIDEO"
-                            shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
-                        />
+                        <div className="lg:hidden">
+                            <ShareButton
+                                disabled={!course || !subchapter}
+                                typeCopy="COURSE VIDEO"
+                                shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                            />
+                        </div>
+
+                        <div className="hidden lg:flex justify-end min-w-[108px]">
+                            {subchapter?.video?.is_free ? (
+                                <FreeBadge className="uppercase tracking-[0.08em]" />
+                            ) : (
+                                <div className="h-6 w-[65px]" />
+                            )}
+                        </div>
                     </div>
                 ) : (
                     <div></div>
@@ -148,7 +159,11 @@ function MateriLearnContainer({
                 } grid grid-cols-8 gap-6`}>
                 <div
                     className={`${
-                        isExercise ? '' : 'max-w-[844px]'
+                        isExercise
+                            ? ''
+                            : isKelasRoute
+                            ? 'lg:max-w-[960px]'
+                            : 'max-w-[844px]'
                     } w-full mx-auto col-span-8 lg:col-span-5 lg:pb-0`}>
                     {subchapter?.type_name === 'lecture' ? (
                         <div className="lg:h-[calc(100vh-32px-36px-16px)] lg:overflow-scroll lg:no-scrollbar">

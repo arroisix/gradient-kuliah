@@ -62,6 +62,11 @@ function MateriVideoProfile({
         }
     )?.description;
 
+    const lecturers =
+        isKelasRoute && course?.lecturers?.length
+            ? course.lecturers
+            : subchapter.video?.lecturers;
+
     return (
         <div className="mx-4 mt-4 lg:mx-0 lg:mt-10">
             {!isKelasRoute && (
@@ -98,13 +103,27 @@ function MateriVideoProfile({
                     )}
 
                     {isKelasRoute ? (
-                        <Button
-                            onClick={() => router.push('/kelas/downloads')}
-                            variant="neutral"
-                            size="small"
-                            className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
-                            <MdFileDownload className="text-white w-4 h-4" />
-                        </Button>
+                        <>
+                            <div className="lg:hidden">
+                                <Button
+                                    onClick={() =>
+                                        router.push('/kelas/downloads')
+                                    }
+                                    variant="neutral"
+                                    size="small"
+                                    className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
+                                    <MdFileDownload className="text-white w-4 h-4" />
+                                </Button>
+                            </div>
+
+                            <div className="hidden lg:block">
+                                <ShareButton
+                                    disabled={!course || !subchapter}
+                                    typeCopy="COURSE VIDEO"
+                                    shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                                />
+                            </div>
+                        </>
                     ) : (
                         <div className="flex-shrink-0">
                             <ShareButton
@@ -135,7 +154,7 @@ function MateriVideoProfile({
                 </div>
 
                 {isKelasRoute && videoDescription && (
-                    <div className="order-3 mt-6 flex flex-col gap-3">
+                    <div className="order-3 mt-6 flex flex-col gap-3 lg:hidden">
                         <h4 className="text-xs text-[#999999] font-semibold">
                             DEKSRIPSI
                         </h4>
@@ -144,7 +163,7 @@ function MateriVideoProfile({
                 )}
 
                 {isKelasRoute && !!course.rating && course.rating > 0 && (
-                    <div className="order-4 mt-4 mb-20 inline-flex items-center ">
+                    <div className="order-4 mt-4 mb-20 inline-flex items-center lg:hidden">
                         <div className="gap-1 px-2 py-[6px] bg-[#F2C04C80] w-fit rounded-[32px] flex flex-row items-center">
                             <AiFillStar className="w-4 h-4 text-[#F2C04C]" />
                             <span className="font-semibold text-white">
@@ -156,8 +175,61 @@ function MateriVideoProfile({
                     </div>
                 )}
 
-                <div className="order-1 mt-3 lg:order-2 lg:mt-10">
-                    <LecturerProfile lecturers={subchapter.video?.lecturers} />
+                {isKelasRoute && (
+                    <div className="hidden lg:block order-3 mt-10 mb-20 lg:mb-0 rounded-2xl bg-[#181818] p-6 relative">
+                        {!!course.rating && course.rating > 0 && (
+                            <div className="absolute -top-4 right-5 inline-flex items-center">
+                                <div className="gap-1 px-2 py-[6px] bg-[#F2C04C80] w-fit rounded-[32px] flex flex-row items-center">
+                                    <AiFillStar className="w-4 h-4 text-[#F2C04C]" />
+                                    <span className="font-semibold text-white">
+                                        {typeof course?.rating === 'number'
+                                            ? course.rating.toFixed(1)
+                                            : '-'}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex flex-col gap-3">
+                            <h4 className="text-xs text-[#999999] font-semibold">
+                                PENGAJAR
+                            </h4>
+                            <LecturerProfile lecturers={lecturers} />
+                        </div>
+
+                        {videoDescription && (
+                            <div className="mt-6 flex flex-col gap-3 relative pr-16">
+                                <h4 className="text-xs text-[#999999] font-semibold">
+                                    DEKSRIPSI
+                                </h4>
+                                <p className="text-white text-sm">
+                                    {videoDescription}
+                                </p>
+                            </div>
+                        )}
+
+                        {!videoDescription &&
+                            !!course.rating &&
+                            course.rating > 0 && (
+                                <div className="mt-6 inline-flex items-center">
+                                    <div className="gap-1 px-2 py-[6px] bg-[#F2C04C80] w-fit rounded-[32px] flex flex-row items-center">
+                                        <AiFillStar className="w-4 h-4 text-[#F2C04C]" />
+                                        <span className="font-semibold text-white">
+                                            {typeof course?.rating === 'number'
+                                                ? course.rating.toFixed(1)
+                                                : '-'}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+                    </div>
+                )}
+
+                <div
+                    className={`order-1 mt-3 lg:order-2 lg:mt-10 ${
+                        isKelasRoute ? 'lg:hidden' : ''
+                    }`}>
+                    <LecturerProfile lecturers={lecturers} />
                 </div>
             </div>
 
