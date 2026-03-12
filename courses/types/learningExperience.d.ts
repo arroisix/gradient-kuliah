@@ -245,8 +245,15 @@ interface GetSpiderChartResponse {
     average_score: number;
 }
 
-interface GetLineChartResponse {
+interface TrendLineResult {
     trend_scores: number[];
+    raw_growth: number;
+    avg_percentage: number;
+    total_percentage: number;
+}
+
+interface GetLineChartResponse {
+    trend_line: TrendLineResult;
     line_chart_data: {
         exercise_slug: string;
         title: string;

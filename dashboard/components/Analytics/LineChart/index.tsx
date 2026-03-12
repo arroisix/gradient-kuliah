@@ -77,7 +77,7 @@ function findMinMaxTryout(data: GetLineChartResponse['line_chart_data']): {
 }
 
 function generateContext(data: GetLineChartResponse): string {
-    const { line_chart_data, trend_scores } = data;
+    const { line_chart_data, trend_line } = data;
     const { minTryout, maxTryout } = findMinMaxTryout(line_chart_data);
 
     return `
@@ -97,11 +97,11 @@ function generateContext(data: GetLineChartResponse): string {
     ${line_chart_data.map(
         (v, index) =>
             `- ${formatTryoutTitle(v.title)}: ${
-                trend_scores.length < line_chart_data.length
-                    ? index > trend_scores.length - 1
+                trend_line.trend_scores.length < line_chart_data.length
+                    ? index > trend_line.trend_scores.length - 1
                         ? 'Unknown'
-                        : trend_scores[index]
-                    : trend_scores[index]
+                        : trend_line.trend_scores[index]
+                    : trend_line.trend_scores[index]
             }${line_chart_data.length - 1 === index ? '' : '\n'}`
     )}
 
@@ -164,7 +164,7 @@ function LineChart(): JSX.Element {
                 },
                 {
                     label: 'Tren saat ini',
-                    data: response.trend_scores,
+                    data: response.trend_line.trend_scores,
                     borderColor: '#fcd34d',
                     borderDash: [5, 5],
                     // no dots on the trend line
@@ -248,7 +248,9 @@ function LineChart(): JSX.Element {
                             }
 
                             const trendScore =
-                                response.trend_scores[ctx[0].dataIndex];
+                                response.trend_line.trend_scores[
+                                    ctx[0].dataIndex
+                                ];
                             return `Tren saat ini: ${trendScore}`;
                         }
                     }
@@ -272,7 +274,7 @@ function LineChart(): JSX.Element {
     if (
         !response ||
         response.line_chart_data.length === 0 ||
-        response.trend_scores.length === 0
+        response.trend_line.trend_scores.length === 0
     ) {
         return (
             <div
