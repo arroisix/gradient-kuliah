@@ -15,6 +15,7 @@ import dynamic from 'next/dynamic';
 import { StudentTargetInstitution } from 'dashboard/types/dashboard';
 import { useWindowSize } from 'usehooks-ts';
 import Modal from 'commons/components/modules/Modal';
+import { useRouter } from 'next/router';
 
 const SetTargetInstitutionWall = dynamic(
     () => import('./SetTargetInstitutionWall')
@@ -39,6 +40,7 @@ function SetTargetDrawer({
     children,
     isForInterrupt = false
 }: SetTargetDrawerProps): JSX.Element {
+    const router = useRouter();
     const [targets, setTargets] = useState<StudentTargetInstitution[]>([]);
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
     const [isModalOpened, setIsModalOpened] = useState(false);
@@ -91,7 +93,9 @@ function SetTargetDrawer({
                 />
 
                 <div className="drawer-content">
-                    {targets.length === 0 && !isForInterrupt ? (
+                    {targets.length === 0 &&
+                    !isForInterrupt &&
+                    router.pathname !== '/utbk/dashboard' ? (
                         <SetTargetInstitutionWall />
                     ) : (
                         children
