@@ -194,6 +194,20 @@ function LineChart(): JSX.Element {
                         chartElement.length > 0 ? 'pointer' : 'default';
                 }
             },
+            // redirect to tryout result on click
+            onClick: (_, elements) => {
+                if (elements.length > 0) {
+                    const clickedIndex = elements[0].index;
+                    const tryout = response.line_chart_data[clickedIndex];
+                    if (tryout.exercise_slug) {
+                        window.open(
+                            `/latihan/${tryout.exercise_slug}`,
+                            '_blank',
+                            'noopener,noreferrer'
+                        );
+                    }
+                }
+            },
             scales: {
                 x: {
                     grid: { display: false },
