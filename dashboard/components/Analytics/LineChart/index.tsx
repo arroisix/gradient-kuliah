@@ -18,6 +18,7 @@ import { useGetLineChartQuery } from 'courses/redux/api/learningExperienceApi';
 import { EmptyChart } from '../EmptyChart';
 import { CourseDropdown } from './CourseDropdown';
 import { CopilotSummarizer } from '../CopilotSummarizer';
+import { LightbulbOutline } from 'commons/components/elements/Icons/LightbulbOutline';
 
 ChartJS.register(
     CategoryScale,
@@ -339,6 +340,16 @@ function LineChart(): JSX.Element {
                         setSelectedCourseId={setSelectedCourseId}
                     />
                 </div>
+
+                {response.trend_line.avg_percentage > 0 ? (
+                    <p className="bg-[#20222E] border border-[#282B3C] text-white text-sm leading-[160%] flex items-center gap-2 p-3 rounded-xl">
+                        <LightbulbOutline className="shrink-0 w-4 h-4 text-white" />{' '}
+                        Nilai Try Out mu mengalami kenaikan rata-rata{' '}
+                        {response.trend_line.avg_percentage}%.
+                    </p>
+                ) : (
+                    <></>
+                )}
 
                 {isFetchingChart ? (
                     <div className="animate-pulse bg-[#333333] aspect-[4/3] rounded-xl"></div>
