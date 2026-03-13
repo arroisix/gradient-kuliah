@@ -152,10 +152,11 @@ function AnalyticsWall(): JSX.Element {
 
                 {targetInstitutions?.length === 0 ? (
                     <Button
+                        onClick={handleClickButton}
                         type="button"
                         variant="primary"
                         className={cn(
-                            '!py-2 !px-3 text-sm font-semibold leading-tight w-full flex justify-center items-center gap-1',
+                            'shrink-0 !py-2 !px-3 text-sm font-semibold leading-tight w-full flex justify-center items-center gap-1',
                             'lg:w-fit'
                         )}>
                         Pilih Jurusan

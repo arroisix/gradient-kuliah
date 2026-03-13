@@ -18,6 +18,7 @@ import { useGetLineChartQuery } from 'courses/redux/api/learningExperienceApi';
 import { EmptyChart } from '../EmptyChart';
 import { CourseDropdown } from './CourseDropdown';
 import { CopilotSummarizer } from '../CopilotSummarizer';
+import { LightbulbOutline } from 'commons/components/elements/Icons/LightbulbOutline';
 
 ChartJS.register(
     CategoryScale,
@@ -77,7 +78,7 @@ function findMinMaxTryout(data: GetLineChartResponse['line_chart_data']): {
 }
 
 function generateContext(data: GetLineChartResponse): string {
-    const { line_chart_data, trend_scores } = data;
+    const { line_chart_data, trend_line } = data;
     const { minTryout, maxTryout } = findMinMaxTryout(line_chart_data);
 
     return `
@@ -97,11 +98,11 @@ function generateContext(data: GetLineChartResponse): string {
     ${line_chart_data.map(
         (v, index) =>
             `- ${formatTryoutTitle(v.title)}: ${
-                trend_scores.length < line_chart_data.length
-                    ? index > trend_scores.length - 1
+                trend_line.trend_scores.length < line_chart_data.length
+                    ? index > trend_line.trend_scores.length - 1
                         ? 'Unknown'
-                        : trend_scores[index]
-                    : trend_scores[index]
+                        : trend_line.trend_scores[index]
+                    : trend_line.trend_scores[index]
             }${line_chart_data.length - 1 === index ? '' : '\n'}`
     )}
 
@@ -164,7 +165,7 @@ function LineChart(): JSX.Element {
                 },
                 {
                     label: 'Tren saat ini',
-                    data: response.trend_scores,
+                    data: response.trend_line.trend_scores,
                     borderColor: '#fcd34d',
                     borderDash: [5, 5],
                     // no dots on the trend line
@@ -191,6 +192,20 @@ function LineChart(): JSX.Element {
                     const target = event.native.target as HTMLElement;
                     target.style.cursor =
                         chartElement.length > 0 ? 'pointer' : 'default';
+                }
+            },
+            // redirect to tryout result on click
+            onClick: (_, elements) => {
+                if (elements.length > 0) {
+                    const clickedIndex = elements[0].index;
+                    const tryout = response.line_chart_data[clickedIndex];
+                    if (tryout.exercise_slug) {
+                        window.open(
+                            `/latihan/${tryout.exercise_slug}`,
+                            '_blank',
+                            'noopener,noreferrer'
+                        );
+                    }
                 }
             },
             scales: {
@@ -248,7 +263,9 @@ function LineChart(): JSX.Element {
                             }
 
                             const trendScore =
-                                response.trend_scores[ctx[0].dataIndex];
+                                response.trend_line.trend_scores[
+                                    ctx[0].dataIndex
+                                ];
                             return `Tren saat ini: ${trendScore}`;
                         }
                     }
@@ -272,7 +289,7 @@ function LineChart(): JSX.Element {
     if (
         !response ||
         response.line_chart_data.length === 0 ||
-        response.trend_scores.length === 0
+        response.trend_line.trend_scores.length === 0
     ) {
         return (
             <div
@@ -337,6 +354,16 @@ function LineChart(): JSX.Element {
                         setSelectedCourseId={setSelectedCourseId}
                     />
                 </div>
+
+                {response.trend_line.avg_percentage > 0 ? (
+                    <p className="bg-[#20222E] border border-[#282B3C] text-white text-sm leading-[160%] flex items-center gap-2 p-3 rounded-xl">
+                        <LightbulbOutline className="shrink-0 w-4 h-4 text-white" />{' '}
+                        Nilai Try Out mu mengalami kenaikan rata-rata{' '}
+                        {response.trend_line.avg_percentage}%.
+                    </p>
+                ) : (
+                    <></>
+                )}
 
                 {isFetchingChart ? (
                     <div className="animate-pulse bg-[#333333] aspect-[4/3] rounded-xl"></div>
