@@ -128,10 +128,10 @@ const VideoPlayerContainer = ({
         isFinished?: boolean,
         subchapter_slug?: string
     ): Promise<void> => {
-        if (!isAuthenticated) return;
+        if (!isAuthenticated || !learning_progress_id) return;
 
         track({
-            learning_progress_id: learning_progress_id as string,
+            learning_progress_id: learning_progress_id,
             video_progress: {
                 video_id: video?.id as string,
                 last_duration: last_duration as unknown as string,
