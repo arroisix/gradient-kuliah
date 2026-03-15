@@ -69,21 +69,23 @@ export default function RenewSubscriptionBanner({
 
     const collegeStudentComponentV2 = (): JSX.Element => {
         return (
-            <div className={
-                cn(
-                    "fixed left-1/2 -translate-x-1/2 w-[90%] lg:w-fit z-40 lg:translate-x-[calc(-50%+125px)] bg-black p-4 md:p-6 overflow-hidden",
-                    isAuthenticated ? "md:w-[60%] bottom-[68px] md:bottom-[58px] lg:bottom-0 rounded-xl md:rounded-none md:rounded-t-xl" : "md:-translate-x-1/2 md:w-[75%] bottom-0 rounded-t-xl",
+            <div
+                className={cn(
+                    'fixed left-1/2 -translate-x-1/2 w-[90%] lg:w-fit z-40 bg-black p-4 md:p-6 overflow-hidden',
+                    isAuthenticated
+                        ? 'md:w-[60%] bottom-[68px] md:bottom-[58px] lg:bottom-0 rounded-xl md:rounded-none md:rounded-t-xl lg:translate-x-[calc(-50%+127.5px)]'
+                        : 'md:-translate-x-1/2 md:w-[75%] bottom-0 rounded-t-xl lg:translate-x-[calc(-50%)]',
                     className
-                )
-            }>
-                <div className='flex flex-col md:flex-row items-center gap-4 md:gap-6 lg:gap-10 relative'>
-                    <span className='text-md lg:text-xl font-semibold text-white z-10'>
-                        Daftar Gradient untuk melihat rekomendasi sesuai jurusan kamu!
+                )}>
+                <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 lg:gap-10 relative">
+                    <span className="text-md lg:text-xl font-semibold text-white z-10">
+                        Daftar Gradient untuk melihat rekomendasi sesuai jurusan
+                        kamu!
                     </span>
 
                     <Button
-                        variant='primary'
-                        className='z-10 w-full md:w-fit'
+                        variant="primary"
+                        className="z-10 w-full md:w-fit"
                         onClick={() => {
                             if (isAuthenticated)
                                 window.location.href = '/langganan';

@@ -98,7 +98,7 @@ function MateriLearnContainer({
 
     const backHref =
         isKelasRoute && effectiveCourseSlug
-            ? `/kelas/${effectiveCourseSlug}`
+            ? `/kelas`
             : '/utbk/materi';
     const nextHref = subchapter?.next_subchapter_slug
         ? isKelasRoute
