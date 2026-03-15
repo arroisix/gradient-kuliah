@@ -525,7 +525,8 @@ const ClassContainer = ({
                             (allCourses.data?.length ?? 0) > 0 ? (
                                 <div className="flex flex-col gap-6">
                                     <span className="text-[#999999] text-sm">
-                                        Hasil pencarian untuk "{searchTerm}"
+                                        Hasil pencarian untuk &quot;{searchTerm}
+                                        &quot;
                                     </span>
 
                                     <div className="flex flex-col gap-8">

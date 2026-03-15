@@ -45,7 +45,10 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 })
             }
         ),
-        getPrivateListCourseCluster: builder.query<ListResponseData<CourseClusterData>, void>({
+        getPrivateListCourseCluster: builder.query<
+            ListResponseData<CourseClusterData>,
+            void
+        >({
             query: () => ({
                 url: `${PRIVATE_COURSE_BASE_URL}course-cluster/`
             })

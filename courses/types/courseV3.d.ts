@@ -14,4 +14,4 @@ type CourseV3 = {
     latest_subchapter_slug?: string;
     slug: string;
     clusters: string[];
-}
+};

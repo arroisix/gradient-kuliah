@@ -1,4 +1,4 @@
-import CourseCard from "./CourseCard";
+import CourseCard from './CourseCard';
 
 interface CourseListProps {
     courses: CourseV3[];
@@ -12,10 +12,14 @@ const CourseList = ({
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-8">
             {courses.map((course) => (
-                <CourseCard key={course.id} {...course} highlightQuery={highlightQuery} />
+                <CourseCard
+                    key={course.id}
+                    {...course}
+                    highlightQuery={highlightQuery}
+                />
             ))}
         </div>
     );
-}
+};
 
 export default CourseList;

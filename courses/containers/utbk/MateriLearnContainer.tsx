@@ -97,9 +97,7 @@ function MateriLearnContainer({
     }, [is_subscribed, subchapter?.video?.is_free, subscribedFeatures]);
 
     const backHref =
-        isKelasRoute && effectiveCourseSlug
-            ? `/kelas`
-            : '/utbk/materi';
+        isKelasRoute && effectiveCourseSlug ? `/kelas` : '/utbk/materi';
     const nextHref = subchapter?.next_subchapter_slug
         ? isKelasRoute
             ? `/kelas/${effectiveCourseSlug}/${subchapter.next_subchapter_slug}`

@@ -54,7 +54,10 @@ export const publicCourseApi = baseApi.injectEndpoints({
                 url: `${PUBLIC_COURSE_BASE_URL}code-editor/${id}/`
             })
         }),
-        getPublicListCourseCluster: builder.query<ListResponseData<CourseClusterData>, void>({
+        getPublicListCourseCluster: builder.query<
+            ListResponseData<CourseClusterData>,
+            void
+        >({
             query: () => ({
                 url: `${PUBLIC_COURSE_BASE_URL}course-cluster/`
             })
@@ -79,5 +82,4 @@ export const {
     getPublicCourse,
     getLandingCourseData,
     getPublicListCourseCluster
-} =
-    publicCourseApi.endpoints;
+} = publicCourseApi.endpoints;

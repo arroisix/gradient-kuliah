@@ -433,4 +433,4 @@ type SubchapterPathResponse = {
 type CourseClusterData = {
     id: string;
     name: string;
-}
+};

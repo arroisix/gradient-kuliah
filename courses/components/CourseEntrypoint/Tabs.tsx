@@ -13,7 +13,7 @@ interface CourseEntrypointTabsProps {
         value: string;
         label: string;
     }[];
-    defaultTab: string
+    defaultTab: string;
 }
 const CourseEntrypointTabs = ({
     tabs,
@@ -35,7 +35,10 @@ const CourseEntrypointTabs = ({
         const firstTabs = tabs.slice(0, 5);
         const activeTab = tabs.find((tab) => isTabActive(tab.value));
 
-        if (!activeTab || firstTabs.some((tab) => tab.value === activeTab.value)) {
+        if (
+            !activeTab ||
+            firstTabs.some((tab) => tab.value === activeTab.value)
+        ) {
             return firstTabs;
         }
 
@@ -47,9 +50,7 @@ const CourseEntrypointTabs = ({
     const tabStyle = (tab: string): string =>
         cn(
             'inline-flex items-center gap-2 justify-center md:justify-start text-center text-sm py-3 border-b-2 flex-1 md:flex-none first:!px-1 whitespace-nowrap',
-            isTabActive(tab)
-                ? TabStyle.active
-                : TabStyle.default
+            isTabActive(tab) ? TabStyle.active : TabStyle.default
         );
 
     const mobileTabStyle = (tab: string): string => {
@@ -65,13 +66,14 @@ const CourseEntrypointTabs = ({
 
     return (
         <>
-            <div className='flex lg:hidden items-start gap-4 w-full'>
-                <div className={cn(
-                    'flex flex-1 gap-3 min-h-px min-w-px',
-                    isExpandedMobile
-                        ? 'flex-wrap items-start'
-                        : 'items-center overflow-x-auto no-scrollbar'
-                )}>
+            <div className="flex lg:hidden items-start gap-4 w-full">
+                <div
+                    className={cn(
+                        'flex flex-1 gap-3 min-h-px min-w-px',
+                        isExpandedMobile
+                            ? 'flex-wrap items-start'
+                            : 'items-center overflow-x-auto no-scrollbar'
+                    )}>
                     {displayedMobileTabs.map((tab, index) => {
                         const active = isTabActive(tab.value);
 
@@ -86,7 +88,7 @@ const CourseEntrypointTabs = ({
                                 {isAuthenticated && index === 0 && (
                                     <Sparkles isActive={active} />
                                 )}
-                                <span className='text-white'>{tab.label}</span>
+                                <span className="text-white">{tab.label}</span>
                             </Link>
                         );
                     })}
@@ -94,8 +96,10 @@ const CourseEntrypointTabs = ({
 
                 {hasHiddenMobileTabs && (
                     <button
-                        type='button'
-                        aria-label={isExpandedMobile ? 'Collapse tabs' : 'Expand tabs'}
+                        type="button"
+                        aria-label={
+                            isExpandedMobile ? 'Collapse tabs' : 'Expand tabs'
+                        }
                         className={cn(
                             'flex h-6 w-[38px] shrink-0 items-center justify-center rounded-2xl shadow-[-10px_0px_4px_0px_rgba(0,0,0,0.8)]',
                             isExpandedMobile
@@ -128,7 +132,7 @@ const CourseEntrypointTabs = ({
                             {isAuthenticated && index === 0 && (
                                 <Sparkles isActive={active} />
                             )}
-                            <span className='text-white'>{tab.label}</span>
+                            <span className="text-white">{tab.label}</span>
                         </Link>
                     );
                 })}
@@ -142,7 +146,7 @@ const CourseEntrypointTabs = ({
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default CourseEntrypointTabs;

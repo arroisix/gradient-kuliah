@@ -1,13 +1,13 @@
-import Button from "commons/components/elements/Button";
-import Link from "next/link";
+import Button from 'commons/components/elements/Button';
+import Link from 'next/link';
 import { FaChevronLeft } from 'react-icons/fa';
-import Playstore from "commons/components/elements/Icons/Playstore";
-import Appstore from "commons/components/elements/Icons/Appstore";
+import Playstore from 'commons/components/elements/Icons/Playstore';
+import Appstore from 'commons/components/elements/Icons/Appstore';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from "authentication/redux/selectors/userSelector";
-import { cn } from "commons/utils";
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { cn } from 'commons/utils';
 
 const DownloadsContainer = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -32,7 +32,9 @@ const DownloadsContainer = (): JSX.Element => {
                         </h1>
 
                         <h2 className="text-white">
-                            Belajar dimana saja kapan saja tanpa internet. Download aplikasi Gradient dan akses video materi kapan saja.
+                            Belajar dimana saja kapan saja tanpa internet.
+                            Download aplikasi Gradient dan akses video materi
+                            kapan saja.
                         </h2>
                     </div>
 
@@ -71,12 +73,11 @@ const DownloadsContainer = (): JSX.Element => {
                 </div>
             </div>
 
-            <div className={
-                cn(
+            <div
+                className={cn(
                     'w-full aspect-[1365/1095] absolute opacity-70 top-[238px] md:top-[228px] lg:top-16 right-[-48px] z-0',
-                    isAuthenticated ? "right-[-48px]" : "right-[-100px]"
-                )
-            }>
+                    isAuthenticated ? 'right-[-48px]' : 'right-[-100px]'
+                )}>
                 <Image
                     src={`${CDN_URL}/assets/course-download-background.png`}
                     alt="Course Download Background"
@@ -85,7 +86,7 @@ const DownloadsContainer = (): JSX.Element => {
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default DownloadsContainer;
