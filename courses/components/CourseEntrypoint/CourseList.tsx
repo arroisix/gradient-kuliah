@@ -10,7 +10,7 @@ const CourseList = ({
     highlightQuery
 }: CourseListProps): JSX.Element => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 w-full gap-6">
             {courses.map((course) => (
                 <CourseCard
                     key={course.id}

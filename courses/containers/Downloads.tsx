@@ -13,7 +13,7 @@ const DownloadsContainer = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
-        <div className="w-full pt-16 lg:h-[calc(100vh-64px)] relative">
+        <div className="w-full lg:h-[calc(100vh-100px)] relative ">
             <Link href="/kelas" className="z-10 relative">
                 <Button
                     variant="secondary"
@@ -75,7 +75,7 @@ const DownloadsContainer = (): JSX.Element => {
 
             <div
                 className={cn(
-                    'w-full aspect-[1365/1095] absolute opacity-70 top-[238px] md:top-[228px] lg:top-16 right-[-48px] z-0',
+                    'w-full aspect-[1365/1095] absolute opacity-70 top-[238px] md:top-[228px] lg:top-[72px] right-[-48px] z-0 overflow-hidden h-[100%]',
                     isAuthenticated ? 'right-[-48px]' : 'right-[-100px]'
                 )}>
                 <Image

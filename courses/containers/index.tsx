@@ -505,7 +505,7 @@ const ClassContainer = ({
 
             <div className="w-full z-10 relative">
                 {isLoading || !allCourses || isFetchingCourses ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 grid-rows-2 gap-6">
                         <Skeleton
                             repeat={
                                 width < 768
@@ -514,9 +514,13 @@ const ClassContainer = ({
                                     ? 2
                                     : width < 1280
                                     ? 3
-                                    : 4
+                                    : width < 1536
+                                    ? 4
+                                    : width < 1920
+                                    ? 5
+                                    : 6
                             }
-                            className="w-full h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)]"
+                            className="w-full h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)] 2xl:h-[calc(38vh)] 3xl:h-[calc(34vh)]"
                         />
                     </div>
                 ) : (
@@ -529,7 +533,7 @@ const ClassContainer = ({
                                         &quot;
                                     </span>
 
-                                    <div className="flex flex-col gap-8">
+                                    <div className="flex flex-col gap-6">
                                         {groupedSearchCourses.map((group) => (
                                             <div
                                                 key={group.cluster}
@@ -573,7 +577,7 @@ const ClassContainer = ({
                         )}
 
                         {isFetchingMoreCourses && (
-                            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-2 gap-6">
+                            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 grid-rows-2 gap-6">
                                 <Skeleton
                                     repeat={
                                         width < 768
@@ -582,9 +586,13 @@ const ClassContainer = ({
                                             ? 2
                                             : width < 1280
                                             ? 3
-                                            : 4
+                                            : width < 1536
+                                            ? 4
+                                            : width < 1920
+                                            ? 5
+                                            : 6
                                     }
-                                    className="w-full h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)]"
+                                    className="w-full h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)] 2xl:h-[calc(38vh)] 3xl:h-[calc(34vh)]"
                                 />
                             </div>
                         )}

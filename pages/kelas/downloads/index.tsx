@@ -1,13 +1,16 @@
-import LearnLayout from 'commons/learnLayout';
+import { Layout } from 'commons/components/Layout';
+import { cn } from 'commons/utils';
 import DownloadsContainer from 'courses/containers/Downloads';
 import { GetStaticProps } from 'next';
 import { wrapper } from 'redux/store';
 
 const Downloads = (): JSX.Element => {
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <DownloadsContainer />
-        </LearnLayout>
+        <Layout>
+            <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+                <DownloadsContainer />
+            </div>
+        </Layout>
     );
 };
 
