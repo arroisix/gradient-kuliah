@@ -169,6 +169,7 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                 className={cn(
                     'pb-[59px] min-h-screen overflow-x-hidden',
                     'lg:pb-0 lg:flex-grow lg:overflow-y-scroll lg:scrollbar-none',
+                    router.pathname === '/utbk/dashboard' ? 'lg:relative' : '',
                     router.pathname.includes('/copilot')
                         ? 'h-screen flex flex-col pt-12 lg:pt-0'
                         : router.pathname !== '/utbk/dashboard/atur-strategi'
