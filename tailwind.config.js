@@ -26,6 +26,9 @@ module.exports = {
             mono: ['Inter', 'sans-serif']
         },
         extend: {
+            screens: {
+                '3xl': '1920px'
+            },
             boxShadow: {
                 glowing: '0px 0px 26px rgba(255, 255, 255, 0.25);'
             },

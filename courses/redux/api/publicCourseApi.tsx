@@ -53,6 +53,14 @@ export const publicCourseApi = baseApi.injectEndpoints({
             query: (id: string) => ({
                 url: `${PUBLIC_COURSE_BASE_URL}code-editor/${id}/`
             })
+        }),
+        getPublicListCourseCluster: builder.query<
+            ListResponseData<CourseClusterData>,
+            void
+        >({
+            query: () => ({
+                url: `${PUBLIC_COURSE_BASE_URL}course-cluster/`
+            })
         })
     })
 });
@@ -65,8 +73,13 @@ export const {
     useGetPublicCourseNotebookQuery,
     useGetListCourseChapterQuery,
     useGetListCourseSubChapterQuery,
-    useGetPublicCodeEditorTemplateQuery
+    useGetPublicCodeEditorTemplateQuery,
+    useGetPublicListCourseClusterQuery
 } = publicCourseApi;
 
-export const { getPublicListCourses, getPublicCourse, getLandingCourseData } =
-    publicCourseApi.endpoints;
+export const {
+    getPublicListCourses,
+    getPublicCourse,
+    getLandingCourseData,
+    getPublicListCourseCluster
+} = publicCourseApi.endpoints;

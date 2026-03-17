@@ -23,7 +23,10 @@ function MateriDetailBox({
     setIsTranscriptOpen
 }: MateriDetailBoxProps): JSX.Element {
     const router = useRouter();
-    const { slug_subtest } = router.query as { slug_subtest: string };
+    const slug_subtest =
+        (router.query.id as string) ||
+        (router.query.slug_subtest as string) ||
+        '';
 
     const { isAuthenticated } = useAuth();
 
@@ -40,6 +43,11 @@ function MateriDetailBox({
 
     const percentageProgress =
         learningProgress?.completion_percentage?.percentage_progress;
+    const computedPercentageProgress =
+        percentageProgress ??
+        (totalMateriCount
+            ? ((completedMateriCount ?? 0) / totalMateriCount) * 100
+            : 0);
 
     if (isTranscriptOpen) {
         return (
@@ -64,7 +72,9 @@ function MateriDetailBox({
                         <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 my-4">
                             <div
                                 className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
-                                style={{ width: `${percentageProgress}%` }}
+                                style={{
+                                    width: `${computedPercentageProgress}%`
+                                }}
                                 role="progressbar"
                                 aria-valuenow={completedMateriCount}
                                 aria-valuemin={0}
@@ -86,7 +96,7 @@ function MateriDetailBox({
                                 Materi Selesai
                             </span>
                             <span className="text-white font-semibold">
-                                {percentageProgress?.toFixed(0)}%
+                                {computedPercentageProgress.toFixed(0)}%
                             </span>
                         </div>
                     ) : (

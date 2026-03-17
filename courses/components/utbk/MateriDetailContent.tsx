@@ -15,18 +15,16 @@ function MateriDetailContent({
     setIsModalSheetOpen
 }: MateriDetailContentProps): JSX.Element {
     const router = useRouter();
-    const { slug_subtest, slug_chapter } = router.query as {
-        slug_subtest: string;
-        slug_chapter: string;
-    };
+    const courseSlug =
+        (router.query.id as string) ||
+        (router.query.slug_subtest as string) ||
+        '';
+    const slug_chapter = (router.query.slug_chapter as string) || '';
 
     const { searchKeyword } = useSearchSubchapter();
 
     const { data: courseContent, isLoading: isLoadingCourse } =
-        useGetCourseContentQuery(
-            { slug: slug_subtest },
-            { skip: !slug_subtest }
-        );
+        useGetCourseContentQuery({ slug: courseSlug }, { skip: !courseSlug });
 
     if (isLoadingCourse) {
         return (

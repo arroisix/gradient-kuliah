@@ -81,9 +81,9 @@ function OngoingLiveClass(): JSX.Element {
         is_subscribed &&
         !!subscribedFeatures?.includes('live_class');
 
-    const extractMeetLink = (
-        payload?: { data?: Array<Record<string, unknown>> }
-    ): string => {
+    const extractMeetLink = (payload?: {
+        data?: Array<Record<string, unknown>>;
+    }): string => {
         const firstItem = payload?.data?.[0];
 
         if (!firstItem || !('meet_link' in firstItem)) {
@@ -223,19 +223,13 @@ function OngoingLiveClass(): JSX.Element {
                         isRegistered && 'lg:w-[436px] xl:w-[354px]'
                     )}
                     onClick={handleRegister}>
-                    {isRegistering ? (
-                        <Spinner size="small" />
-                    ) : (
-                        <></>
-                    )}
+                    {isRegistering ? <Spinner size="small" /> : <></>}
                     {isRegistering
                         ? 'Mendaftar...'
                         : isRegistered
                         ? 'Gabung Sekarang'
                         : 'Daftar Sekarang'}
-                    {!isRegistering && (
-                        <LuArrowUpRight className="w-5 h-5" />
-                    )}
+                    {!isRegistering && <LuArrowUpRight className="w-5 h-5" />}
                 </Button>
             </div>
         </>

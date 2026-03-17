@@ -10,21 +10,45 @@ import { ArrowSvg } from 'commons/components/modules/Navbar/components/utbk/Arro
 import Modal from 'commons/components/modules/Modal';
 import { XIcon } from 'lucide-react';
 
-function MateriLearnNavigation(): JSX.Element {
+interface MateriLearnNavigationProps {
+    isKelasRoute?: boolean;
+    courseName?: string;
+}
+
+function MateriLearnNavigation({
+    isKelasRoute: isKelasRouteFromProps = false,
+    courseName
+}: MateriLearnNavigationProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated } = useAuth();
 
     const router = useRouter();
-    const { slug_subtest } = router.query as { slug_subtest: string };
+    const slug_subtest =
+        (router.query.id as string) ||
+        (router.query.slug_subtest as string) ||
+        '';
+    const isKelasRoute = router.pathname.startsWith('/kelas/');
+
+    const isKelasMode = isKelasRouteFromProps || isKelasRoute;
+
+    const buildCourseHref = (course: any): string =>
+        isKelasRoute
+            ? `/kelas/${course.slug}/${course.latest_subchapter_slug}`
+            : `/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`;
 
     const { isLoading: isPublicCoursesLoading, data: publicCourses } =
         useGetPublicListCoursesV2Query(
             { type: 'UTBK' },
-            { skip: isAuthenticated }
+            { skip: isAuthenticated || isKelasMode }
         );
 
     const { isLoading: isPrivateCoursesLoading, data: privateCourses } =
-        useGetPrivateListCoursesV2Query({}, { skip: !isAuthenticated });
+        useGetPrivateListCoursesV2Query(
+            {},
+            {
+                skip: !isAuthenticated || isKelasMode
+            }
+        );
 
     const courses = useMemo(() => {
         return publicCourses
@@ -38,6 +62,14 @@ function MateriLearnNavigation(): JSX.Element {
         () => courses.find((course) => course.slug === slug_subtest),
         [courses, slug_subtest]
     );
+
+    if (isKelasMode) {
+        return (
+            <div className="text-white font-bold text-base lg:text-2xl text-center line-clamp-1 px-2">
+                {courseName || currentCourse?.course_name || 'Kelas'}
+            </div>
+        );
+    }
 
     return (
         <>
@@ -73,7 +105,7 @@ function MateriLearnNavigation(): JSX.Element {
                                     <CourseMenuItem
                                         key={course.id}
                                         course={course}
-                                        href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
+                                        href={buildCourseHref(course)}
                                         setIsOpen={setIsOpen}
                                     />
                                 ))}
@@ -159,7 +191,7 @@ function MateriLearnNavigation(): JSX.Element {
                                 <CourseMenuItem
                                     key={course.id}
                                     course={course}
-                                    href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
+                                    href={buildCourseHref(course)}
                                     setIsOpen={setIsOpen}
                                 />
                             ))}

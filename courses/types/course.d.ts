@@ -429,3 +429,8 @@ type SubchapterPathResponse = {
     video_is_free: boolean;
     video_duration: string;
 };
+
+type CourseClusterData = {
+    id: string;
+    name: string;
+};
