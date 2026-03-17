@@ -1,6 +1,6 @@
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import { countTheDay } from 'payment/utils';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
@@ -29,6 +29,8 @@ const useCourseSubscription = (slug?: string) => {
         }
     }, [data]);
 
+    console.log('LOG: useCourseSubscription -> data', data);
+
     const checkIsSubscribed = (): boolean => {
         if (data?.subscription_id && data.is_all_courses) return true;
 
@@ -39,6 +41,21 @@ const useCourseSubscription = (slug?: string) => {
     };
 
     const is_subscribed = checkIsSubscribed();
+    const subscribedFeatures = useMemo(() => {
+        if (data?.is_all_features) {
+            return [
+                'material',
+                'exercise',
+                'live_class',
+                'copilot',
+                'astronotes',
+                'textbook',
+                'bank_soal'
+            ];
+        }
+
+        return data?.features || [];
+    }, [data]);
     const { data: coursePreview } = useGetCoursePreviewQuery(
         !slug || checkIsSubscribed() ? skipToken : { slug }
     );
@@ -71,7 +88,7 @@ const useCourseSubscription = (slug?: string) => {
         learning_progress_id: learningProgress?.id,
         coursePreview,
         lastPacketId,
-        subscribedFeatures: data?.features,
+        subscribedFeatures,
         ...learningProgress
     };
 };
