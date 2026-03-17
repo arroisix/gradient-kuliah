@@ -29,6 +29,12 @@ function TimeoutAlert({
     const { width } = useWindowSize();
     const router = useRouter();
     const { slug, sectionId, problemId } = router.query;
+    const materiDestinationUrl =
+        exercise?.course.subchapter_slug && exercise?.course.slug
+            ? exercise?.course.chapter_slug
+                ? `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`
+                : `/kelas/${exercise.course.slug}/${exercise.course.subchapter_slug}`
+            : `/latihan/${slug}`;
 
     const [redirectionURL, setRedirectionURL] = useState('');
     const [submitProblemset] = useFinishUserProblemSetMutation();
@@ -60,7 +66,7 @@ function TimeoutAlert({
                         if (!exercise?.latest_exercise_progress?.id) {
                             const url =
                                 exercise?.tryout_type === 'MATERI'
-                                    ? `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`
+                                    ? materiDestinationUrl
                                     : `/latihan/${slug}`;
 
                             setRedirectionURL(url);

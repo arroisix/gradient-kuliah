@@ -16,7 +16,9 @@ interface QuizContentProps {
 function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { slug_subtest } = router.query as { slug_subtest: string };
+    const courseSlug =
+        (router.query.id as string) || (router.query.slug_subtest as string);
+    const isKelasRoute = router.pathname.startsWith('/kelas/');
 
     const isEverCompleted = exercise?.latest_completed_exercise_progress;
     const isInProgress =
@@ -163,7 +165,11 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
                             <Link
                                 href={
                                     subchapter.next_subchapter_slug
-                                        ? `/utbk/materi/${slug_subtest}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
+                                        ? isKelasRoute
+                                            ? `/kelas/${courseSlug}/${subchapter.next_subchapter_slug}`
+                                            : `/utbk/materi/${courseSlug}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
+                                        : isKelasRoute
+                                        ? `/kelas/${courseSlug}`
                                         : '/utbk/materi'
                                 }
                                 className="bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full leading-tight font-semibold p-3 px-4 w-[180px] hidden lg:block">

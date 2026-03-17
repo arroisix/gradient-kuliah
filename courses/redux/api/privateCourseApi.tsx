@@ -44,7 +44,15 @@ export const privateCourseApi = baseApi.injectEndpoints({
                     url: `${PRIVATE_COURSE_BASE_URL}code-editor/${id}/`
                 })
             }
-        )
+        ),
+        getPrivateListCourseCluster: builder.query<
+            ListResponseData<CourseClusterData>,
+            void
+        >({
+            query: () => ({
+                url: `${PRIVATE_COURSE_BASE_URL}course-cluster/`
+            })
+        })
     })
 });
 
@@ -54,5 +62,6 @@ export const {
     useSubmitPopupQuizAnswerMutation,
     useGetSubchapterDetailQuery,
     useGetCourseNotebookQuery,
-    useGetPrivateCodeEditorTemplateQuery
+    useGetPrivateCodeEditorTemplateQuery,
+    useGetPrivateListCourseClusterQuery
 } = privateCourseApi;

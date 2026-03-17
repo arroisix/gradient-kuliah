@@ -151,7 +151,9 @@ const ExerciseWorksheetHeader = ({
         setIsModalOpen(false);
         const url =
             exercise?.tryout_type === 'MATERI'
-                ? `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`
+                ? exercise?.course.chapter_slug
+                    ? `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`
+                    : `/kelas/${exercise?.course.slug}/${exercise?.course.subchapter_slug}`
                 : `/latihan/${slug}`;
 
         router.push(url);
