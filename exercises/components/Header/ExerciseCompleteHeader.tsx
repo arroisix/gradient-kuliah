@@ -35,6 +35,13 @@ const ExerciseCompleteHeader = () => {
 
     const isUTBK = exercise?.tryout_type === 'UTBK';
     const isMateri = exercise?.tryout_type === 'MATERI';
+    const materiDestinationHref =
+        exercise?.course.subchapter_slug && exercise?.course.slug
+            ? exercise?.course.chapter_slug
+                ? `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`
+                : `/kelas/${exercise.course.slug}/${exercise.course.subchapter_slug}`
+            : '/latihan';
+
     const thirdTabLabel = isUTBK
         ? 'Analisa Diri'
         : isMateri
@@ -123,7 +130,7 @@ const ExerciseCompleteHeader = () => {
         <header className="w-full flex items-center justify-center gap-4 relative">
             {isMateri ? (
                 <Link
-                    href={`/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`}
+                    href={materiDestinationHref}
                     className="bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full font-semibold justify-center items-center gap-3 absolute top-auto bottom-auto right-0 p-3 px-4 hidden lg:flex">
                     Selesai{' '}
                     <FaCircleCheck className="text-white w-4 h-4 shrink-0" />
@@ -145,7 +152,7 @@ const ExerciseCompleteHeader = () => {
                             subchapter.is_finished ??
                             subchapter.status === 'COMPLETED'
                         }
-                        href={`/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`}
+                        href={materiDestinationHref}
                         course_name={exercise.course.name}
                         next_subchapter_name={
                             subchapter.next_subchapter_name as string

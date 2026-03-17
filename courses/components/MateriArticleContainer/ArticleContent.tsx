@@ -28,11 +28,13 @@ function ArticleContent({
     const [crawlerBot, setCrawlerBot] = useState('');
 
     const router = useRouter();
-    const { slug_subtest } = router.query as { slug_subtest: string };
+    const courseSlug =
+        (router.query.id as string) || (router.query.slug_subtest as string);
+    const isKelasRoute = router.pathname.startsWith('/kelas/');
 
     const { isAuthenticated } = useAuth();
     const { is_subscribed, subscribedFeatures } =
-        useCourseSubscription(slug_subtest);
+        useCourseSubscription(courseSlug);
 
     useEffect(() => {
         setCrawlerBot(getCookieValue(IS_BOT));
@@ -108,9 +110,12 @@ function ArticleContent({
                     subchapter_slug={subchapter.subchapter_slug}
                     book_slug={subchapter.notebook?.book_slug}
                     redirectionURL={
-                        subchapter.next_chapter_slug &&
                         subchapter.next_subchapter_slug
-                            ? `/utbk/materi/${slug_subtest}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
+                            ? isKelasRoute
+                                ? `/kelas/${courseSlug}/${subchapter.next_subchapter_slug}`
+                                : subchapter.next_chapter_slug
+                                ? `/utbk/materi/${courseSlug}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
+                                : ''
                             : ''
                     }
                 />

@@ -6,7 +6,7 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienc
 import { ListIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SearchMateri } from './SearchMateri';
 import { MateriDetailContent } from './MateriDetailContent';
 
@@ -15,8 +15,9 @@ interface MateriDetailSheetProps {
     isFinished: boolean;
     isReportMode?: boolean;
     href: string;
+    course_slug?: string;
     course_name: string;
-    next_subchapter_name: string;
+    next_subchapter_name?: string | null;
 }
 
 function MateriDetailSheet({
@@ -24,13 +25,21 @@ function MateriDetailSheet({
     isFinished,
     isReportMode = false,
     href,
+    course_slug,
     course_name,
     next_subchapter_name
 }: MateriDetailSheetProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated } = useAuth();
     const router = useRouter();
-    const { slug_subtest } = router.query as { slug_subtest: string };
+    const slug_subtest = useMemo(() => {
+        return (
+            course_slug ||
+            (router.query.id as string) ||
+            (router.query.slug_subtest as string) ||
+            ''
+        );
+    }, [course_slug, router.query.id, router.query.slug_subtest]);
 
     const { data: learningProgress, isLoading: isLoadingLearning } =
         useGetLearningProgressQuery(slug_subtest, {
@@ -45,6 +54,11 @@ function MateriDetailSheet({
 
     const percentageProgress =
         learningProgress?.completion_percentage?.percentage_progress;
+    const computedPercentageProgress =
+        percentageProgress ??
+        (totalMateriCount
+            ? ((completedMateriCount ?? 0) / totalMateriCount) * 100
+            : 0);
 
     return (
         <div className="bg-[#101010] rounded-tl-2xl rounded-tr-2xl fixed bottom-0 left-0 right-0 flex justify-between items-center gap-4 p-4">
@@ -120,7 +134,7 @@ function MateriDetailSheet({
                                         <div
                                             className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
                                             style={{
-                                                width: `${percentageProgress}%`
+                                                width: `${computedPercentageProgress}%`
                                             }}
                                             role="progressbar"
                                             aria-valuenow={completedMateriCount}
@@ -143,7 +157,10 @@ function MateriDetailSheet({
                                             {totalMateriCount} Materi Selesai
                                         </span>
                                         <span className="text-white font-semibold">
-                                            {percentageProgress?.toFixed(0)}%
+                                            {computedPercentageProgress.toFixed(
+                                                0
+                                            )}
+                                            %
                                         </span>
                                     </div>
                                 ) : (

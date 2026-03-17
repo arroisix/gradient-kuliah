@@ -151,7 +151,11 @@ const ExerciseReportNavigationFooter: React.FC<{
 
                 {exercise?.tryout_type === 'MATERI' ? (
                     <Link
-                        href={`/utbk/materi/${exercise?.course.slug}/${exercise?.course.chapter_slug}/${exercise?.course.subchapter_slug}`}
+                        href={
+                            exercise?.course.chapter_slug
+                                ? `/utbk/materi/${exercise?.course.slug}/${exercise?.course.chapter_slug}/${exercise?.course.subchapter_slug}`
+                                : `/kelas/${exercise?.course.slug}/${exercise?.course.subchapter_slug}`
+                        }
                         className="bg-[#333333] hover:bg-[#333333]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4 w-full">
                         Selesai
                     </Link>

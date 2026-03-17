@@ -18,13 +18,18 @@ function SubchapterList({
     setIsModalSheetOpen
 }: SubchapterListProps): JSX.Element {
     const router = useRouter();
-    const { slug_subtest, slug_subchapter } = router.query as {
-        slug_subtest: string;
-        slug_subchapter: string;
-    };
+    const courseSlug =
+        (router.query.id as string) ||
+        (router.query.slug_subtest as string) ||
+        '';
+    const currentSubchapterSlug =
+        (router.query.slug as string) ||
+        (router.query.slug_subchapter as string) ||
+        '';
+    const isKelasRoute = router.pathname.startsWith('/kelas/');
 
     const { is_subscribed, subscribedFeatures } =
-        useCourseSubscription(slug_subtest);
+        useCourseSubscription(courseSlug);
 
     const { data, isLoading } = useGetSubchapterQuery(
         { chapterId: chapter_id ?? '' },
@@ -58,11 +63,15 @@ function SubchapterList({
             {subchapters?.map((value) => (
                 <SubchapterMenuItem
                     key={value.id}
-                    href={`/utbk/materi/${slug_subtest}/${chapter_slug}/${value.subchapter_slug}`}
+                    href={
+                        isKelasRoute
+                            ? `/kelas/${courseSlug}/${value.subchapter_slug}`
+                            : `/utbk/materi/${courseSlug}/${chapter_slug}/${value.subchapter_slug}`
+                    }
                     name={value.subchapter_name}
                     duration={value.duration}
                     type={value.type_name ?? value.type}
-                    isActive={slug_subchapter === value.subchapter_slug}
+                    isActive={currentSubchapterSlug === value.subchapter_slug}
                     isFinished={
                         value.is_finished ?? value.status === 'COMPLETED'
                     }
