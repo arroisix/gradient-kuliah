@@ -75,6 +75,19 @@ function ArticleContent({
               }
             : undefined;
 
+    const handleCopilotClick = () => {
+        const currentPath = (router.asPath || router.pathname || '').split(
+            '?'
+        )[0];
+
+        if (!isAuthenticated && currentPath.startsWith('/kelas')) {
+            router.push(`/masuk?redirect=${encodeURIComponent(currentPath)}`);
+            return;
+        }
+
+        setIsCopilotOpen(true);
+    };
+
     return (
         <div className="bg-black rounded-2xl overflow-hidden lg:bg-[#101010] lg:h-[calc(100vh-32px-36px-16px)] lg:pb-4">
             <div className="mb-4 flex justify-between flex-col gap-4 lg:mb-0 lg:flex-row lg:items-center lg:gap-0 lg:border-b lg:border-b-[#222222] lg:py-4 lg:px-6">
@@ -84,7 +97,7 @@ function ArticleContent({
 
                 <Button
                     disabled={isLoading}
-                    onClick={() => setIsCopilotOpen(true)}
+                    onClick={handleCopilotClick}
                     variant="primary"
                     className="w-fit flex-shrink-0 !py-2 !px-4 flex justify-center items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4 lg:flex-grow-0">
                     <CopilotIconFill />
