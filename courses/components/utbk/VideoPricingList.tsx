@@ -1,3 +1,4 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import Link from 'next/link';
 
 function utbkPricingListIcon(
@@ -369,7 +370,43 @@ const UTBK_PRICING_LIST = [
     }
 ];
 
+const COLLEGE_PRICING_LIST = [
+    {
+        Icon: utbkPricingListIcon('tryout_mingguan'),
+        title: 'Try Out UTS/UAS',
+        description: 'Simulasi Try Out UTS/UAS.',
+        isComingSoon: false
+    },
+    {
+        Icon: utbkPricingListIcon('video_pembelajaran'),
+        title: 'Video Pembelajaran',
+        description: 'Akses 2000+ Video Pembelajaran dengan kualitas terbaik.',
+        isComingSoon: false
+    },
+    {
+        Icon: utbkPricingListIcon('soal_latihan'),
+        title: 'Soal Latihan',
+        description:
+            'Kumpulan pembahasan dan soal-soal UTS/UAS dari tahun sebelumnya.',
+        isComingSoon: false
+    },
+    {
+        Icon: utbkPricingListIcon('catatan_materi'),
+        title: 'Catatan Materi',
+        description:
+            'Kumpulan catatan materi-materi penting untuk mempermudah kamu belajar.',
+        isComingSoon: false
+    }
+];
+
 function VideoPricingList(): JSX.Element {
+    const { profile } = useAuth();
+
+    const pricingList =
+        profile?.current_role === 'COLLEGE_STUDENT'
+            ? COLLEGE_PRICING_LIST
+            : UTBK_PRICING_LIST;
+
     return (
         <div className="bg-[#191920] relative rounded-2xl p-8 overflow-hidden">
             <div className="bg-[#494BA0]/50 blur-[104px] w-[510px] h-[175px] absolute -bottom-[88px] -left-32"></div>
@@ -382,13 +419,13 @@ function VideoPricingList(): JSX.Element {
 
                 <p className="text-[#DEDEDE] text-center w-full max-w-[468px] mx-auto mb-4 text-sm lg:mb-6 lg:text-base">
                     Jangan biarkan ilmu ini terlewat.{' '}
-                    <span className="font-semibold">200.000+</span> pelajar
+                    <span className="font-semibold">250.000+</span> pelajar
                     sudah bergabung dan meningkatkan skill mereka.
                 </p>
 
                 <div className="flex flex-col gap-8 mt-4 lg:mt-6">
                     <div className="bg-[#282B3C] grid gap-6 rounded-2xl py-6 px-4 grid-cols-1 order-1 lg:px-6 lg:grid-cols-2 lg:order-2">
-                        {UTBK_PRICING_LIST.map((v) => (
+                        {pricingList.map((v) => (
                             <div
                                 key={v.title}
                                 className="flex items-center gap-4">
