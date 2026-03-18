@@ -3,6 +3,7 @@ import { CDN_URL } from 'commons/constants';
 import Link from 'next/link';
 import Button from 'commons/components/elements/Button';
 import { cn } from 'commons/utils';
+import { ArrowRight } from 'lucide-react';
 
 interface CourseCardProps extends CourseV3 {
     highlightQuery?: string;
@@ -79,7 +80,7 @@ const CourseCard = ({
                     />
                 </div>
 
-                <div className="absolute inset-0 px-4 pb-4 pt-6 w-full h-full flex flex-col justify-end bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)]">
+                <div className="absolute inset-0 px-4 pb-4 pt-6 w-full h-full flex flex-col justify-end bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.35)_42.47%,rgba(16,16,16,0.5)_100%)]">
                     <div className="transition-all duration-400 ease-out group-hover:pb-14">
                         <h2 className="font-semibold text-sm line-clamp-2 text-white">
                             {renderHighlightedCourseName()}
@@ -161,7 +162,10 @@ const CourseCard = ({
                             variant="primary"
                             size="small"
                             className="w-full !backdrop-blur-sm">
-                            Mulai Belajar
+                            <span className="hidden md:block">
+                                Mulai Belajar
+                            </span>
+                            <ArrowRight className="block md:hidden mx-auto" />
                         </Button>
                     </div>
                 </div>
