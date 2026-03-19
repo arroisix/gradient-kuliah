@@ -9,13 +9,8 @@ import Button from 'commons/components/elements/Button';
 import { useEffect, useMemo, useState } from 'react';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import Modal from 'commons/components/modules/Modal';
-import Image from 'next/image';
-import {
-    DEVICE_TYPE_ICON,
-    DeviceLogoutSelection
-} from 'profile/components/DeviceLogoutSelection';
+import { DEVICE_TYPE_ICON } from 'profile/components/DeviceLogoutSelection';
 import { useRouter } from 'next/router';
-import { sanitizeUrl } from 'commons/utils';
 import useLogout from 'authentication/hooks/useLogout';
 
 const KeluarPerangkat = (): JSX.Element => {
@@ -27,7 +22,7 @@ const KeluarPerangkat = (): JSX.Element => {
                 data?.reduce((acc, deviceType) => {
                     acc[deviceType.id] = deviceType;
                     return acc;
-                }, {} as Record<number, DeviceTypeResponse>) ?? {}
+                }, {} as Record<number, DeviceTypeResponse | undefined>) ?? {}
         })
     });
     const { data: connectedDevices } = useGetConnectedDevicesQuery(undefined);
@@ -36,13 +31,13 @@ const KeluarPerangkat = (): JSX.Element => {
 
     const initialCurrentDeviceAllowed = useMemo(
         () => currentDeviceIsSuccess && currentDevice?.device_allowed,
-        [currentDeviceIsSuccess]
+        [currentDeviceIsSuccess, currentDevice]
     );
     useEffect(() => {
         if (initialCurrentDeviceAllowed) {
             router.replace('/');
         }
-    }, [initialCurrentDeviceAllowed]);
+    }, [initialCurrentDeviceAllowed, router]);
 
     const filteredConnectedDevices = useMemo(
         () =>
@@ -56,11 +51,11 @@ const KeluarPerangkat = (): JSX.Element => {
     );
 
     const currentDeviceType = deviceTypes[currentDevice?.device_type_id ?? 0];
-
-    const [disableLogin, setDisableLogin] = useState(true);
+    const CurrentDeviceIcon = DEVICE_TYPE_ICON[currentDeviceType?.id ?? 1];
 
     const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
-    const [removeOtherDevice] = useRemoveOtherDeviceMutation();
+    const [removeOtherDevice, { isLoading: removeOtherDeviceIsLoading }] =
+        useRemoveOtherDeviceMutation();
 
     if (!currentDeviceType || !currentDevice || initialCurrentDeviceAllowed) {
         return <LoadingBackdrop />;
@@ -68,57 +63,53 @@ const KeluarPerangkat = (): JSX.Element => {
 
     return (
         <main className="min-h-screen text-white bg-neutral-1000 flex justify-center items-center">
-            <div className="max-w-[325px] mx-[18px] mt-20 mb-12">
-                <h2 className="font-sans text-xl font-bold text-center mb-8">
-                    Setiap akun hanya bisa login dari{' '}
-                    {currentDeviceType.max_count}{' '}
-                    {currentDeviceType.name.toLowerCase()}
-                </h2>
+            <div className="max-w-[357px] mx-[18px] mt-20 mb-12 flex flex-col gap-12">
+                <div className="flex flex-col gap-8 text-center">
+                    <h2 className="font-semibold text-xl">
+                        Kamu sudah login di{' '}
+                        {currentDeviceType.name.toLowerCase()} lain
+                    </h2>
 
-                <ul className="mb-12 p-0 m-0 min-h-[216px]">
-                    {Object.values(deviceTypes)
-                        .filter((device) =>
-                            filteredConnectedDevices?.hasOwnProperty(
-                                device?.id ?? ''
-                            )
-                        )
-                        .map((device) => (
-                            <DeviceLogoutSelection
-                                key={device.id}
-                                deviceName={device.name}
-                                connectedDeviceCount={
-                                    filteredConnectedDevices[device.id].length
-                                }
-                                isCurrentDevice={
-                                    currentDeviceType.id === device.id
-                                }
-                                DeviceIcon={DEVICE_TYPE_ICON[device.id]}
-                                onClickLogout={async () => {
-                                    setOpenConfirmationModal(true);
-                                }}
-                            />
-                        ))}
-                </ul>
+                    <section className="flex flex-col items-center gap-1">
+                        <CurrentDeviceIcon width={80} height="auto" />
+                        <h3 className="font-semibold text-sm">
+                            {currentDeviceType.name}
+                        </h3>
+                        <p className="text-neutral-400 text-xs">
+                            Aktif di{' '}
+                            {
+                                filteredConnectedDevices[currentDeviceType.id]
+                                    ?.length
+                            }{' '}
+                            perangkat lain
+                        </p>
+                    </section>
 
-                <section className="flex flex-col gap-3">
+                    <p className="text-sm">
+                        Untuk keamanan, akunmu hanya bisa dipakai di{' '}
+                        {currentDeviceType.max_count}{' '}
+                        {currentDeviceType.name.toLowerCase()} pada satu waktu.
+                    </p>
+                </div>
+
+                <section className="flex flex-col gap-3 px-[14.5px]">
                     <Button
-                        href={
-                            sanitizeUrl(router.query.redirect as string) ?? '/'
-                        }
+                        onClick={() => {
+                            setOpenConfirmationModal(true);
+                        }}
                         variant="primary"
-                        disabled={disableLogin}
-                        className="!py-3 text-base !font-sans text-center">
-                        Masuk dari {currentDeviceType.name.toLowerCase()} ini
+                        className="!py-3 text-base text-center font-semibold">
+                        Login di {currentDeviceType.name.toLowerCase()} ini
                     </Button>
                     <Button
                         variant="custom"
-                        className="!py-3 text-base !font-sans bg-[#212121] text-center"
+                        className="!py-3 text-base bg-[#212121] text-center font-semibold"
                         disabled={isLoadingLogout}
                         onClick={async () => {
                             await logout();
                         }}>
                         {isLoadingLogout
-                            ? 'Tuggu Sebentar...'
+                            ? 'Tunggu Sebentar...'
                             : 'Kembali ke Halaman Utama'}
                     </Button>
                 </section>
@@ -128,35 +119,37 @@ const KeluarPerangkat = (): JSX.Element => {
                 isOpen={openConfirmationModal}
                 setOpen={setOpenConfirmationModal}
                 variant="dark"
-                dialog>
-                <main className="flex flex-col items-center">
-                    <Image
-                        src="https://assets.gradient.academy/assets/logout-device2.png"
-                        width={160}
-                        height={160}
-                    />
-                    <h4 className="mt-5 mb-2 font-sans text-2xl font-bold">
-                        Logout dari {currentDeviceType.name.toLowerCase()}?
-                    </h4>
-                    <p className="mb-8 text-base text-center text-neutral-400">
-                        Kamu masih bisa login lagi di{' '}
-                        {currentDeviceType.name.toLowerCase()} tersebut setelah
-                        ini
-                    </p>
+                dialog
+                className="md:!max-w-[398px]">
+                <main className="flex flex-col items-center gap-8">
+                    <div className="flex flex-col gap-2 w-full text-center">
+                        <h4 className="text-base font-semibold">
+                            Login di {currentDeviceType.name.toLowerCase()} ini?
+                        </h4>
+                        <p className="text-sm text-neutral-400">
+                            Sesi di {currentDeviceType.name.toLowerCase()} lain
+                            akan otomatis berakhir.
+                        </p>
+                    </div>
                     <footer className="flex flex-col gap-3 self-stretch">
                         <Button
                             variant="primary"
-                            className="!py-3 text-base !font-sans text-center"
+                            className="text-base text-center font-semibold h-[44px]"
+                            disabled={removeOtherDeviceIsLoading}
                             onClick={async () => {
                                 await removeOtherDevice();
                                 setOpenConfirmationModal(false);
-                                setDisableLogin(false);
+                                router.replace(
+                                    (router.query.redirect as string) ?? '/'
+                                );
                             }}>
-                            Logout
+                            {removeOtherDeviceIsLoading
+                                ? 'Tunggu sebentar...'
+                                : 'Ya, login disini'}
                         </Button>
                         <Button
                             variant="custom"
-                            className="!py-3 text-base !font-sans bg-[rgba(255,255,255,0.10)] text-center"
+                            className="text-base bg-[rgba(255,255,255,0.10)] text-center font-semibold h-[44px]"
                             onClick={() => {
                                 setOpenConfirmationModal(false);
                             }}>

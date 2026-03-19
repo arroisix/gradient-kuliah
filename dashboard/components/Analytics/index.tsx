@@ -38,7 +38,7 @@ function Analytics(): JSX.Element {
     }
 
     return (
-        <div className={cn('m-4', 'lg:mx-12 lg:my-8')}>
+        <div className={cn('relative m-4', 'lg:mx-12 lg:my-8')}>
             <div className="w-full max-w-[934px] mx-auto">
                 <div
                     className={cn(

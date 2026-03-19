@@ -2,10 +2,24 @@ import withAnon from 'commons/withAnon';
 import type { GetStaticProps } from 'next';
 import { Layout } from 'commons/components/Layout';
 import { Analytics } from 'dashboard/components/Analytics';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
+import { cn } from 'commons/utils';
 
 const Dashboard = (): JSX.Element => {
     return (
         <Layout>
+            <div
+                className={cn(
+                    'hidden',
+                    'lg:block absolute top-0 left-0 w-[702px] h-[380px]'
+                )}>
+                <Image
+                    src={`${CDN_URL}/assets/utbk/dashboard/gradient.svg`}
+                    alt=""
+                    layout="fill"
+                />
+            </div>
             <Analytics />
         </Layout>
     );

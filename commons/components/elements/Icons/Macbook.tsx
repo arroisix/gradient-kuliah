@@ -1,9 +1,10 @@
-const Macbook = (): JSX.Element => {
+const Macbook = ({ width = 38, height = 22 }): JSX.Element => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="38"
-            height="22"
+            width={width}
+            height={height}
+            viewBox="0 0 38 22"
             fill="none">
             <path
                 fill="#8C8C8C"

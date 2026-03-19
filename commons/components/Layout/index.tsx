@@ -28,6 +28,8 @@ import { useRouter } from 'next/router';
 import HistorySection from 'copilot/components/revamp/HistorySection';
 import { useWindowSize } from 'usehooks-ts';
 import CopilotNavbar from './CopilotNavbar';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
 
 interface MenuItem {
     title: string;
@@ -111,6 +113,7 @@ const utbkMenuItems = [
 const loadingBackdropPaths = ['/dashboard', '/utbk/dashboard'];
 
 function Layout({ children }: PropsWithChildren): JSX.Element {
+    const [isReachesThreshold, setIsReachesThreshold] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const router = useRouter();
     const { width } = useWindowSize();
@@ -137,17 +140,46 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
         }
     }, [isLoadingProfile, profile, router]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsReachesThreshold(window.scrollY > 100);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     if (!profile && loadingBackdropPaths.includes(router.pathname)) {
         return <LoadingBackdrop />;
     }
 
     return (
         <div className={cn('bg-black', 'lg:h-screen lg:flex')}>
+            {router.pathname === '/utbk/dashboard' ? (
+                <div
+                    className={cn(
+                        'absolute top-0 -left-96 -right-96 h-[384px]',
+                        'lg:hidden'
+                    )}>
+                    <Image
+                        src={`${CDN_URL}/assets/utbk/dashboard/gradient.svg`}
+                        alt=""
+                        layout="fill"
+                        className="object-cover object-center"
+                    />
+                </div>
+            ) : (
+                <></>
+            )}
+
             {/* mobile copilot topbar & mobile topbar */}
             <div
                 className={cn(
-                    'bg-black fixed z-[51] top-0 left-0 right-0',
-                    'lg:hidden'
+                    'bg-black fixed z-[51] top-0 left-0 right-0 transition-all',
+                    'lg:hidden',
+                    router.pathname === '/utbk/dashboard' && !isReachesThreshold
+                        ? 'bg-opacity-0'
+                        : 'bg-opacity-100'
                 )}>
                 {router.pathname.includes('/copilot') ? (
                     <CopilotNavbar.Mobile
@@ -169,6 +201,7 @@ function Layout({ children }: PropsWithChildren): JSX.Element {
                 className={cn(
                     'pb-[59px] min-h-screen overflow-x-hidden',
                     'lg:pb-0 lg:flex-grow lg:overflow-y-scroll lg:scrollbar-none',
+                    router.pathname === '/utbk/dashboard' ? 'lg:relative' : '',
                     router.pathname.includes('/copilot')
                         ? 'h-screen flex flex-col pt-12 lg:pt-0'
                         : router.pathname !== '/utbk/dashboard/atur-strategi'
