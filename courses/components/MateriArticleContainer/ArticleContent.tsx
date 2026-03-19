@@ -103,6 +103,7 @@ function ArticleContent({
 
             {!isLoading ? (
                 <ArticleMarkdown
+                    key={article?.page_id}
                     book={book}
                     article={article as GetAstronotesContentResponse}
                     initialContent={content}
