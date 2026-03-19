@@ -12,7 +12,7 @@ export const DeviceLogoutSelection = ({
 }: {
     deviceName: string;
     connectedDeviceCount: number;
-    DeviceIcon: () => JSX.Element;
+    DeviceIcon: (props: any) => JSX.Element;
     onClickLogout?: () => Promise<void>;
     isCurrentDevice?: boolean;
 }): JSX.Element => {
@@ -41,8 +41,8 @@ export const DeviceLogoutSelection = ({
     );
 };
 
-export const DEVICE_TYPE_ICON: Record<number, () => JSX.Element> = {
-    1: GalaxyS9,
-    2: Tablet,
-    3: Macbook
+export const DEVICE_TYPE_ICON: Record<number, (props: any) => JSX.Element> = {
+    1: (props) => <GalaxyS9 {...props} />,
+    2: (props) => <Tablet {...props} />,
+    3: (props) => <Macbook {...props} />
 };

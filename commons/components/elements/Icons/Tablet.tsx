@@ -1,9 +1,10 @@
-const Tablet = (): JSX.Element => {
+const Tablet = ({ width = 30, height = 44 }): JSX.Element => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="44"
+            width={width}
+            height={height}
+            viewBox="0 0 30 44"
             fill="none">
             <path
                 fill="#8C8C8C"

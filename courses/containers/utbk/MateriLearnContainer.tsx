@@ -70,9 +70,11 @@ function MateriLearnContainer({
         { skip: !slug_subtest || !slug_subchapter || isAuthenticated }
     );
 
-    const { data: csrSubchapter, isLoading } = isAuthenticated
-        ? privateSubchapterDetails
-        : publicSubchapterDetails;
+    const {
+        data: csrSubchapter,
+        isLoading,
+        isFetching
+    } = isAuthenticated ? privateSubchapterDetails : publicSubchapterDetails;
 
     const { data: csrCourse } = useGetCourseDetailQuery(
         { slug: slug_subtest },
@@ -166,6 +168,7 @@ function MateriLearnContainer({
                     {subchapter?.type_name === 'lecture' ? (
                         <div className="lg:h-[calc(100vh-32px-36px-16px)] lg:overflow-scroll lg:no-scrollbar">
                             <VideoPlayerContainer
+                                is_switching_course={isFetching}
                                 isLoadingData={isLoading}
                                 subchapter_name={subchapter?.subchapter_name}
                                 video={subchapter?.video}

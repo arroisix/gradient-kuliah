@@ -1,9 +1,10 @@
-const GalaxyS9 = (): JSX.Element => {
+const GalaxyS9 = ({ width = 22, height = 42 }): JSX.Element => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="42"
+            width={width}
+            height={height}
+            viewBox="0 0 22 42"
             fill="none">
             <path
                 fill="#B9B9B9"

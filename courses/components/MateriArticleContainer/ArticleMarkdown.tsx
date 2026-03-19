@@ -90,19 +90,23 @@ function ArticleMarkdown({
     };
 
     useEffect(() => {
-        const key = getCookieValue(IS_BOT);
-        const decrypted =
-            !!key && !isPreview
-                ? CryptoJS.AES.decrypt(initialContent ?? '', key).toString(
-                      CryptoJS.enc.Utf8
-                  )
-                : '{}';
+        try {
+            const key = getCookieValue(IS_BOT);
+            const decrypted =
+                !!key && !isPreview
+                    ? CryptoJS.AES.decrypt(initialContent ?? '', key).toString(
+                          CryptoJS.enc.Utf8
+                      )
+                    : '{}';
 
-        setContent(
-            JSON.parse(
-                isPreview ? initialContent ?? '' : decrypted
-            ) as GetAstronotesContentResponse
-        );
+            setContent(
+                JSON.parse(
+                    isPreview ? initialContent ?? '' : decrypted
+                ) as GetAstronotesContentResponse
+            );
+        } catch (error) {
+            console.error(error);
+        }
     }, [initialContent, isPreview]);
 
     return (
