@@ -38,6 +38,7 @@ interface VideoPlayerContainerProps
         | 'next_chapter_slug'
     > {
     isLoadingData: boolean;
+    is_switching_course?: boolean;
 }
 
 const VideoPlayerContainer = ({
@@ -45,7 +46,8 @@ const VideoPlayerContainer = ({
     subchapter_name: title,
     video,
     next_chapter_slug,
-    next_subchapter_slug
+    next_subchapter_slug,
+    is_switching_course
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
     const slug = Object.hasOwn(router.query, 'id')
@@ -96,7 +98,13 @@ const VideoPlayerContainer = ({
             course_slug: slug as string,
             subchapter_slug: next_subchapter_slug ?? ''
         },
-        { skip: !slug || !next_subchapter_slug || !isAuthenticated }
+        {
+            skip:
+                !slug ||
+                !next_subchapter_slug ||
+                !isAuthenticated ||
+                is_switching_course
+        }
     );
 
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
@@ -104,7 +112,13 @@ const VideoPlayerContainer = ({
             course_slug: slug as string,
             subchapter_slug: next_subchapter_slug ?? ''
         },
-        { skip: !slug || !next_subchapter_slug || isAuthenticated }
+        {
+            skip:
+                !slug ||
+                !next_subchapter_slug ||
+                isAuthenticated ||
+                is_switching_course
+        }
     );
 
     const { data: nextSubchapter } = isAuthenticated
