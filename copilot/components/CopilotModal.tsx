@@ -7,6 +7,7 @@ import ReferenceModal from '../components/Reference/ReferenceModal';
 import ReferenceContentModal from '../components/Reference/ReferenceContentModal';
 import { ReferenceContentType, SelectedReference } from '../types/copilot';
 import { cn } from 'commons/utils';
+import { useRouter } from 'next/router';
 
 interface CopilotModalProps {
     isOpen: boolean;
@@ -41,6 +42,9 @@ const CopilotModal = ({
     >([]);
     const [isMobile, setIsMobile] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const router = useRouter();
+    const currentPath = (router.asPath || router.pathname || '').split('?')[0];
+    const isKelasRoute = currentPath.startsWith('/kelas');
 
     useEffect(() => {
         const checkMobile = () => {
@@ -180,38 +184,43 @@ const CopilotModal = ({
 
     return (
         <>
-            <div
-                className={cn(
-                    'fixed bottom-0 right-0 z-50 shadow-lg font-inter',
-                    getModalWidth(),
-                    xlWidth,
-                    !isMobile && 'xl:pr-4',
-                    isMobile && isCollapsed ? '' : 'rounded-t-lg',
-                    getModalHeight(),
-                    'transition-all duration-300 ease-in-out',
-                    isOpen ? 'translate-y-0' : 'translate-y-full',
-                    !isOpen && 'pointer-events-none',
-                    'flex flex-col overflow-hidden'
-                )}>
-                <CopilotSidebarContainer
-                    currentContext={currentContext}
-                    sessionId={sessionId}
-                    isCollapsed={isCollapsed}
-                    isMobile={isMobile}
-                    selectedReferences={selectedReferences}
-                    onCollapsedChange={setIsCollapsed}
-                    onClose={handleClose}
-                    onOpenReferenceModal={handleOpenReferenceModal}
-                    onOpenReferenceContentModal={
-                        handleOpenReferenceContentModal
-                    }
-                    onRemoveReference={handleRemoveReference}
-                    onOpenUsedReferencesModal={handleOpenUsedReferencesModal}
-                    contentType={getCurrentContentType()}
-                    bookSlug={bookSlug}
-                    chapterId={chapterId}
-                />
-            </div>
+            {!isKelasRoute ||
+                (isKelasRoute && isAuthenticated && (
+                    <div
+                        className={cn(
+                            'fixed bottom-0 right-0 z-50 shadow-lg font-inter',
+                            getModalWidth(),
+                            xlWidth,
+                            !isMobile && 'xl:pr-4',
+                            isMobile && isCollapsed ? '' : 'rounded-t-lg',
+                            getModalHeight(),
+                            'transition-all duration-300 ease-in-out',
+                            isOpen ? 'translate-y-0' : 'translate-y-full',
+                            !isOpen && 'pointer-events-none',
+                            'flex flex-col overflow-hidden'
+                        )}>
+                        <CopilotSidebarContainer
+                            currentContext={currentContext}
+                            sessionId={sessionId}
+                            isCollapsed={isCollapsed}
+                            isMobile={isMobile}
+                            selectedReferences={selectedReferences}
+                            onCollapsedChange={setIsCollapsed}
+                            onClose={handleClose}
+                            onOpenReferenceModal={handleOpenReferenceModal}
+                            onOpenReferenceContentModal={
+                                handleOpenReferenceContentModal
+                            }
+                            onRemoveReference={handleRemoveReference}
+                            onOpenUsedReferencesModal={
+                                handleOpenUsedReferencesModal
+                            }
+                            contentType={getCurrentContentType()}
+                            bookSlug={bookSlug}
+                            chapterId={chapterId}
+                        />
+                    </div>
+                ))}
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}

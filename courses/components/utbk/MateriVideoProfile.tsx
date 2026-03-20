@@ -67,6 +67,19 @@ function MateriVideoProfile({
             ? course.lecturers
             : subchapter.video?.lecturers;
 
+    const handleCopilotClick = () => {
+        const currentPath = (router.asPath || router.pathname || '').split(
+            '?'
+        )[0];
+
+        if (!isAuthenticated && currentPath.startsWith('/kelas')) {
+            router.push(`/masuk?redirect=${encodeURIComponent(currentPath)}`);
+            return;
+        }
+
+        setIsCopilotModalOpen(true);
+    };
+
     return (
         <div className="mx-4 mt-4 lg:mx-0 lg:mt-10">
             {!isKelasRoute && (
@@ -136,7 +149,7 @@ function MateriVideoProfile({
 
                     <Button
                         disabled={!course || !subchapter}
-                        onClick={() => setIsCopilotModalOpen(true)}
+                        onClick={handleCopilotClick}
                         variant="primary"
                         className="flex-grow max-w-[256px] flex-shrink-0 !py-2 !px-4 flex justify-center items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4 lg:flex-grow-0">
                         <CopilotIconFill />
