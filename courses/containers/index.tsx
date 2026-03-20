@@ -505,12 +505,10 @@ const ClassContainer = ({
 
             <div className="w-full z-10 relative">
                 {isLoading || !allCourses || isFetchingCourses ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 grid-rows-2 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 grid-rows-2 gap-6">
                         <Skeleton
                             repeat={
-                                width < 768
-                                    ? 1
-                                    : width < 1024
+                                width < 1024
                                     ? 2
                                     : width < 1280
                                     ? 3
@@ -520,7 +518,7 @@ const ClassContainer = ({
                                     ? 5
                                     : 6
                             }
-                            className="w-full h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)] 2xl:h-[calc(38vh)] 3xl:h-[calc(34vh)]"
+                            className="w-full h-[calc(32vh)] md:h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)] 2xl:h-[calc(38vh)] 3xl:h-[calc(34vh)]"
                         />
                     </div>
                 ) : (
@@ -577,12 +575,10 @@ const ClassContainer = ({
                         )}
 
                         {isFetchingMoreCourses && (
-                            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 grid-rows-2 gap-6">
+                            <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 grid-rows-2 gap-6">
                                 <Skeleton
                                     repeat={
-                                        width < 768
-                                            ? 1
-                                            : width < 1024
+                                        width < 1024
                                             ? 2
                                             : width < 1280
                                             ? 3
@@ -592,7 +588,7 @@ const ClassContainer = ({
                                             ? 5
                                             : 6
                                     }
-                                    className="w-full h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)] 2xl:h-[calc(38vh)] 3xl:h-[calc(34vh)]"
+                                    className="w-full h-[calc(32vh)] md:h-[calc(60vh)] lg:h-[calc(38vh)] xl:h-[calc(42vh)] 2xl:h-[calc(38vh)] 3xl:h-[calc(34vh)]"
                                 />
                             </div>
                         )}
