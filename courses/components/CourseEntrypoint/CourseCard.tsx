@@ -81,7 +81,7 @@ const CourseCard = ({
                 </div>
 
                 <div className="absolute inset-0 px-4 pb-4 pt-6 w-full h-full flex flex-col justify-end bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)]">
-                    <div className="transition-all duration-400 ease-out group-hover:pb-14 -mx-4 px-4 -mb-4 group-hover:-mb-0 pb-4 pt-4 bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)] backdrop-blur-[20px] group-hover:backdrop-blur-none group-hover:bg-none">
+                    <div className="transition-all duration-400 ease-out group-hover:pb-14">
                         <h2 className="font-semibold text-sm line-clamp-2 text-white">
                             {renderHighlightedCourseName()}
                         </h2>
