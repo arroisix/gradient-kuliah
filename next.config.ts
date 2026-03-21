@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
+import { withMotionwind } from "motionwind-react/next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   /* config options here */
 };
 
-export default nextConfig;
+export default withMotionwind(nextConfig);
