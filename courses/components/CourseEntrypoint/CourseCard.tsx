@@ -83,11 +83,13 @@ const CourseCard = ({
                 <div className="absolute inset-0 w-full h-full flex flex-col justify-end">
                     <div className="relative z-10 px-4 pb-4">
                         <div
-                            className="absolute inset-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-0 backdrop-blur-[20px] [mask-image:linear-gradient(180deg,_transparent_1.1%,_black_42.47%,_black_100%)] [-webkit-mask-image:linear-gradient(180deg,_transparent_1.1%,_black_42.47%,_black_100%)]"
-                            style={{ WebkitBackdropFilter: 'blur(20px)' }}
+                            className="absolute inset-0 pointer-events-none transition-all duration-300 backdrop-blur-[20px] group-hover:backdrop-blur-[24px] [mask-image:linear-gradient(180deg,_transparent_1.1%,_black_42.47%,_black_100%)] [-webkit-mask-image:linear-gradient(180deg,_transparent_1.1%,_black_42.47%,_black_100%)]"
+                            style={{ WebkitBackdropFilter: 'blur(24px)' }}
                         />
 
-                        <div className="absolute inset-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-0 bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)]" />
+                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.44)_42.47%,rgba(16,16,16,0.7)_100%)]" />
+
+                        <div className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[linear-gradient(180deg,rgba(16,16,16,0)_1.1%,rgba(16,16,16,0.2)_42.47%,rgba(16,16,16,0.36)_100%)]" />
 
                         <div className="relative transition-all duration-400 ease-out pt-2 group-hover:pb-14">
                             <h2 className="font-semibold text-sm line-clamp-2 text-white">
@@ -165,7 +167,7 @@ const CourseCard = ({
                         </div>
                     </div>
 
-                    <div className="absolute left-4 right-4 bottom-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out">
+                    <div className="absolute left-4 right-4 bottom-4 z-20 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out">
                         <Button
                             type="button"
                             variant="primary"
