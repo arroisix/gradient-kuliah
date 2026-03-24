@@ -185,42 +185,42 @@ const CopilotModal = ({
     return (
         <>
             {!isKelasRoute ||
-                (isKelasRoute && isAuthenticated && (
-                    <div
-                        className={cn(
-                            'fixed bottom-0 right-0 z-50 shadow-lg font-inter',
-                            getModalWidth(),
-                            xlWidth,
-                            !isMobile && 'xl:pr-4',
-                            isMobile && isCollapsed ? '' : 'rounded-t-lg',
-                            getModalHeight(),
-                            'transition-all duration-300 ease-in-out',
-                            isOpen ? 'translate-y-0' : 'translate-y-full',
-                            !isOpen && 'pointer-events-none',
-                            'flex flex-col overflow-hidden'
-                        )}>
-                        <CopilotSidebarContainer
-                            currentContext={currentContext}
-                            sessionId={sessionId}
-                            isCollapsed={isCollapsed}
-                            isMobile={isMobile}
-                            selectedReferences={selectedReferences}
-                            onCollapsedChange={setIsCollapsed}
-                            onClose={handleClose}
-                            onOpenReferenceModal={handleOpenReferenceModal}
-                            onOpenReferenceContentModal={
-                                handleOpenReferenceContentModal
-                            }
-                            onRemoveReference={handleRemoveReference}
-                            onOpenUsedReferencesModal={
-                                handleOpenUsedReferencesModal
-                            }
-                            contentType={getCurrentContentType()}
-                            bookSlug={bookSlug}
-                            chapterId={chapterId}
-                        />
-                    </div>
-                ))}
+                (isKelasRoute && isAuthenticated) ? (
+                <div
+                    className={cn(
+                        'fixed bottom-0 right-0 z-50 shadow-lg font-inter',
+                        getModalWidth(),
+                        xlWidth,
+                        !isMobile && 'xl:pr-4',
+                        isMobile && isCollapsed ? '' : 'rounded-t-lg',
+                        getModalHeight(),
+                        'transition-all duration-300 ease-in-out',
+                        isOpen ? 'translate-y-0' : 'translate-y-full',
+                        !isOpen && 'pointer-events-none',
+                        'flex flex-col overflow-hidden'
+                    )}>
+                    <CopilotSidebarContainer
+                        currentContext={currentContext}
+                        sessionId={sessionId}
+                        isCollapsed={isCollapsed}
+                        isMobile={isMobile}
+                        selectedReferences={selectedReferences}
+                        onCollapsedChange={setIsCollapsed}
+                        onClose={handleClose}
+                        onOpenReferenceModal={handleOpenReferenceModal}
+                        onOpenReferenceContentModal={
+                            handleOpenReferenceContentModal
+                        }
+                        onRemoveReference={handleRemoveReference}
+                        onOpenUsedReferencesModal={
+                            handleOpenUsedReferencesModal
+                        }
+                        contentType={getCurrentContentType()}
+                        bookSlug={bookSlug}
+                        chapterId={chapterId}
+                    />
+                </div>
+            ) : null}
 
             <ReferenceModal
                 isOpen={isReferenceModalOpen}
