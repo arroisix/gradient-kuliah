@@ -20,6 +20,8 @@ interface BenefitCardProps {
   imageSrc?: string;
   lottieData?: object;
   showPlayIcon?: boolean;
+  tagIcon?: string;
+  copilotStyle?: boolean;
 }
 
 export default function BenefitCard({
@@ -33,6 +35,8 @@ export default function BenefitCard({
   imageSrc,
   lottieData,
   showPlayIcon = false,
+  tagIcon,
+  copilotStyle = false,
 }: BenefitCardProps) {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -41,7 +45,7 @@ export default function BenefitCard({
   const isImageVariant = variant === "image" && imageSrc;
   const isLottieVariant = variant === "lottie" && lottieData;
 
-  // Initialize Lottie at frame 0 when loaded
+  // Initialize Lottie at frame 0
   useEffect(() => {
     if (lottieRef.current && lottieData) {
       lottieRef.current.goToAndStop(0, true);
@@ -64,7 +68,7 @@ export default function BenefitCard({
     }
   };
 
-  // Reset to frame 0 after fade out completes, then fade back in
+  // Handle fade transitions - reset to frame 0
   const handleTransitionEnd = () => {
     if (isFadingOut && lottieRef.current) {
       lottieRef.current.goToAndStop(0, true);
@@ -93,9 +97,15 @@ export default function BenefitCard({
 
       {/* Lottie animation for lottie variant */}
       {isLottieVariant && (
-        <div className="relative w-full h-[55%] min-h-[300px] overflow-hidden">
+        <div className={`relative w-full overflow-hidden flex items-center justify-center ${
+          isLottieVariant ? "flex-1" : "h-[55%] min-h-[300px]"
+        }`}>
           <div
-            className="w-full h-full transition-opacity duration-500 ease-in-out"
+            className={`transition-opacity duration-500 ease-in-out ${
+              copilotStyle
+                ? "w-[75%] rounded-[12px] border-x border-b border-[#3a3a3a]/60 overflow-hidden -translate-y-[20%]"
+                : "w-full h-full"
+            }`}
             style={{ opacity: isFadingOut ? 0 : 1 }}
             onTransitionEnd={handleTransitionEnd}
           >
@@ -105,9 +115,6 @@ export default function BenefitCard({
               loop={false}
               autoplay={false}
               className="w-full h-full"
-              style={{
-                objectFit: 'cover',
-              }}
               onDOMLoaded={() => {
                 if (lottieRef.current) {
                   lottieRef.current.goToAndStop(0, true);
@@ -132,18 +139,26 @@ export default function BenefitCard({
 
       {/* Content */}
       <div
-        className={`relative z-10 flex flex-col items-center gap-4 px-8 pb-8 flex-1 ${
-          (isImageVariant || isLottieVariant) ? "pt-6" : "pt-8"
+        className={`relative z-10 flex flex-col items-center gap-4 px-8 pb-8 ${
+          isLottieVariant ? "pt-8" : "flex-1 pt-8"
         }`}
       >
-        {/* Tag with optional play icon */}
-        <div className="flex items-center gap-3">
+        {/* Tag with optional icon */}
+        <div className="flex items-center gap-2">
           {showPlayIcon && (
             <Image
               src="/assets/play-icon.svg"
               alt="Play"
               width={36}
               height={36}
+            />
+          )}
+          {tagIcon && (
+            <Image
+              src={tagIcon}
+              alt=""
+              width={32}
+              height={32}
             />
           )}
           <span
@@ -169,10 +184,12 @@ export default function BenefitCard({
         </p>
 
         {/* Link */}
-        <button className="inline-flex items-center gap-1.5 text-secondary-purple text-base font-semibold hover:gap-2.5 transition-all w-fit mt-2">
-          {linkText}
-          <ChevronRight className="w-5 h-5" />
-        </button>
+        {linkText && (
+          <button className="inline-flex items-center gap-1.5 text-secondary-purple text-base font-semibold hover:gap-2.5 transition-all w-fit mt-2">
+            {linkText}
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </div>
   );

@@ -60,7 +60,7 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Floating Pill Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 hidden md:block">
+      <nav className="fixed top-0 left-0 right-0 z-50 hidden lg:block">
         {/* Outer container with padding */}
         <div className="max-w-[1280px] mx-auto px-6 py-4">
           {/* Inner pill navbar */}
@@ -194,7 +194,7 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 md:hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 lg:hidden">
         <div className="px-4 py-3">
           <div
             className="flex items-center justify-between px-4 py-2.5 rounded-full border border-white/8"

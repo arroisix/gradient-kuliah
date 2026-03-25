@@ -17,7 +17,7 @@ const featureData: Record<string, FeatureCardData> = {
   kelas: {
     badge: "KELAS",
     badgeIcon: "play",
-    title: "Video Materi Berkualitas Tinggi dari Dosen Top Universitas",
+    title: "200.000+ Video Materi dari Dosen Top Universitas",
     description: "Penjelasan yang santai, mudah dimengerti, dan ",
     descriptionItalic: "to the point",
     cta: "Lihat Daftar Kelas",

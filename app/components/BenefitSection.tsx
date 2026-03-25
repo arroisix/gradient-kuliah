@@ -6,8 +6,8 @@ import BenefitCard from "./BenefitCard";
 const benefits = [
   {
     tag: "Kelas",
-    title: "Video Materi Berkualitas Tinggi dari Dosen Top Universitas",
-    description: "Penjelasan yang santai, mudah dimengerti, dan to the point.",
+    title: "200.000+ Video Materi dari Dosen Top Universitas",
+    description: "Diajarkan oleh dosen yang ahli di berbagai bidang dan jurusan",
     linkText: "Lihat Daftar Kelas",
     accentColor: "#5F2BCE",
     variant: "lottie" as const,
@@ -25,9 +25,12 @@ const benefits = [
     tag: "Assistant",
     title: "Copilot AI Assistant",
     description:
-      "Asisten AI cerdas yang membantu menjawab pertanyaan, menjelaskan konsep sulit, dan memberikan tips belajar yang dipersonalisasi untukmu.",
-    linkText: "Coba Copilot",
+      "Asisten belajar pribadi berbasis AI yang siap membantumu. Tanyakan soal sulit atau minta penjelasan materi yang belum kamu pahami!",
+    linkText: "",
     accentColor: "#36236A",
+    variant: "lottie" as const,
+    tagIcon: "/assets/copilot-icon.svg",
+    copilotStyle: true,
   },
   {
     tag: "Analytics",
@@ -41,12 +44,18 @@ const benefits = [
 
 export default function BenefitSection() {
   const [lecturerAnimation, setLecturerAnimation] = useState<object | null>(null);
+  const [copilotAnimation, setCopilotAnimation] = useState<object | null>(null);
 
   useEffect(() => {
     fetch("/assets/lecturer.json")
       .then((res) => res.json())
       .then((data) => setLecturerAnimation(data))
-      .catch((err) => console.error("Failed to load animation:", err));
+      .catch((err) => console.error("Failed to load lecturer animation:", err));
+
+    fetch("/assets/copilot.json")
+      .then((res) => res.json())
+      .then((data) => setCopilotAnimation(data))
+      .catch((err) => console.error("Failed to load copilot animation:", err));
   }, []);
 
   return (
@@ -58,8 +67,7 @@ export default function BenefitSection() {
             Semua yang kamu butuhkan untuk raih IPK idaman
           </h2>
           <p className="text-lg text-gray-text leading-relaxed">
-            Platform all-in-one dengan fitur canggih untuk memastikan kamu siap
-            tempur di hari H!
+          Tingkatkan Pengalaman Belajar dengan Fitur-Fitur Gradient
           </p>
         </div>
 
@@ -70,7 +78,7 @@ export default function BenefitSection() {
             <BenefitCard
               {...benefits[0]}
               lottieData={lecturerAnimation ?? undefined}
-              className="h-full min-h-[500px] md:min-h-[680px]"
+              className="h-[500px] md:h-[680px]"
             />
           </div>
           <div className="animate-initial:opacity-0 animate-initial:y-20 animate-inview:opacity-100 animate-inview:y-0 animate-once animate-duration-500 animate-delay-100">
@@ -79,7 +87,11 @@ export default function BenefitSection() {
 
           {/* Second row */}
           <div className="animate-initial:opacity-0 animate-initial:y-20 animate-inview:opacity-100 animate-inview:y-0 animate-once animate-duration-500 animate-delay-200">
-            <BenefitCard {...benefits[2]} className="h-full min-h-[380px]" />
+            <BenefitCard
+              {...benefits[2]}
+              lottieData={copilotAnimation ?? undefined}
+              className="h-[500px] md:h-[680px]"
+            />
           </div>
           <div className="animate-initial:opacity-0 animate-initial:y-20 animate-inview:opacity-100 animate-inview:y-0 animate-once animate-duration-500 animate-delay-300">
             <BenefitCard {...benefits[3]} className="h-full min-h-[380px]" />
