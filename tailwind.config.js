@@ -36,6 +36,7 @@ module.exports = {
                 accent: {
                     blue: '#72B6E8',
                     purple: '#5F2BCE',
+                    'purple-light': '#B6A6F3',
                     orange: '#B73E32',
                     yellow: '#F2C04C',
                     green: '#34C759',
@@ -57,6 +58,7 @@ module.exports = {
                     200: '#CCCCCC',
                     400: '#999999',
                     600: '#666666',
+                    650: '#3a3a3a',
                     700: '#333333',
                     800: '#242424',
                     900: '#121212',

@@ -28,6 +28,9 @@ interface LayoutProps {
     // accomodate landing page revamp which still uses old layout but with new background, can be removed once the revamp is fully rolled out and old layout is removed
     withoutMaxWidthContainer?: boolean;
     withoutBackButton?: boolean;
+    // For kuliah landing page revamp - uses its own Navbar/Footer
+    withoutNavbar?: boolean;
+    withoutFooter?: boolean;
 }
 
 const Layout = ({
@@ -40,7 +43,9 @@ const Layout = ({
     isFullBlackBackground,
     withoutMaxWidthContainer = false,
     withoutK12Paywall = false,
-    withoutBackButton = false
+    withoutBackButton = false,
+    withoutNavbar = false,
+    withoutFooter = false
 }: LayoutProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
@@ -62,22 +67,25 @@ const Layout = ({
                 paymentPage && 'flex flex-col'
             )}>
             {!withoutK12Paywall && <K12Paywall />}
-            <Navbar
-                paymentPage={paymentPage ?? false}
-                shouldTransparent={shouldTransparent ?? false}
-                courses={courses}
-                withoutBackButton={withoutBackButton}
-            />
+            {!withoutNavbar && (
+                <>
+                    <Navbar
+                        paymentPage={paymentPage ?? false}
+                        shouldTransparent={shouldTransparent ?? false}
+                        courses={courses}
+                        withoutBackButton={withoutBackButton}
+                    />
 
-            {
-                <div
-                    className={cn(
-                        'h-14 bg-[#222222]',
-                        paymentPage && 'bg-transparent'
-                    )}></div>
-            }
+                    <div
+                        className={cn(
+                            'h-14 bg-[#222222]',
+                            paymentPage && 'bg-transparent'
+                        )}
+                    />
 
-            {!isAuthenticated && !paymentPage && <CountdownBanner />}
+                    {!isAuthenticated && !paymentPage && <CountdownBanner />}
+                </>
+            )}
 
             <section
                 className={cn(
@@ -101,7 +109,7 @@ const Layout = ({
                     {children}
                 </div>
             </section>
-            {(!is_subscribed || router.asPath === '/') && <Footer />}
+            {!withoutFooter && (!is_subscribed || router.asPath === '/') && <Footer />}
             <Appbar />
         </div>
     );

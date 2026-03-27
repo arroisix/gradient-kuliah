@@ -93,16 +93,24 @@ DetailKelas.displayName = 'Course Landing';
 export default DetailKelas;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const courseSlug = await fetch(
-        `${config.API_BASE_URL}courses/public/landing/`
-    );
+    try {
+        const courseSlug = await fetch(
+            `${config.API_BASE_URL}courses/public/landing/`
+        );
 
-    const result: ResponseData<string> = await courseSlug.json();
+        const result: ResponseData<string> = await courseSlug.json();
 
-    return {
-        paths: result.data.map((slug: string) => ({ params: { id: slug } })),
-        fallback: 'blocking' // can also be true or 'blocking'
-    };
+        return {
+            paths: result.data.map((slug: string) => ({ params: { id: slug } })),
+            fallback: 'blocking'
+        };
+    } catch (error) {
+        console.log('API not available during build, using empty paths');
+        return {
+            paths: [],
+            fallback: 'blocking'
+        };
+    }
 };
 
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(

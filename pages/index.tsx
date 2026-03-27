@@ -23,7 +23,11 @@ const RevampedLandingPage = ({
     return (
         <>
             <GridProvider>
-                <Layout withoutK12Paywall withoutMaxWidthContainer>
+                <Layout
+                    withoutK12Paywall
+                    withoutMaxWidthContainer
+                    withoutNavbar
+                    withoutFooter>
                     <LandingContainer
                         classesData={classesData?.data}
                         popularBooksData={popularBooksData?.books}
@@ -69,9 +73,9 @@ const RevampedLandingPage = ({
 
 export async function getStaticProps(): Promise<{
     props: {
-        pricingData: ResponseData<PacketOffer>;
-        classesData: ResponseData<Course>;
-        popularBooksData: GetLandingPopularBooksResponseData;
+        pricingData: ResponseData<PacketOffer> | null;
+        classesData: ResponseData<Course> | null;
+        popularBooksData: GetLandingPopularBooksResponseData | null;
         canonical: string;
         title: string;
         description: string;
@@ -90,15 +94,29 @@ export async function getStaticProps(): Promise<{
     };
     revalidate?: number;
 }> {
-    const { data: classesData }: { data: ResponseData<Course> } =
-        await axios.get(`${config.API_BASE_URL}courses/v2/public/?major=all`);
-    const {
-        data: popularBooksData
-    }: { data: GetLandingPopularBooksResponseData } = await axios.get(
-        `${config.API_BASE_URL}books/landing/popular/?major=all`
-    );
-    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
-        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
+    // Temporarily disable API calls for local testing
+    let classesData = null;
+    let popularBooksData = null;
+    let pricingData = null;
+
+    try {
+        const classesRes = await axios.get(
+            `${config.API_BASE_URL}courses/v2/public/?major=all`
+        );
+        classesData = classesRes.data;
+
+        const booksRes = await axios.get(
+            `${config.API_BASE_URL}books/landing/popular/?major=all`
+        );
+        popularBooksData = booksRes.data;
+
+        const pricingRes = await axios.get(
+            `${config.API_BASE_URL}subscriptions/packet-offer/`
+        );
+        pricingData = pricingRes.data;
+    } catch (error) {
+        console.log('API not available, using empty data for testing');
+    }
 
     const META_TITLE =
         'Platform Belajar Materi Kuliah Online #1 di Indonesia | Gradient';
