@@ -17,6 +17,35 @@
   --color-gray-light: #D9D9D9;
   --color-gray-dark: #525157;
 
+  /* Gamification x Mastery UI (Figma: Gamification x Mastery – Desktop) */
+  --color-gm-bg: #110f19;
+  --color-gm-surface: #171421;      /* surface/surface-primary */
+  --color-gm-card: #1d1a29;
+  --color-gm-line: #221e2f;         /* color/midnight/850 */
+  --color-gm-raised: #2a253a;       /* surface/surface-secondary */
+  --color-gm-muted: #9e98b3;
+  --color-gm-brand: #5f2bce;        /* brand/500 – only for primary CTA */
+  --color-gm-brand-lip: #451aa2;
+  --color-gm-brand-300: #b285f0;
+  --color-gm-brand-200: #cdaff6;
+  --color-gm-brand-700: #3b1b81;
+  --color-gm-gold: #fcd590;         /* gold/300 */
+  --color-gm-coral: #ff6a5c;        /* coral/500 */
+  --color-gm-coral-700: #ad342c;
+  --color-gm-mint: #2dd4a7;
+
+  /* Subtest identity */
+  --color-sub-pu: #c0c7d6;
+  --color-sub-ppu: #22d3ee;
+  --color-sub-pbm: #c084fc;
+  --color-sub-pk: #ffc83d;
+  --color-sub-lbi: #84cc16;
+  --color-sub-lbe: #f59e0b;
+  --color-sub-pm: #facc15;
+
+  --font-nunito: var(--font-nunito-var), 'Nunito', sans-serif;
+  --font-nunito-sans: var(--font-nunito-sans-var), 'Nunito Sans', sans-serif;
+
   /* Fonts - using next/font/google */
   --font-sans: var(--font-inter), 'Inter', sans-serif;
   --font-raleway: var(--font-raleway), 'Raleway', sans-serif;
@@ -58,4 +87,19 @@ body {
 
 .font-urbanist {
   font-family: var(--font-urbanist);
+}
+
+/* Gamification UI motion */
+@keyframes gm-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -8px; }
+}
+
+@keyframes gm-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-"] { animation: none !important; }
 }
