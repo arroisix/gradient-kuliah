@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gradient Academy</title>
 <meta name="description" content="Satu semesta belajar untuk Indonesia. Gradient Academy sebagai pusat dari Gradient UTBK, TKA, Kuliah, dan Private.">
+<script>document.documentElement.classList.add("wait")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
@@ -106,6 +107,8 @@ main, footer { position: relative; z-index: 1; }
 .sw-item:hover .sw-go { color: var(--text); }
 @keyframes nav-in { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
 
+.wait .nav, .wait .word, .wait .hero .lede, .wait .rings circle, .wait .arrive, .wait .ripple, .wait .hub, .wait #stars { animation-play-state: paused !important; }
+.wait #stars { opacity: 0; }
 /* ---------- Hero: a flat universe ---------- */
 .hero { position: relative; padding-top: 128px; overflow: hidden; text-align: center; }
 .hero-copy { position: relative; z-index: 3; display: grid; justify-items: center; gap: 22px; }
@@ -827,7 +830,25 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
   }
   resize(); addEventListener('resize', resize); requestAnimationFrame(draw);
   if (reduce) addEventListener('scroll', () => requestAnimationFrame(draw), { passive: true });
-  else cv.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1600, easing: 'ease-out' });
+
+  /* ---- start the intro only once the page is loaded and actually visible ---- */
+  const root = document.documentElement;
+  let started = false;
+  function startIntro() {
+    if (started) return; started = true;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      root.classList.remove('wait');
+      if (!reduce) cv.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1600, easing: 'ease-out' });
+    }));
+  }
+  function maybeStart() { if (document.readyState === 'complete' && document.visibilityState === 'visible') startIntro(); }
+  if (reduce) root.classList.remove('wait');
+  else {
+    addEventListener('load', () => setTimeout(maybeStart, 120));
+    document.addEventListener('visibilitychange', maybeStart);
+    maybeStart();
+    setTimeout(startIntro, 6000);   // never leave the hero hidden
+  }
 
   /* ---- Mastery: answer one question, watch the map and the next practice change ---- */
   const level = (m) => m >= 80 ? ['Hampir Master', 'var(--mint)'] : m >= 60 ? ['Berkembang', 'var(--brand-200)'] : ['Perlu dilatih', 'var(--coral)'];
