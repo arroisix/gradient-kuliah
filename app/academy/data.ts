@@ -48,7 +48,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "tka",
     name: "Gradient TKA",
-    audience: "SD, SMP & SMA",
+    audience: "Siswa SMA",
     tagline: "Siap Tes Kemampuan Akademik",
     description:
       "Latihan terarah untuk Tes Kemampuan Akademik: materi inti, bank soal, dan simulasi tes yang menyesuaikan kemampuanmu.",
