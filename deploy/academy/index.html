@@ -81,7 +81,7 @@ main, footer { position: relative; z-index: 1; }
 .lockup-tka img { height: 1em; width: auto; }
 .lockup-tka span { height: .97em; padding: 0 .42em; display: inline-grid; place-items: center; border-radius: 999px; background: linear-gradient(110deg, #0e7490, #22d3ee); border: 1px solid rgba(255,255,255,.35); font: 900 .58em/1 var(--display); letter-spacing: .08em; color: #fff; }
 /* ---------- Nav (appears after the intro) ---------- */
-.nav { position: fixed; z-index: 20; top: 0; left: 0; right: 0; padding: calc(14px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 14px max(20px, env(safe-area-inset-left, 0px)); display: flex; justify-content: space-between; align-items: center; animation: nav-in .8s var(--ease-out) 2.7s both; }
+.nav { position: fixed; z-index: 20; top: 0; left: 0; right: 0; padding: calc(14px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 14px max(20px, env(safe-area-inset-left, 0px)); display: flex; justify-content: space-between; align-items: center; animation: nav-in .8s var(--ease-out) 3.9s both; }
 .nav::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(8,7,13,.9), rgba(8,7,13,0)); pointer-events: none; z-index: -1; }
 .switch { position: relative; }
 .switch-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; margin: -8px -12px; border: 0; border-radius: 999px; background: transparent; color: var(--text); cursor: pointer; transition: background-color .2s; }
@@ -108,7 +108,7 @@ main, footer { position: relative; z-index: 1; }
 @keyframes nav-in { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
 
 .wait .nav, .wait .word, .wait .hero .lede, .wait .rings circle, .wait .arrive, .wait .ripple, .wait .hub, .wait #stars { animation-play-state: paused !important; }
-.wait #stars { opacity: 0; }
+.wait #stars, .wait .hub { opacity: 0; }
 /* ---------- Hero: a flat universe ---------- */
 .hero { position: relative; padding-top: 128px; overflow: hidden; text-align: center; }
 .hero-copy { position: relative; z-index: 3; display: grid; justify-items: center; gap: 22px; }
@@ -116,38 +116,38 @@ main, footer { position: relative; z-index: 1; }
 .hero h1 { font-size: clamp(44px, 7.4vw, 84px); font-weight: 900; line-height: 1; letter-spacing: -0.035em; }
 .hero h1 .fade { background: linear-gradient(90deg, #fff 0%, #fff 45%, #8e88a6 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .lede { max-width: 30em; color: #c9c4da; font-size: clamp(16px, 1.6vw, 19px); }
-.word { display: inline-block; animation: word-in 1s var(--ease-out) both; animation-delay: calc(1.55s + var(--i) * 70ms); }
+.word { display: inline-block; animation: word-in 1s var(--ease-out) both; animation-delay: calc(2.8s + var(--i) * 80ms); }
 .hero .lede { animation: rise .9s var(--ease-out) both; }
-.hero .lede { animation-delay: 2.05s; }
+.hero .lede { animation-delay: 3.3s; }
 @keyframes word-in { from { opacity: 0; filter: blur(14px); transform: translateY(18px); } to { opacity: 1; filter: blur(0); transform: none; } }
 @keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
 
 .system { --S: min(1060px, 150vw); position: relative; width: var(--S); height: var(--S); margin: calc(var(--S) * -0.36) 0 0; left: 50%; translate: -50% 0; }
 .rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.rings circle { fill: none; stroke: rgba(255,255,255,.1); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 1.4s var(--ease-out) both; animation-delay: calc(.7s + var(--k) * 120ms); }
-.rings circle.dash { stroke-dasharray: 2 7; stroke-dashoffset: 0; animation: fade 1s ease-out calc(.7s + var(--k) * 120ms) both, dash-run 30s linear infinite; }
+.rings circle { fill: none; stroke: rgba(255,255,255,.1); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 1.4s var(--ease-out) both; animation-delay: calc(1.9s + var(--k) * 120ms); }
+.rings circle.dash { stroke-dasharray: 2 7; stroke-dashoffset: 0; animation: fade 1s ease-out calc(1.9s + var(--k) * 120ms) both, dash-run 30s linear infinite; }
 @keyframes dash-run { to { stroke-dashoffset: -90; } }
-@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes draw { 0% { stroke-dashoffset: 100; opacity: 0; } 12% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 .orbit { position: absolute; left: 50%; top: 50%; width: calc(var(--S) * var(--d)); height: calc(var(--S) * var(--d)); margin: calc(var(--S) * var(--d) / -2) 0 0 calc(var(--S) * var(--d) / -2); border-radius: 50%; animation: spin calc(var(--t) * 1s) linear infinite; animation-delay: calc(var(--t) * var(--p) * -1s); }
 @keyframes spin { to { rotate: 360deg; } }
 .body { position: absolute; left: 50%; top: 0; translate: -50% -50%; }
 .upright { animation: spin calc(var(--t) * 1s) linear infinite reverse; animation-delay: calc(var(--t) * var(--p) * -1s); }
-.arrive { animation: arrive .7s var(--ease-back) both; animation-delay: calc(1.2s + var(--k) * 130ms); }
+.arrive { animation: arrive .7s var(--ease-back) both; animation-delay: calc(2.3s + var(--k) * 130ms); }
 @keyframes arrive { from { opacity: 0; scale: .3; } to { opacity: 1; scale: 1; } }
 .badge { --h: 20px; display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 999px; background: #15131d; border: 1px solid var(--line); box-shadow: 0 4px 0 #0b0a10; font: 800 14px/1 var(--display); white-space: nowrap; transition: border-color .2s, transform .2s var(--ease-back); }
 .badge:hover { border-color: color-mix(in srgb, var(--c) 60%, transparent); transform: translateY(-3px); }
 .dot { display: block; width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
 
 .core { position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 4; }
-.hub { --h: clamp(30px, 4vw, 46px); position: relative; display: inline-flex; align-items: center; gap: calc(var(--h) * .36); animation: core-in .9s var(--ease-back) .2s both; }
+.hub { --h: clamp(30px, 4vw, 46px); position: relative; display: inline-flex; align-items: center; gap: calc(var(--h) * .36); }
 .hub::before { content: ""; position: absolute; inset: -70% -40%; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgba(95,43,206,.38), rgba(95,43,206,0)); pointer-events: none; }
 .hub .g-icon { width: calc(var(--h) * 1.3); height: calc(var(--h) * 1.3); border-radius: 22%; background: #242424; border: 1px solid rgba(255,255,255,.14); display: grid; place-items: center; box-shadow: 0 6px 18px rgba(0,0,0,.45); }
 .hub .g-icon svg { width: 72%; height: 72%; fill: #fff; }
 .hub .logotype { height: var(--h); width: auto; }
 @keyframes core-in { 0% { opacity: 0; scale: .4; } 70% { opacity: 1; scale: 1.06; } 100% { opacity: 1; scale: 1; } }
-.ripple { position: absolute; left: 50%; top: 50%; width: calc(var(--S) * .2); height: calc(var(--S) * .2); margin: calc(var(--S) * -.1) 0 0 calc(var(--S) * -.1); border-radius: 50%; border: 2px solid var(--brand-300); z-index: 3; pointer-events: none; animation: ripple 1.6s var(--ease-out) both; animation-delay: calc(.45s + var(--k) * 180ms); }
-@keyframes ripple { from { opacity: .9; scale: .6; } to { opacity: 0; scale: 4; } }
+.ripple { position: absolute; left: 50%; top: 50%; width: calc(var(--S) * .2); height: calc(var(--S) * .2); margin: calc(var(--S) * -.1) 0 0 calc(var(--S) * -.1); border-radius: 50%; border: 2px solid var(--brand-300); z-index: 3; pointer-events: none; animation: ripple 1.6s var(--ease-out) both; animation-delay: calc(1.95s + var(--k) * 180ms); }
+@keyframes ripple { 0% { opacity: 0; scale: .6; } 8% { opacity: .9; } 100% { opacity: 0; scale: 4; } }
 
 /* ---------- Chapters (Mastery, Akses) ---------- */
 .chapter { padding: clamp(96px, 14vw, 170px) 0 0; }
@@ -837,6 +837,20 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
   function startIntro() {
     if (started) return; started = true;
     requestAnimationFrame(() => requestAnimationFrame(() => {
+      // 1) the logo appears alone in the middle of the screen, then glides down into the centre of the orbits
+      const hub = document.querySelector('.hub');
+      if (hub) {
+        const r = hub.getBoundingClientRect();
+        const dx = innerWidth / 2 - (r.left + r.width / 2), dy = innerHeight / 2 - (r.top + r.height / 2);
+        const at = `translate(${dx}px, ${dy}px)`;
+        hub.animate([
+          { opacity: 0, transform: `${at} scale(.7)`, filter: 'blur(10px)' },
+          { opacity: 1, transform: `${at} scale(1.35)`, filter: 'blur(0px)', offset: .3 },
+          { opacity: 1, transform: `${at} scale(1.35)`, filter: 'blur(0px)', offset: .52 },
+          { opacity: 1, transform: 'none', filter: 'blur(0px)' },
+        ], { duration: 2000, easing: 'cubic-bezier(.65,0,.25,1)', fill: 'both' });
+      }
+      // 2) everything else is on the CSS timeline (rings 1.9s, badges 2.3s, words 2.8s, nav 3.9s)
       root.classList.remove('wait');
       if (!reduce) cv.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1600, easing: 'ease-out' });
     }));
