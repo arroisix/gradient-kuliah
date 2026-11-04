@@ -404,6 +404,22 @@ main, footer { position: relative; z-index: 1; }
 .scene-private .tutor-dot { background: #fff; color: #3b2fa0; box-shadow: 0 0 0 6px rgba(255,255,255,.25), 0 12px 30px rgba(20,10,60,.4); }
 .scene-private .you-dot { background: var(--private); color: #0a1a33; box-shadow: 0 0 0 6px rgba(96,165,250,.3), 0 12px 30px rgba(20,10,60,.4); }
 .scene-private .link-line { width: clamp(60px, 12vw, 160px); height: 4px; border-radius: 4px; background: repeating-linear-gradient(90deg, #fff 0 10px, transparent 10px 18px); animation: dash 1.2s linear infinite; background-size: 18px 4px; }
+@media (min-width: 900px) {
+  .intros { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 1280px; margin-left: auto; margin-right: auto; padding: 0 24px; }
+  .intro { padding-top: 56px; display: flex; flex-direction: column; }
+  .intro .name { --h: 34px; }
+  .intro h2 { font-size: clamp(36px, 3.6vw, 52px); }
+  .intro .sub-tag { font-size: 15px; max-width: 26em; }
+  .intro .visual.scene { height: clamp(280px, 26vw, 380px); margin-top: auto; padding-top: 32px; box-sizing: content-box; }
+  .scene-tka { gap: clamp(12px, 2vw, 32px); }
+  .scene-tka .subj img { width: clamp(64px, 7vw, 104px); }
+  .scene-tka .subj.big img { width: clamp(80px, 8.5vw, 128px); }
+  .scene-tka .subj span { font-size: 13px; }
+  .scene-private .who { width: clamp(72px, 7vw, 104px); }
+  .scene-private .link-line { width: clamp(48px, 6vw, 96px); }
+  .scene-utbk .students { height: auto; width: 100%; max-width: 100%; max-height: 100%; object-fit: contain; align-self: end; }
+  .scene-kuliah video { height: 100%; }
+}
 @keyframes dash { to { background-position: 18px 0; } }
 
 /* ---------- Closing & footer ---------- */
