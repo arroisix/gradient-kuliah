@@ -134,8 +134,8 @@ main, footer { position: relative; z-index: 1; }
 .lockup-tka img { height: 1em; width: auto; }
 .lockup-tka span { height: .97em; padding: 0 .42em; display: inline-grid; place-items: center; border-radius: 999px; background: linear-gradient(110deg, #0e7490, #22d3ee); border: 1px solid rgba(255,255,255,.35); font: 900 .58em/1 var(--display); letter-spacing: .08em; color: #fff; }
 /* ---------- Nav (appears after the intro) ---------- */
-.nav { position: fixed; z-index: 20; top: 0; left: 0; right: 0; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 0; animation: nav-in .8s var(--ease-out) 5s both; pointer-events: none; }
-.nav-pill { pointer-events: auto; position: relative; max-width: 1440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,.1); background: rgba(4,4,4,.25); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 20px 50px -20px rgba(95,43,206,.55); }
+.nav { position: fixed; z-index: 20; top: 0; left: 0; right: 0; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 0; animation: nav-in .8s var(--ease-out) 5s backwards; pointer-events: none; }
+.nav-pill { pointer-events: auto; position: relative; max-width: 1440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,.1); background: rgba(8,7,13,.55); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); box-shadow: 0 20px 50px -20px rgba(95,43,206,.55); }
 .glock { display: inline-flex; align-items: center; gap: 8px; }
 .gword { font: 800 16px/1 'Urbanist', var(--display); color: #fff; letter-spacing: -0.01em; }
 .gbadge { display: inline-flex; height: 18px; padding: 1px; border-radius: 999px; background: var(--bd); }
