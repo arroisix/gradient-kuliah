@@ -392,7 +392,7 @@ main, footer { position: relative; z-index: 1; }
 .app-card { background: radial-gradient(60% 90% at 78% 100%, rgba(95,43,206,.45), transparent 70%), radial-gradient(rgba(255,255,255,.07) 1px, transparent 1.2px) 0 0 / 18px 18px, var(--card); }
 @media (max-width: 760px) { .app-card { background: radial-gradient(90% 60% at 50% 100%, rgba(95,43,206,.45), transparent 70%), radial-gradient(rgba(255,255,255,.07) 1px, transparent 1.2px) 0 0 / 18px 18px, var(--card); } }
 .testi { position: relative; }
-.testi::before { content: ""; position: absolute; left: 0; bottom: -120px; width: min(783px, 90vw); height: 818px; background: radial-gradient(closest-side, rgba(95,43,206,.22), transparent); pointer-events: none; z-index: -1; }
+
 .testi .chapter-head h2 { max-width: 14em; }
 .testi-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start; }
 .testi-col { display: grid; gap: 20px; }
@@ -948,14 +948,17 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
   let stars = [], W = 0, H = 0; const dpr = Math.min(2, devicePixelRatio || 1);
   function resize() {
     W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    stars = Array.from({ length: Math.round(W * H / 6000) }, () => ({ x: Math.random() * W, y: Math.random() * H * 3, r: Math.random() * 1 + .25, z: Math.random() * .5 + .1, tw: Math.random() * 6.28, sp: Math.random() * 1.5 + .4 }));
+    const n = Math.round(W * H / 5200);
+    stars = Array.from({ length: n }, (_, i) => { const layer = i % 10 < 6 ? 0 : i % 10 < 9 ? 1 : 2; return { x: Math.random() * W, y: Math.random() * H * 3, r: [.35, .8, 1.5][layer] + Math.random() * [.4, .5, .8][layer], z: [.08, .3, .65][layer] + Math.random() * .06, a: [.45, .7, .9][layer], glow: layer === 2, tw: Math.random() * 6.28, sp: Math.random() * 1.5 + .4 }; });
   }
   function draw(t) {
     cx.clearRect(0, 0, W, H); const sy = scrollY;
     for (const s of stars) {
       const y = ((s.y - sy * s.z) % (H * 3) + H * 3) % (H * 3); if (y > H) continue;
-      cx.globalAlpha = reduce ? .5 : .3 + .45 * (0.5 + 0.5 * Math.sin(s.tw + (t || 0) / 1000 * s.sp));
-      cx.fillStyle = '#fff'; cx.fillRect(s.x, y, s.r * 1.4, s.r * 1.4);
+      cx.globalAlpha = s.a * (reduce ? .8 : .55 + .45 * (0.5 + 0.5 * Math.sin(s.tw + (t || 0) / 1000 * s.sp)));
+      cx.fillStyle = '#fff';
+      if (s.glow) { cx.beginPath(); cx.arc(s.x, y, s.r, 0, 6.283); cx.fill(); cx.globalAlpha *= .18; cx.beginPath(); cx.arc(s.x, y, s.r * 3.2, 0, 6.283); cx.fill(); }
+      else cx.fillRect(s.x, y, s.r * 1.4, s.r * 1.4);
     }
     if (!reduce) requestAnimationFrame(draw);
   }
