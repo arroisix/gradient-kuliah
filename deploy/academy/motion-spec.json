@@ -797,6 +797,20 @@
       "pointer": "rotateX/rotateY up to ±7deg toward the pointer (perspective 700px), 250ms",
       "hover": "shine sweep 800ms; badge lifts -4px, scale 1.06, rotate -4deg (easeBack)",
       "featured": "conic ring spins 6s linear; badge bobs 4.5s"
+    },
+    {
+      "id": "nav-produk-menu",
+      "component": "Nav · Produk",
+      "trigger": "hover (mouse, 160ms close delay) / click or tap / ArrowDown",
+      "transition": "opacity 180ms ease-out, translateY -6 → 0",
+      "items": {
+        "TKA": "https://gradient.academy/tka",
+        "UTBK": "https://gradient.academy/utbk",
+        "Mandiri": "https://gradient.academy/mandiri",
+        "Kuliah": "https://gradient.academy/",
+        "Private": "https://gradient.academy/private"
+      },
+      "testimoni": "https://gradient.academy/testimoni"
     }
   ],
   "brandMotion": {
