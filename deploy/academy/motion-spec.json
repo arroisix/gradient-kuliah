@@ -796,7 +796,7 @@
       "component": "Hall of Fame badge tile",
       "pointer": "rotateX/rotateY up to ±7deg toward the pointer (perspective 700px), 250ms",
       "hover": "shine sweep 800ms; badge lifts -4px, scale 1.06, rotate -4deg (easeBack)",
-      "featured": "conic ring spins 6s linear; badge bobs 4.5s"
+      "featured": "conic ring spins 6s linear; badges are static (no floating)"
     },
     {
       "id": "nav-produk-menu",
