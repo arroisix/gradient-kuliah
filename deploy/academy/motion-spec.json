@@ -755,6 +755,25 @@
       "bump": "700ms easeBack on chosen option",
       "barGrow": "Mastery / Bar width 1200ms easeOut",
       "toast": "EXP / Toast hadiah pop 500ms easeBack, exp-up 1100ms ease-out"
+    },
+    {
+      "id": "why-reveal",
+      "component": "Mastery step · Kenapa ini ngebantu?",
+      "states": [
+        "Tertutup (+)",
+        "Terbuka (×)"
+      ],
+      "trigger": "click / Enter / Space",
+      "icon": "rotate 0 → 135deg, 400ms easeOut; fill #2b2740 → brand #612ACE",
+      "panel": "grid-template-rows 0fr → 1fr, 450ms easeOut",
+      "text": {
+        "opacity": "0 → 1",
+        "y": "-6 → 0",
+        "blur": "4 → 0",
+        "duration": "300–450ms",
+        "delay": 80
+      },
+      "a11y": "button aria-expanded + aria-controls"
     }
   ],
   "brandMotion": {

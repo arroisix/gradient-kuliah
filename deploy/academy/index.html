@@ -268,8 +268,20 @@ main, footer { position: relative; z-index: 1; }
 .demo { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; counter-reset: s; }
 .step { display: flex; flex-direction: column; gap: 12px; padding: 18px; border-radius: 18px; background: var(--card-2); border: 1px solid var(--line); transition: border-color .3s, background-color .3s; }
 .step > b { font: 900 16px/1.25 var(--display); }
-.step .why { margin-top: auto; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,.1); font-size: 13.5px; line-height: 1.5; color: #c9c4da; }
-.step .why span { display: block; margin-bottom: 4px; font: 900 11px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--mint); }
+.step .why { margin-top: auto; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.1); }
+/* Apple-style reveal: a "+" that turns into "×" and slides the explanation open */
+.why-btn { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 4px 0; font: 700 14px/1.25 var(--display); color: var(--text); border-radius: 10px; }
+.why-btn:focus-visible { outline: 2px solid var(--brand-200); outline-offset: 3px; }
+.why-btn i { position: relative; flex: none; width: 28px; height: 28px; border-radius: 50%; background: #2b2740; transition: rotate .4s var(--ease-out), background-color .25s; }
+.why-btn i::before, .why-btn i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; border-radius: 2px; background: #fff; translate: -50% -50%; }
+.why-btn i::after { rotate: 90deg; }
+.why-btn:hover i { background: #35314d; }
+.why.open .why-btn i { rotate: 135deg; background: var(--brand); }
+.why-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease-out); }
+.why-body > div { overflow: hidden; min-height: 0; }
+.why-body p { padding-top: 8px; font-size: 13.5px; line-height: 1.5; color: #c9c4da; opacity: 0; transform: translateY(-6px); filter: blur(4px); transition: opacity .3s ease-out, transform .45s var(--ease-out), filter .3s ease-out; }
+.why.open .why-body { grid-template-rows: 1fr; }
+.why.open .why-body p { opacity: 1; transform: none; filter: blur(0); transition-delay: .08s; }
 .step .n { flex: none; }
 .step .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 900 13px/1 var(--display); background: #2a2539; color: var(--muted); box-shadow: 0 3px 0 #1c1828; transition: background-color .3s, color .3s; }
 .step.live { border-color: rgba(178,133,240,.45); }
@@ -761,20 +773,20 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
                     <button type="button" data-ok="0">2/3</button>
                   </div>
                 </div>
-                <p class="why"><span>Kenapa ini ngebantu</span>Gak perlu mulai dari nol. Cuma dari beberapa soal aja, Gradient udah paham posisi dan tingkat kemampuanmu.</p>
+                <div class="why"><button class="why-btn" type="button" aria-expanded="false" aria-controls="why-1"><span>Kenapa ini ngebantu?</span><i aria-hidden="true"></i></button><div class="why-body" id="why-1" role="region"><div><p>Gak perlu mulai dari nol. Cuma dari beberapa soal aja, Gradient udah paham posisi dan tingkat kemampuanmu.</p></div></div></div>
               </li>
               <li class="step" id="step-2">
                 <span class="n">2</span><b>Peta kemampuanmu berubah</b>
                 <div class="mapcard" id="skillmap"></div>
                 <p class="note" id="map-note">Menunggu jawabanmu…</p>
-                <p class="why"><span>Kenapa ini ngebantu</span>Kamu tahu persis bagian mana yang udah kuat dan mana yang masih lemah, jadi gak belajar sambil menebak-nebak.</p>
+                <div class="why"><button class="why-btn" type="button" aria-expanded="false" aria-controls="why-2"><span>Kenapa ini ngebantu?</span><i aria-hidden="true"></i></button><div class="why-body" id="why-2" role="region"><div><p>Kamu tahu persis bagian mana yang udah kuat dan mana yang masih lemah, jadi gak belajar sambil menebak-nebak.</p></div></div></div>
               </li>
               <li class="step" id="step-3">
                 <span class="n">3</span><b>Latihan berikutnya menyesuaikan</b>
                 <div class="nextcard" id="next" aria-live="polite">
                   <p class="idle">Jawab soal di langkah 1. Latihan berikutnya akan berbeda tergantung jawabanmu.</p>
                 </div>
-                <p class="why"><span>Kenapa ini ngebantu</span>Latihan berikutnya bakal langsung menyesuaikan. Waktu belajarmu kepakai buat materi yang paling kamu butuhin, bukan ngulang yang udah kamu bisa.</p>
+                <div class="why"><button class="why-btn" type="button" aria-expanded="false" aria-controls="why-3"><span>Kenapa ini ngebantu?</span><i aria-hidden="true"></i></button><div class="why-body" id="why-3" role="region"><div><p>Latihan berikutnya bakal langsung menyesuaikan. Waktu belajarmu kepakai buat materi yang paling kamu butuhin, bukan ngulang yang udah kamu bisa.</p></div></div></div>
               </li>
             </ol>
             <span class="caption" style="margin-top:14px">Peta 7 subtes UTBK milikmu bakal langsung berubah begitu kamu jawab soal. Semua perkembangan belajarmu terpantau secara murni dan akurat.</span>
@@ -1098,6 +1110,12 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
     maybeStart();
     setTimeout(startIntro, 6000);   // never leave the hero hidden
   }
+
+  /* ---- "Kenapa ini ngebantu?" reveal ---- */
+  document.querySelectorAll('.why-btn').forEach((b) => b.addEventListener('click', () => {
+    const w = b.closest('.why'), open = !w.classList.contains('open');
+    w.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open));
+  }));
 
   /* ---- Mastery: answer one question, watch the map and the next practice change ---- */
   const level = (m) => m >= 80 ? ['Hampir Master', 'var(--mint)'] : m >= 60 ? ['Berkembang', 'var(--brand-200)'] : ['Perlu dilatih', 'var(--coral)'];
