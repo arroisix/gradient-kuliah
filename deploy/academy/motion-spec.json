@@ -774,6 +774,29 @@
         "delay": 80
       },
       "a11y": "button aria-expanded + aria-controls"
+    },
+    {
+      "id": "answer-result",
+      "component": "Mastery demo · step 1 result",
+      "states": [
+        "Benar",
+        "Salah"
+      ],
+      "options": "correct option bumps (scale 1.07, 500ms easeBack) + ✓ chip; wrong option shakes (±5px, 400ms) + ✕ chip; untouched options fade to 45%",
+      "banner": "grid-rows 0fr → 1fr 450ms easeOut, box fades/rises 300–450ms easeBack; Benar = mint + '+3 EXP' chip and EXP burst at the button; Salah = coral + 'EXP tetap masuk'"
+    },
+    {
+      "id": "next-practice",
+      "component": "Mastery demo · step 3 practice card",
+      "in": "translateY 10 → 0, scale .97 → 1, 550ms easeBack; plan steps rise with 80ms stagger",
+      "tint": "radial tint + border in the level colour"
+    },
+    {
+      "id": "gelar-tilt",
+      "component": "Hall of Fame badge tile",
+      "pointer": "rotateX/rotateY up to ±7deg toward the pointer (perspective 700px), 250ms",
+      "hover": "shine sweep 800ms; badge lifts -4px, scale 1.06, rotate -4deg (easeBack)",
+      "featured": "conic ring spins 6s linear; badge bobs 4.5s"
     }
   ],
   "brandMotion": {
