@@ -811,6 +811,13 @@
         "Private": "https://gradient.academy/private"
       },
       "testimoni": "https://gradient.academy/testimoni"
+    },
+    {
+      "id": "seru-badges",
+      "component": "Section Gamifikasi · 3 badge header (Streak, Level, Tri Nalar)",
+      "enter": "same tumble as the Mastery subtest icons (IntersectionObserver .2, 900ms, 70ms stagger)",
+      "rest": "odd: translateY 6 rotate -6deg; even: translateY -4 rotate 5deg",
+      "hover": "translateY -10, rotate 0, scale 1.08 (300ms easeBack) + wiggle rotate 0 → -9 → 7 → -3 → 0deg (550ms)"
     }
   ],
   "brandMotion": {
