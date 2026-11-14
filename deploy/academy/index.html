@@ -257,7 +257,7 @@ main, footer { position: relative; z-index: 1; }
 .sub-row img { width: clamp(40px, 6vw, 60px); margin: 0 -4px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); transition: transform .3s var(--ease-back); }
 .sub-row img:nth-child(odd) { transform: translateY(6px) rotate(-6deg); }
 .sub-row img:nth-child(even) { transform: translateY(-4px) rotate(5deg); }
-.sub-row img:hover { transform: translateY(-10px) rotate(0); }
+@media (hover: hover) { .sub-row img:hover { transform: translateY(-10px) rotate(0); } }
 .sub-row { min-height: clamp(40px, 6vw, 60px); }
 .chapter-head .term { font: 900 1em/1 var(--display); color: var(--brand-200); background: color-mix(in srgb, var(--brand) 28%, transparent); padding: 2px 8px 3px; border-radius: 8px; white-space: nowrap; box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--brand-lip) 70%, transparent); }
 .chapter-head h2 { font-size: clamp(44px, 6.4vw, 72px); font-weight: 900; line-height: 1.04; letter-spacing: -0.03em; margin-top: 8px; padding-bottom: .06em; }
@@ -644,7 +644,10 @@ main, footer { position: relative; z-index: 1; }
 .seru-row img { transition: transform .3s var(--ease-back); cursor: default; }
 .seru-row img:nth-child(odd) { transform: translateY(6px) rotate(-6deg); }
 .seru-row img:nth-child(even) { transform: translateY(-4px) rotate(5deg); }
-.seru-row img:hover { transform: translateY(-10px) rotate(0) scale(1.08); animation: gb-wiggle .55s var(--ease-out); }
+@media (hover: hover) { .seru-row img:hover { transform: translateY(-10px) rotate(0) scale(1.08); animation: gb-wiggle .55s var(--ease-out); } }
+/* touch: one playful hop, then back to the resting pose */
+.sub-row img.hop, .seru-row img.hop { animation: icon-hop .7s var(--ease-out); }
+@keyframes icon-hop { 0% { translate: 0 0; scale: 1; rotate: 0deg; } 30% { translate: 0 -14px; scale: 1.12; rotate: -9deg; } 55% { translate: 0 -6px; rotate: 7deg; } 78% { translate: 0 -2px; rotate: -3deg; } 100% { translate: 0 0; scale: 1; rotate: 0deg; } }
 @keyframes gb-wiggle { 0% { rotate: 0deg; } 25% { rotate: -9deg; } 50% { rotate: 7deg; } 75% { rotate: -3deg; } 100% { rotate: 0deg; } }
 .card.gelar { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: 28px; align-items: stretch; background: radial-gradient(120% 90% at 100% 0%, rgba(97,42,206,.22), transparent 60%), var(--card); }
 .gelar-l { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
@@ -1278,6 +1281,15 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
     const offIO = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('offscreen', !e.isIntersecting)), { rootMargin: '300px 0px' });
     document.querySelectorAll('main > section, .hero').forEach((s) => offIO.observe(s));
   }
+
+  /* ---- touch: tapping a header icon plays one hop and settles back ---- */
+  document.querySelectorAll('.sub-row img, .seru-row img').forEach((img) => {
+    img.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' || reduce) return;
+      img.classList.remove('hop'); void img.offsetWidth; img.classList.add('hop');
+    });
+    img.addEventListener('animationend', (e) => { if (e.animationName === 'icon-hop') img.classList.remove('hop'); });
+  });
 
   /* ---- "Kenapa ini ngebantu?" reveal ---- */
   document.querySelectorAll('.why-btn').forEach((b) => b.addEventListener('click', () => {
