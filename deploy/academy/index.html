@@ -347,11 +347,12 @@ main, footer { position: relative; z-index: 1; }
 .nextcard .tagline-s { display: inline-block; justify-self: start; padding: 4px 10px; border-radius: 99px; font: 900 11px/1.2 var(--display); color: #10151a; }
 .nextcard h4 { margin: 0; font: 900 18px/1.25 var(--display); }
 .nextcard p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
-.nx { display: grid; gap: 10px; padding: 14px; border-radius: 16px; background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--c) 18%, transparent), transparent 60%), #15131d; border: 1px solid color-mix(in srgb, var(--c) 35%, rgba(255,255,255,.06)); }
+.nx { display: grid; gap: 8px; padding: 16px; border-radius: 16px; background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--c) 18%, transparent), transparent 60%), #15131d; border: 1px solid color-mix(in srgb, var(--c) 35%, rgba(255,255,255,.06)); }
 .nx-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .nx-top img { width: 26px; height: 26px; }
 .nx-top .nx-kind { font: 700 12px/1 var(--display); color: var(--muted); }
-.nx-top .tagline-s { margin-left: auto; }
+.nx-top { justify-content: space-between; }
+.nx .again { margin-top: 4px; }
 .nx-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; counter-reset: nx; }
 .nx-steps li { counter-increment: nx; display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: center; font-size: 13px; color: #c9c4da; }
 .nx-steps li::before { content: counter(nx); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: #2b2740; font: 800 11px/1 var(--display); color: var(--text); }
@@ -1358,8 +1359,8 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
       const [lbl, col] = level(after);
       const pm = SUB[PM].img;
       next.innerHTML = ok
-        ? `<div class="nx" style="--c:${col}"><div class="nx-top"><img alt="" src="${pm}"><span class="nx-kind">Latihan berikutnya · PM</span><span class="tagline-s" style="background:${col}">${lbl}</span></div><h4>Naik satu tingkat: peluang kejadian majemuk</h4><p>Soalnya dibuat sedikit lebih menantang, karena dasarnya sudah kamu kuasai.</p><ol class="nx-steps"><li class="now">Soal peluang 2 kejadian</li><li>Soal campuran yang lebih menantang</li><li>Cek ulang peta kemampuanmu</li></ol><div class="nx-foot"><span class="qres-exp"><img alt="" src="${EXP}">+3 EXP udah masuk</span><button class="again" type="button">Ulangi demo ↺</button></div></div>`
-        : `<div class="nx" style="--c:${col}"><div class="nx-top"><img alt="" src="${pm}"><span class="nx-kind">Latihan berikutnya · PM</span><span class="tagline-s" style="background:${col}">${lbl}</span></div><h4>Pembahasan dulu, lalu 2 soal serupa yang lebih ringan</h4><p>Kamu tidak langsung dilempar ke soal susah. Gradient membangun pemahamanmu pelan-pelan dari sini.</p><ol class="nx-steps"><li class="now">Pembahasan konsep peluang</li><li>2 soal serupa yang lebih ringan</li><li>Coba lagi soal tadi</li></ol><div class="nx-foot"><span class="qres-exp"><img alt="" src="${EXP}">Jawaban salah tetap dapat EXP</span><button class="again" type="button">Ulangi demo ↺</button></div></div>`;
+        ? `<div class="nx" style="--c:${col}"><div class="nx-top"><img alt="" src="${pm}"><span class="tagline-s" style="background:${col}">${lbl}</span></div><h4>Naik satu tingkat: peluang kejadian majemuk</h4><p>Soalnya sedikit lebih menantang, karena dasarnya udah kamu kuasai.</p><button class="again" type="button">Ulangi demo ↺</button></div>`
+        : `<div class="nx" style="--c:${col}"><div class="nx-top"><img alt="" src="${pm}"><span class="tagline-s" style="background:${col}">${lbl}</span></div><h4>Pembahasan dulu, lalu 2 soal serupa yang lebih ringan</h4><p>Gradient bangun pemahamanmu pelan-pelan, nggak langsung lempar soal susah.</p><button class="again" type="button">Ulangi demo ↺</button></div>`;
       next.classList.remove('pop'); void next.offsetWidth; next.classList.add('pop');
     }, reduce ? 0 : 650);
   }
