@@ -1,9 +1,13 @@
 {
   "name": "Gradient Academy – Landing motion spec",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "source": "deploy/academy/index.html (CSS keyframes + Web Animations API)",
   "figma": "https://www.figma.com/design/JXo93fsAo4yPvglUbRAVV8 → page \"Gradient Academy – Landing\" → section 06 Animasi",
-  "units": { "time": "ms", "distance": "px", "angle": "deg" },
+  "units": {
+    "time": "ms",
+    "distance": "px",
+    "angle": "deg"
+  },
   "reducedMotion": "prefers-reduced-motion: reduce → all animations and transitions off, content shown in final state",
   "easings": {
     "easeOut": "cubic-bezier(.2, .8, .2, 1)",
@@ -15,106 +19,722 @@
   },
   "intro": {
     "trigger": "window load AND document visible (+120ms); fallback start at 6000ms so the hero is never hidden",
-    "totalDuration": 5800,
+    "totalDuration": 6600,
     "keyframesForFigmaStoryboard": [
-      { "frame": "01 · 0.0s", "t": 0, "state": "Empty dark canvas. Hub (G icon + logotype) opacity 0, scale .7, blur 10." },
-      { "frame": "02 · 1.1s", "t": 1100, "state": "Hub alone in the screen centre, scale 1, sharp. Ripples start." },
-      { "frame": "03 · 1.9–2.9s", "t": 2900, "state": "Orbit rings drawn around the centred hub; product badges + dots arrived on their orbits. Still centred." },
-      { "frame": "04 · 3.0–4.1s", "t": 4100, "state": "Whole system glides down from screen centre to its resting position below the hero copy." },
-      { "frame": "05 · 4.4s", "t": 4400, "state": "Headline words revealed (blur→sharp), lede rising." },
-      { "frame": "06 · 5.0s+", "t": 5800, "state": "Nav slides in. Final hero. Orbits keep spinning forever." }
+      {
+        "frame": "01 · 0.0s",
+        "t": 0,
+        "state": "Empty dark canvas, logo area scaled 1.7× in the screen centre."
+      },
+      {
+        "frame": "02 · 0.15–0.95s",
+        "t": 950,
+        "state": "Three stripes draw in along the 24.1° axis, from their top ends, lightest first (130ms stagger)."
+      },
+      {
+        "frame": "03 · 0.56–1.1s",
+        "t": 1100,
+        "state": "A fourth bar (#4313A3, 9% width of the triangle) draws in next to the stripes."
+      },
+      {
+        "frame": "04 · 1.1–1.86s",
+        "t": 1860,
+        "state": "The bar unfolds sideways (scale across the axis 0.09 → 1.08 → 1) into the ∇/G triangle. Glow pulse."
+      },
+      {
+        "frame": "05 · 1.45–2.15s",
+        "t": 2150,
+        "state": "Wordmark wipes in left→right (clip + blur). Ripples, logo settles from 1.7× to 1×."
+      },
+      {
+        "frame": "06 · 2.1–3.8s",
+        "t": 3800,
+        "state": "Orbit rings draw, product badges arrive. Still centred."
+      },
+      {
+        "frame": "07 · 3.8–4.9s",
+        "t": 4900,
+        "state": "System glides down to its resting place below the hero copy."
+      },
+      {
+        "frame": "08 · 4.7–6.6s",
+        "t": 6600,
+        "state": "Headline, lede, CTAs, nav. Hero line starts rotating at 7.6s."
+      }
     ],
     "tracks": [
       {
-        "id": "hub-in", "target": ".hub (Logo / Gradient lockup)", "delay": 0, "duration": 1100, "easing": "easeOut",
+        "id": "logo-scale",
+        "target": ".hub",
+        "delay": 0,
+        "duration": 2700,
         "keyframes": [
-          { "offset": 0, "opacity": 0, "scale": 0.7, "blur": 10 },
-          { "offset": 0.6, "opacity": 1, "scale": 1.2, "blur": 0 },
-          { "offset": 1, "opacity": 1, "scale": 1, "blur": 0 }
+          {
+            "offset": 0,
+            "scale": 1.7
+          },
+          {
+            "offset": 0.7,
+            "scale": 1.7,
+            "easing": "glide"
+          },
+          {
+            "offset": 1,
+            "scale": 1
+          }
         ]
       },
       {
-        "id": "ripple", "target": ".ripple ×3 (ring, stroke 2px brand-300)", "delay": 1150, "stagger": 180, "duration": 1600, "easing": "easeOut",
+        "id": "stripe-draw",
+        "target": "logo stripes s1 #C6BDFF, s2 #925BFF, s3 #612ACE",
+        "delay": 150,
+        "stagger": 130,
+        "duration": 620,
+        "easing": "easeOut",
+        "transform": "rotate(-24.1deg) scale(1, s) rotate(24.1deg), origin = stripe top end",
         "keyframes": [
-          { "offset": 0, "opacity": 0, "scale": 0.6 },
-          { "offset": 0.08, "opacity": 0.9 },
-          { "offset": 1, "opacity": 0, "scale": 4 }
+          {
+            "offset": 0,
+            "s": 0
+          },
+          {
+            "offset": 1,
+            "s": 1
+          }
         ]
       },
       {
-        "id": "rings-draw", "target": "orbit rings (k = 0…4)", "delay": 1300, "stagger": 120, "duration": 1400, "easing": "easeOut",
+        "id": "triangle-unfold",
+        "target": "logo triangle #4313A3",
+        "delay": 560,
+        "duration": 1300,
+        "transform": "rotate(-24.1deg) scale(sx, sy) rotate(24.1deg), origin = top of the triangle's left edge",
         "keyframes": [
-          { "offset": 0, "strokeDashoffset": 100, "opacity": 0 },
-          { "offset": 0.12, "opacity": 1 },
-          { "offset": 1, "strokeDashoffset": 0, "opacity": 1 }
+          {
+            "offset": 0,
+            "sx": 0.09,
+            "sy": 0
+          },
+          {
+            "offset": 0.4,
+            "sx": 0.09,
+            "sy": 1,
+            "easing": "glide"
+          },
+          {
+            "offset": 0.82,
+            "sx": 1.08,
+            "sy": 1,
+            "easing": "ease-out"
+          },
+          {
+            "offset": 1,
+            "sx": 1,
+            "sy": 1
+          }
+        ]
+      },
+      {
+        "id": "logo-glow",
+        "target": "logo mark drop-shadow",
+        "delay": 1500,
+        "duration": 900,
+        "keyframes": [
+          {
+            "offset": 0,
+            "glow": "0 6 22 rgba(97,42,206,.45)"
+          },
+          {
+            "offset": 0.5,
+            "glow": "0 0 34 rgba(146,91,255,.95)"
+          },
+          {
+            "offset": 1,
+            "glow": "0 6 22 rgba(97,42,206,.45)"
+          }
+        ]
+      },
+      {
+        "id": "wordmark-wipe",
+        "target": ".logotype",
+        "delay": 1450,
+        "duration": 700,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "clip": "inset(0 100% 0 0)",
+            "x": -14,
+            "opacity": 0,
+            "blur": 6
+          },
+          {
+            "offset": 1,
+            "clip": "inset(0 0 0 0)",
+            "x": 0,
+            "opacity": 1,
+            "blur": 0
+          }
+        ]
+      },
+      {
+        "id": "ripple",
+        "target": ".ripple ×3 (ring, stroke 2px brand-300)",
+        "delay": 1950,
+        "stagger": 180,
+        "duration": 1600,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0,
+            "scale": 0.6
+          },
+          {
+            "offset": 0.08,
+            "opacity": 0.9
+          },
+          {
+            "offset": 1,
+            "opacity": 0,
+            "scale": 4
+          }
+        ]
+      },
+      {
+        "id": "rings-draw",
+        "target": "orbit rings (k = 0…4)",
+        "delay": 2100,
+        "stagger": 120,
+        "duration": 1400,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "strokeDashoffset": 100,
+            "opacity": 0
+          },
+          {
+            "offset": 0.12,
+            "opacity": 1
+          },
+          {
+            "offset": 1,
+            "strokeDashoffset": 0,
+            "opacity": 1
+          }
         ],
         "note": "dashed ring fades in instead (1000ms) then runs dash-run"
       },
       {
-        "id": "badges-arrive", "target": "Badge / Orbit produk + dots (k = 0…10)", "delay": 1800, "stagger": 130, "duration": 700, "easing": "easeBack",
-        "keyframes": [ { "offset": 0, "opacity": 0, "scale": 0.3 }, { "offset": 1, "opacity": 1, "scale": 1 } ]
-      },
-      {
-        "id": "system-glide", "target": "#system (hub + rings + orbits)", "delay": 0, "duration": 4100,
+        "id": "badges-arrive",
+        "target": "Badge / Orbit produk + dots (k = 0…10)",
+        "delay": 2600,
+        "stagger": 130,
+        "duration": 700,
+        "easing": "easeBack",
         "keyframes": [
-          { "offset": 0, "translate": "to screen centre", "scale": 1.08 },
-          { "offset": 0.7317, "translate": "to screen centre", "scale": 1.08, "easing": "glide" },
-          { "offset": 1, "translate": [0, 0], "scale": 1 }
-        ],
-        "note": "hold centred 0–3000ms, glide 3000–4100ms"
+          {
+            "offset": 0,
+            "opacity": 0,
+            "scale": 0.3
+          },
+          {
+            "offset": 1,
+            "opacity": 1,
+            "scale": 1
+          }
+        ]
       },
-      { "id": "hero-scrim", "target": "hero copy backdrop", "delay": 3400, "duration": 900, "easing": "ease-out", "keyframes": [ { "offset": 0, "opacity": 0 }, { "offset": 1, "opacity": 1 } ] },
       {
-        "id": "headline-words", "target": "h1 words (i = 0…4)", "delay": 3900, "stagger": 80, "duration": 1000, "easing": "easeOut",
-        "keyframes": [ { "offset": 0, "opacity": 0, "blur": 14, "y": 18 }, { "offset": 1, "opacity": 1, "blur": 0, "y": 0 } ]
+        "id": "system-glide",
+        "target": "#system (hub + rings + orbits)",
+        "delay": 0,
+        "duration": 4900,
+        "keyframes": [
+          {
+            "offset": 0,
+            "translate": "to screen centre",
+            "scale": 1.08
+          },
+          {
+            "offset": 0.7755,
+            "translate": "to screen centre",
+            "scale": 1.08,
+            "easing": "glide"
+          },
+          {
+            "offset": 1,
+            "translate": [
+              0,
+              0
+            ],
+            "scale": 1
+          }
+        ],
+        "note": "hold centred 0–3800ms, glide 3800–4900ms"
       },
-      { "id": "lede-rise", "target": "hero lede", "delay": 4400, "duration": 900, "easing": "easeOut", "keyframes": [ { "offset": 0, "opacity": 0, "y": 20 }, { "offset": 1, "opacity": 1, "y": 0 } ] },
-      { "id": "stars", "target": "starfield canvas", "delay": 1100, "duration": 1600, "easing": "ease-out", "keyframes": [ { "offset": 0, "opacity": 0 }, { "offset": 1, "opacity": 1 } ] },
-      { "id": "nav-in", "target": "nav (logo + product switcher + Mulai belajar)", "delay": 5000, "duration": 800, "easing": "easeOut", "keyframes": [ { "offset": 0, "opacity": 0, "y": -24 }, { "offset": 1, "opacity": 1, "y": 0 } ] }
+      {
+        "id": "hero-scrim",
+        "target": "hero copy backdrop",
+        "delay": 4200,
+        "duration": 900,
+        "easing": "ease-out",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0
+          },
+          {
+            "offset": 1,
+            "opacity": 1
+          }
+        ]
+      },
+      {
+        "id": "headline-words",
+        "target": "h1 words (i = 0…4)",
+        "delay": 4700,
+        "stagger": 80,
+        "duration": 1000,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0,
+            "blur": 14,
+            "y": 18
+          },
+          {
+            "offset": 1,
+            "opacity": 1,
+            "blur": 0,
+            "y": 0
+          }
+        ]
+      },
+      {
+        "id": "lede-rise",
+        "target": "hero lede",
+        "delay": 5200,
+        "duration": 900,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0,
+            "y": 20
+          },
+          {
+            "offset": 1,
+            "opacity": 1,
+            "y": 0
+          }
+        ]
+      },
+      {
+        "id": "stars",
+        "target": "starfield canvas",
+        "delay": 1100,
+        "duration": 1600,
+        "easing": "ease-out",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0
+          },
+          {
+            "offset": 1,
+            "opacity": 1
+          }
+        ]
+      },
+      {
+        "id": "nav-in",
+        "target": "nav (logo + product switcher + Mulai belajar)",
+        "delay": 5800,
+        "duration": 800,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0,
+            "y": -24
+          },
+          {
+            "offset": 1,
+            "opacity": 1,
+            "y": 0
+          }
+        ]
+      }
     ]
   },
   "loops": [
-    { "id": "orbit-spin", "target": "orbit (badge stays upright via counter-rotation)", "rotate": 360, "easing": "linear", "iterations": "infinite",
+    {
+      "id": "orbit-spin",
+      "target": "orbit (badge stays upright via counter-rotation)",
+      "rotate": 360,
+      "easing": "linear",
+      "iterations": "infinite",
       "orbits": [
-        { "product": "UTBK", "diameter": 0.46, "period": 64000 },
-        { "product": "TKA", "diameter": 0.62, "period": 84000 },
-        { "product": "Kuliah", "diameter": 0.80, "period": 110000 },
-        { "product": "Private", "diameter": 0.98, "period": 150000 }
+        {
+          "product": "UTBK",
+          "diameter": 0.46,
+          "period": 64000
+        },
+        {
+          "product": "TKA",
+          "diameter": 0.62,
+          "period": 84000
+        },
+        {
+          "product": "Kuliah",
+          "diameter": 0.8,
+          "period": 110000
+        },
+        {
+          "product": "Private",
+          "diameter": 0.98,
+          "period": 150000
+        }
       ],
       "diameterUnit": "fraction of system size (1060px desktop)",
-      "phase": "animation-delay = -period × p, p ∈ {.15 UTBK… } so badges start spread around the ring" },
-    { "id": "dash-run", "target": "dashed orbit ring", "duration": 30000, "easing": "linear", "iterations": "infinite", "keyframes": [ { "strokeDashoffset": 0 }, { "strokeDashoffset": -90 } ] },
-    { "id": "floaty", "target": "TKA scene subject chips", "duration": 5000, "easing": "ease-in-out", "iterations": "infinite", "delays": [0, 600, 1200], "keyframes": [ { "y": 0 }, { "y": -10 }, { "y": 0 } ] },
-    { "id": "pulse", "target": "Mastery demo: active step dot", "duration": 1600, "easing": "ease-out", "iterations": "infinite" },
-    { "id": "shimmer", "target": "Mastery demo: waiting placeholder", "duration": 2400, "easing": "linear", "iterations": "infinite" }
-  ],
-  "scroll": [
-    { "id": "reveal", "target": "section cards / chapter heads", "timeline": "view()", "range": ["entry 0%", "entry 55%"], "keyframes": [ { "offset": 0, "opacity": 0, "y": 40 }, { "offset": 1, "opacity": 1, "y": 0 } ] },
-    { "id": "product-rise", "target": "product intro copy (lockup, headline, CTA)", "timeline": "view()", "range": ["entry 10%", "entry 70%"], "keyframes": [ { "offset": 0, "opacity": 0, "y": 20 }, { "offset": 1, "opacity": 1, "y": 0 } ] },
-    { "id": "product-emerge", "target": "product intro scene (Apple-style)", "timeline": "view()", "range": ["entry 0%", "cover 45%"], "keyframes": [ { "offset": 0, "opacity": 0.2, "scale": 0.86, "radius": 64 }, { "offset": 1, "opacity": 1, "scale": 1, "radius": 36 } ] },
+      "phase": "animation-delay = -period × p, p ∈ {.15 UTBK… } so badges start spread around the ring"
+    },
     {
-      "id": "subtest-tumble", "target": "Illustration / Subtest ×7 in Mastery heading", "trigger": "IntersectionObserver threshold .2 (once)",
-      "duration": 900, "stagger": 70, "easing": "tumble", "dir": "k odd → +1, even → −1",
+      "id": "dash-run",
+      "target": "dashed orbit ring",
+      "duration": 30000,
+      "easing": "linear",
+      "iterations": "infinite",
       "keyframes": [
-        { "offset": 0, "x": "18·dir", "y": -90, "rotate": "50·dir", "opacity": 0 },
-        { "offset": 0.65, "x": 0, "y": 8, "rotate": "-6·dir", "opacity": 1 },
-        { "offset": 0.82, "y": -3, "rotate": "2·dir" },
-        { "offset": 1, "x": 0, "y": 0, "rotate": 0, "opacity": 1 }
+        {
+          "strokeDashoffset": 0
+        },
+        {
+          "strokeDashoffset": -90
+        }
       ]
     },
     {
-      "id": "map-pop", "target": "Mastery demo skill-map icons ×7", "trigger": "IntersectionObserver threshold .35 (once)",
-      "duration": 520, "stagger": 70, "easing": "pop",
-      "keyframes": [ { "offset": 0, "scale": 0, "rotate": -30 }, { "offset": 0.6, "scale": 1.35, "rotate": 6 }, { "offset": 1, "scale": 1, "rotate": 0 } ]
+      "id": "floaty",
+      "target": "TKA scene subject chips",
+      "duration": 5000,
+      "easing": "ease-in-out",
+      "iterations": "infinite",
+      "delays": [
+        0,
+        600,
+        1200
+      ],
+      "keyframes": [
+        {
+          "y": 0
+        },
+        {
+          "y": -10
+        },
+        {
+          "y": 0
+        }
+      ]
     },
-    { "id": "pin-drop", "target": "Pin / Kampus on the Indonesia map", "trigger": "in view (once)", "duration": 700, "stagger": 60, "easing": "easeBack", "keyframes": [ { "offset": 0, "opacity": 0, "y": -24, "scale": 0.6 }, { "offset": 1, "opacity": 1, "y": 0, "scale": 1 } ] }
+    {
+      "id": "pulse",
+      "target": "Mastery demo: active step dot",
+      "duration": 1600,
+      "easing": "ease-out",
+      "iterations": "infinite"
+    },
+    {
+      "id": "shimmer",
+      "target": "Mastery demo: waiting placeholder",
+      "duration": 2400,
+      "easing": "linear",
+      "iterations": "infinite"
+    },
+    {
+      "id": "hero-rotator",
+      "target": "hero h1 line 2 (after 'buat')",
+      "phrases": [
+        "Persiapan TKA",
+        "Tembus UTBK",
+        "Lolos Mandiri",
+        "Kejar IPK",
+        "Les Privat",
+        "Masa Depanmu"
+      ],
+      "start": 7600,
+      "interval": 2600,
+      "out": {
+        "y": "-0.45em",
+        "opacity": 0,
+        "blur": 10,
+        "duration": 500
+      },
+      "in": {
+        "y": "0.45em → 0",
+        "opacity": "0 → 1",
+        "blur": "10 → 0",
+        "duration": 600,
+        "easing": "easeOut"
+      },
+      "widthMorph": {
+        "duration": 550,
+        "easing": "glide"
+      },
+      "fill": "linear-gradient(100deg, #C6BDFF, #925BFF 55%, #C6BDFF)",
+      "mobile": "phrase on its own line"
+    },
+    {
+      "id": "closing-stripes",
+      "target": "closing section stripes ×2 groups (3 bars each, rotated -24deg / 156deg)",
+      "flow": "bar gradient scrolls along the bar: 6s / 5s / 4s linear infinite",
+      "pulse": "translate along bar ±5%, 6s easeOut infinite, staggered",
+      "glow": "radial #4313A3 → #080F4F breathes scale 1 → 1.12, 9s ease-in-out"
+    }
+  ],
+  "scroll": [
+    {
+      "id": "reveal",
+      "target": "section cards / chapter heads",
+      "timeline": "view()",
+      "range": [
+        "entry 0%",
+        "entry 55%"
+      ],
+      "keyframes": [
+        {
+          "offset": 0,
+          "opacity": 0,
+          "y": 40
+        },
+        {
+          "offset": 1,
+          "opacity": 1,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "product-rise",
+      "target": "product intro copy (lockup, headline, CTA)",
+      "timeline": "view()",
+      "range": [
+        "entry 10%",
+        "entry 70%"
+      ],
+      "keyframes": [
+        {
+          "offset": 0,
+          "opacity": 0,
+          "y": 20
+        },
+        {
+          "offset": 1,
+          "opacity": 1,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "product-emerge",
+      "target": "product intro scene (Apple-style)",
+      "timeline": "view()",
+      "range": [
+        "entry 0%",
+        "cover 45%"
+      ],
+      "keyframes": [
+        {
+          "offset": 0,
+          "opacity": 0.2,
+          "scale": 0.86,
+          "radius": 64
+        },
+        {
+          "offset": 1,
+          "opacity": 1,
+          "scale": 1,
+          "radius": 36
+        }
+      ]
+    },
+    {
+      "id": "subtest-tumble",
+      "target": "Illustration / Subtest ×7 in Mastery heading",
+      "trigger": "IntersectionObserver threshold .2 (once)",
+      "duration": 900,
+      "stagger": 70,
+      "easing": "tumble",
+      "dir": "k odd → +1, even → −1",
+      "keyframes": [
+        {
+          "offset": 0,
+          "x": "18·dir",
+          "y": -90,
+          "rotate": "50·dir",
+          "opacity": 0
+        },
+        {
+          "offset": 0.65,
+          "x": 0,
+          "y": 8,
+          "rotate": "-6·dir",
+          "opacity": 1
+        },
+        {
+          "offset": 0.82,
+          "y": -3,
+          "rotate": "2·dir"
+        },
+        {
+          "offset": 1,
+          "x": 0,
+          "y": 0,
+          "rotate": 0,
+          "opacity": 1
+        }
+      ]
+    },
+    {
+      "id": "map-pop",
+      "target": "Mastery demo skill-map icons ×7",
+      "trigger": "IntersectionObserver threshold .35 (once)",
+      "duration": 520,
+      "stagger": 70,
+      "easing": "pop",
+      "keyframes": [
+        {
+          "offset": 0,
+          "scale": 0,
+          "rotate": -30
+        },
+        {
+          "offset": 0.6,
+          "scale": 1.35,
+          "rotate": 6
+        },
+        {
+          "offset": 1,
+          "scale": 1,
+          "rotate": 0
+        }
+      ]
+    },
+    {
+      "id": "pin-drop",
+      "target": "Pin / Kampus on the Indonesia map",
+      "trigger": "in view (once)",
+      "duration": 700,
+      "stagger": 60,
+      "easing": "easeBack",
+      "keyframes": [
+        {
+          "offset": 0,
+          "opacity": 0,
+          "y": -24,
+          "scale": 0.6
+        },
+        {
+          "offset": 1,
+          "opacity": 1,
+          "y": 0,
+          "scale": 1
+        }
+      ]
+    }
   ],
   "interactions": [
-    { "id": "button-press", "component": "Button / Gamifikasi", "states": ["Default", "Pressed", "Disabled"], "transition": "transform 80ms, box-shadow 80ms, background-color 120ms", "pressed": { "y": 4, "shadowLip": 0 } },
-    { "id": "badge-hover", "component": "Badge / Orbit produk", "transition": "border-color 200ms, transform 200ms easeBack", "hover": { "y": -3, "border": "product colour @60%" } },
-    { "id": "switcher-open", "component": "Nav product switcher", "trigger": "hover (desktop) / click", "transition": "opacity 180ms ease-out, translate 180ms ease-out", "from": { "opacity": 0, "y": -6 }, "to": { "opacity": 1, "y": 0 }, "caret": "rotate 0→180, 200ms" },
-    { "id": "picker-open", "component": "Mulai belajar picker <dialog>", "duration": 450, "easing": "easeBack", "keyframes": [ { "offset": 0, "opacity": 0, "y": 24, "scale": 0.96 }, { "offset": 1, "opacity": 1, "y": 0, "scale": 1 } ], "backdrop": "fade 300ms ease-out", "items": "rise 500ms easeOut, delay 80 + i·60ms" },
-    { "id": "picker-stage", "component": "Picker stage chips (Aku sekarang…)", "transition": "filter 250ms, border-color 200ms, transform 200ms easeBack", "selected": "matching products get “Cocok untukmu”, others dim (grayscale .6, opacity .45)" },
-    { "id": "demo-answer", "component": "Mastery / Demo jawab satu soal", "states": ["Belum dijawab", "Benar", "Salah"], "answer": "Sesi / Opsi jawaban → Benar | Salah (jawabanmu) + Kunci", "bump": "700ms easeBack on chosen option", "barGrow": "Mastery / Bar width 1200ms easeOut", "toast": "EXP / Toast hadiah pop 500ms easeBack, exp-up 1100ms ease-out" }
-  ]
+    {
+      "id": "button-press",
+      "component": "Button / Gamifikasi",
+      "states": [
+        "Default",
+        "Pressed",
+        "Disabled"
+      ],
+      "transition": "transform 80ms, box-shadow 80ms, background-color 120ms",
+      "pressed": {
+        "y": 4,
+        "shadowLip": 0
+      }
+    },
+    {
+      "id": "badge-hover",
+      "component": "Badge / Orbit produk",
+      "transition": "border-color 200ms, transform 200ms easeBack",
+      "hover": {
+        "y": -3,
+        "border": "product colour @60%"
+      }
+    },
+    {
+      "id": "switcher-open",
+      "component": "Nav product switcher",
+      "trigger": "hover (desktop) / click",
+      "transition": "opacity 180ms ease-out, translate 180ms ease-out",
+      "from": {
+        "opacity": 0,
+        "y": -6
+      },
+      "to": {
+        "opacity": 1,
+        "y": 0
+      },
+      "caret": "rotate 0→180, 200ms"
+    },
+    {
+      "id": "picker-open",
+      "component": "Mulai belajar picker <dialog>",
+      "duration": 450,
+      "easing": "easeBack",
+      "keyframes": [
+        {
+          "offset": 0,
+          "opacity": 0,
+          "y": 24,
+          "scale": 0.96
+        },
+        {
+          "offset": 1,
+          "opacity": 1,
+          "y": 0,
+          "scale": 1
+        }
+      ],
+      "backdrop": "fade 300ms ease-out",
+      "items": "rise 500ms easeOut, delay 80 + i·60ms"
+    },
+    {
+      "id": "picker-stage",
+      "component": "Picker stage chips (Aku sekarang…)",
+      "transition": "filter 250ms, border-color 200ms, transform 200ms easeBack",
+      "selected": "matching products get “Cocok untukmu”, others dim (grayscale .6, opacity .45)"
+    },
+    {
+      "id": "demo-answer",
+      "component": "Mastery / Demo jawab satu soal",
+      "states": [
+        "Belum dijawab",
+        "Benar",
+        "Salah"
+      ],
+      "answer": "Sesi / Opsi jawaban → Benar | Salah (jawabanmu) + Kunci",
+      "bump": "700ms easeBack on chosen option",
+      "barGrow": "Mastery / Bar width 1200ms easeOut",
+      "toast": "EXP / Toast hadiah pop 500ms easeBack, exp-up 1100ms ease-out"
+    }
+  ],
+  "brandMotion": {
+    "source": "Gradient Digital Playbook has no motion chapter; principles derived from its logo story",
+    "principles": [
+      "Stripes = progress step by step → staggered reveals, lightest stripe first (#C6BDFF → #925BFF → #612ACE → #4313A3)",
+      "Arrow / nabla = guidance and direction → movement runs along the logo axis (24.1° from vertical)",
+      "Colour gradient = gradual improvement → colour shifts use same-column gradients from the palette",
+      "Calm, confident: ease-out for entrances, glide cubic-bezier(.65,0,.25,1) for transforms, small overshoot only on the final unfold"
+    ],
+    "axisDeg": 24.1
+  }
 }
