@@ -5,3 +5,5 @@ const nextConfig = {
 };
 
 export default withMotionwind(nextConfig);
+
+import('@opennextjs/cloudflare').then(m => m.initOpenNextCloudflareForDev());
