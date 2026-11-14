@@ -219,6 +219,9 @@ main, footer { position: relative; z-index: 1; }
 .core { position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 4; }
 .hub { --h: clamp(30px, 4vw, 46px); position: relative; display: inline-flex; align-items: center; gap: calc(var(--h) * .36); }
 .hub::before { content: ""; position: absolute; left: 50%; top: 50%; width: calc(var(--h) * 7.5); aspect-ratio: 1; translate: -50% -50%; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgba(110,72,230,.22) 0%, rgba(76,110,245,.14) 45%, rgba(76,110,245,.05) 70%, transparent 100%); pointer-events: none; }
+.hub::before { animation: glow-in 1.2s var(--ease-out) 2s both; }
+@keyframes glow-in { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
+.wait .hub::before { animation-play-state: paused; }
 .hub-mark { height: calc(var(--h) * 1.45); width: auto; overflow: visible; filter: drop-shadow(0 6px 22px rgba(97,42,206,.45)); }
 .hub-mark .lm { transform-box: fill-box; }
 .hub .logotype { height: calc(var(--h) * 1.05); width: auto; margin-top: calc(var(--h) * .28); }
@@ -1006,7 +1009,13 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
     const svg = hub.querySelector('.hub-mark'), word = hub.querySelector('.logotype');
     if (!svg) return;
     // build the logo big in the middle of the screen, then settle to its resting size
-    hub.animate([{ transform: 'scale(1.7)' }, { transform: 'scale(1.7)', offset: .7, easing: 'cubic-bezier(.65,0,.25,1)' }, { transform: 'scale(1)' }],
+    // while only the mark exists, keep the mark itself centred; slide over as the wordmark wipes in
+    const dx = word ? (hub.getBoundingClientRect().right - svg.getBoundingClientRect().right) / 2 : 0;
+    hub.animate([
+      { transform: `translateX(${dx}px) scale(1.7)` },
+      { transform: `translateX(${dx}px) scale(1.7)`, offset: 1.4 / 2.7, easing: 'cubic-bezier(.65,0,.25,1)' },
+      { transform: 'translateX(0px) scale(1.7)', offset: 2.0 / 2.7, easing: 'cubic-bezier(.65,0,.25,1)' },
+      { transform: 'translateX(0px) scale(1)' }],
       { duration: 2700, fill: 'backwards' });
     const tan = Math.tan(AX * Math.PI / 180);
     ['s1', 's2', 's3'].forEach((k, i) => {

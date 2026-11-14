@@ -71,16 +71,25 @@
         "keyframes": [
           {
             "offset": 0,
-            "scale": 1.7
+            "scale": 1.7,
+            "x": "centre the mark alone"
           },
           {
-            "offset": 0.7,
+            "offset": 0.5185,
             "scale": 1.7,
+            "x": "centre the mark alone",
+            "easing": "glide"
+          },
+          {
+            "offset": 0.7407,
+            "scale": 1.7,
+            "x": 0,
             "easing": "glide"
           },
           {
             "offset": 1,
-            "scale": 1
+            "scale": 1,
+            "x": 0
           }
         ]
       },
@@ -176,6 +185,26 @@
             "blur": 0
           }
         ]
+      },
+      {
+        "id": "hub-glow",
+        "target": ".hub::before (purple bloom behind the logo)",
+        "delay": 2000,
+        "duration": 1200,
+        "easing": "easeOut",
+        "keyframes": [
+          {
+            "offset": 0,
+            "opacity": 0,
+            "scale": 0.6
+          },
+          {
+            "offset": 1,
+            "opacity": 1,
+            "scale": 1
+          }
+        ],
+        "note": "no bloom while the logo is being built"
       },
       {
         "id": "ripple",
@@ -465,27 +494,28 @@
         "Les Privat",
         "Masa Depanmu"
       ],
-      "start": 7600,
-      "interval": 2600,
+      "start": 6800,
+      "interval": 2400,
       "out": {
-        "y": "-0.45em",
+        "y": "-0.3em",
         "opacity": 0,
-        "blur": 10,
-        "duration": 500
+        "blur": 6,
+        "duration": 250
       },
       "in": {
-        "y": "0.45em → 0",
+        "y": "0.3em → 0",
         "opacity": "0 → 1",
-        "blur": "10 → 0",
-        "duration": 600,
+        "blur": "6 → 0",
+        "duration": 420,
         "easing": "easeOut"
       },
       "widthMorph": {
-        "duration": 550,
-        "easing": "glide"
+        "duration": 400,
+        "easing": "easeOut"
       },
       "fill": "linear-gradient(100deg, #C6BDFF, #925BFF 55%, #C6BDFF)",
-      "mobile": "phrase on its own line"
+      "mobile": "phrase on its own line",
+      "align": "baseline"
     },
     {
       "id": "closing-stripes",
