@@ -838,5 +838,8 @@
       "Starfield canvas: devicePixelRatio capped at 1.5; redraws every frame only while scrolling, otherwise ~30fps for the twinkle.",
       "No mask-image on the hero (bottom fade is an overlay); nav backdrop blur 14px; no backdrop-filter on repeated cards."
     ]
-  }
+  },
+  "notes": [
+    "Buttons no longer show a \"+EXP\" burst on click. The only EXP pop left is the correct answer in the Mastery demo."
+  ]
 }

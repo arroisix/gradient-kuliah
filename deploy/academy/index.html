@@ -1051,7 +1051,7 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
         <div class="name"><span class="glock glock-lg" role="img" aria-label="Gradient TKA"><span class="gword">Gradient</span><span class="gbadge" style="--bd:linear-gradient(315deg,#F9A8D4,#E1148C,#AC0254);--bf:linear-gradient(90deg,#AC0254,#E1148C)"><span>TKA</span></span></span></div>
         <h2>Kuasai TKA SMA, Raih Skor Terbaikmu!</h2>
         <p class="sub-tag">Sistem persiapan TKA SMA yang nyatuin materi per mata uji, latihan dengan skor mastery, dan tryout format resmi dalam satu ekosistem belajar. Biar kamu siap TKA tanpa panik.</p>
-        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/tka">Daftar Belajar</a><a class="btn btn-grey" href="https://gradient.academy/tka">Apa itu TKA?</a></div>
+        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/tka">Daftar Belajar</a></div>
       </div>
     </section>
 
@@ -1061,7 +1061,7 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
         <div class="name"><span class="glock glock-lg" role="img" aria-label="Gradient UTBK"><span class="gword">Gradient</span><span class="gbadge" style="--bd:linear-gradient(315deg,#F6EDFE,#998DEB,#604DBD);--bf:linear-gradient(90deg,#32257C,#4442B1,#5F6BDF)"><span>UTBK</span></span></span></div>
         <h2>Masuk Kampus Impian Mulai dari Sini</h2>
         <p class="sub-tag">Sistem persiapan cerdas yang ngebantu kamu lewat materi adaptif, analisis AI, dan tryout berbasis IRT dalam satu ekosistem belajar.</p>
-        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/utbk">Coba Gratis</a><a class="btn btn-grey" href="https://gradient.academy/utbk">Apa itu UTBK?</a></div>
+        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/utbk">Coba Gratis</a></div>
       </div>
     </section>
 
@@ -1071,7 +1071,7 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
         <div class="name"><span class="glock glock-lg" role="img" aria-label="Gradient Kuliah"><span class="gword">Gradient</span><span class="gbadge" style="--bd:linear-gradient(90deg,#5F2BCE,#B6A6F3);--bf:linear-gradient(90deg,#5F2BCE,#8A38F5)"><span>Kuliah</span></span></span></div>
         <h2>Aplikasi Belajar Kuliah No. 1 di Indonesia</h2>
         <p class="sub-tag">Makin paham materi perkuliahan, dapet rangkuman soal ujian, dan dijaga AI biar kamu bisa ngeraih IPK idaman. Sekarang waktunya kejar IPK tinggi, bukan cuma sekadar lulus.</p>
-        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/">Coba Sekarang</a><a class="btn btn-grey" href="https://gradient.academy/">Lihat Kelas</a></div>
+        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/">Coba Sekarang</a></div>
       </div>
     </section>
 
@@ -1081,7 +1081,7 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
         <div class="name"><span class="glock glock-lg" role="img" aria-label="Gradient Private"><span class="gword">Gradient</span><span class="gbadge" style="--bd:linear-gradient(315deg,#F6EDFE,#998DEB,#F2C04C);--bf:linear-gradient(90deg,#60A5FA,#60A5FA,#5F6BDF)"><span>Private</span></span></span></div>
         <h2>Belajar Privat, Hasil Maksimal</h2>
         <p class="sub-tag">Tingkatin pemahamanmu bareng tutor terverifikasi dari Gradient. Sesi 1-on-1 yang langsung fokus ke materi yang lagi kamu butuhin banget.</p>
-        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/private">Lihat Program</a><a class="btn btn-grey" href="https://gradient.academy/private">Cara Daftar</a></div>
+        <div class="ctas"><a class="btn btn-primary" href="https://gradient.academy/private">Lihat Program</a></div>
       </div>
     </section>
 
@@ -1454,15 +1454,6 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
     });
   }));
 
-  /* ---- "+EXP" burst on gamified buttons ---- */
-  const rewards = ['+5 EXP', '+10 EXP', '+15 EXP', '+3 EXP']; let r = 0;
-  document.addEventListener('click', (e) => {
-    const b = e.target.closest('.btn'); if (!b || reduce || b.hasAttribute('data-start')) return;
-    const pop = document.createElement('div'); pop.className = 'exp-pop';
-    pop.innerHTML = `<img alt="" src="${EXP}">${rewards[r++ % rewards.length]}`;
-    pop.style.left = e.clientX + 'px'; pop.style.top = (e.clientY - 10) + 'px';
-    document.body.append(pop); setTimeout(() => pop.remove(), 1200);
-  });
 
   /* Private: drag the tutor strip sideways with a mouse (touch scrolls natively) */
   document.querySelectorAll('.tutor-track').forEach((tr) => {
