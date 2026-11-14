@@ -670,6 +670,7 @@ main, footer { position: relative; z-index: 1; }
 .gb figcaption b { font: 800 14px/1.2 var(--display); }
 .gb figcaption span { font-size: 11.5px; line-height: 1.35; color: var(--muted); }
 .gb.featured { grid-row: span 2; gap: 12px; padding: 22px 14px; }
+.gb:not(.featured) { justify-content: flex-start; }
 .gb.featured::before { content: ""; position: absolute; z-index: -1; inset: -40%; background: conic-gradient(from 0deg, transparent 0 60%, color-mix(in srgb, var(--g) 70%, transparent) 75%, transparent 90%); animation: spin 6s linear infinite; }
 .gb.featured { border: 0; background: #1b1828; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
 .gb.featured > .gb-bg { position: absolute; inset: 2px; z-index: -1; border-radius: 16px; background: radial-gradient(90% 70% at 50% 30%, color-mix(in srgb, var(--g) 30%, transparent), transparent 70%), #1b1828; }
@@ -686,7 +687,7 @@ main, footer { position: relative; z-index: 1; }
 .gb-lock { position: absolute; top: 34px; left: 50%; translate: -50% 0; z-index: 3; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #2b2740; color: #fff; box-shadow: 0 0 0 3px #1b1828; }
 @media (max-width: 860px) {
   .card.gelar { grid-template-columns: minmax(0, 1fr); }
-  .shelf-grid { grid-template-columns: 1fr 1fr; grid-template-rows: none; }
+  .shelf-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr 1fr; }
   .gb.featured { grid-row: auto; grid-column: span 2; flex-direction: row; text-align: left; justify-content: flex-start; padding: 16px; }
   .gb.featured img { width: 80px; }
   .gb.featured figcaption { flex: 1; }
