@@ -810,7 +810,7 @@
         "Kuliah": "https://gradient.academy/",
         "Private": "https://gradient.academy/private"
       },
-      "testimoni": "https://gradient.academy/testimoni"
+      "testimoni": "nav link smooth-scrolls to #testimoni (scroll-margin-top 96px); cards and \"Lihat Semua\" go to https://gradient.academy/testimoni"
     },
     {
       "id": "seru-badges",
