@@ -433,16 +433,16 @@
     },
     {
       "id": "dash-run",
-      "target": "dashed orbit ring",
-      "duration": 30000,
+      "target": "dashed orbit ring (HTML element, not SVG)",
+      "duration": 160000,
       "easing": "linear",
       "iterations": "infinite",
       "keyframes": [
         {
-          "strokeDashoffset": 0
+          "rotate": 0
         },
         {
-          "strokeDashoffset": -90
+          "rotate": 360
         }
       ]
     },
@@ -822,5 +822,13 @@
       "Calm, confident: ease-out for entrances, glide cubic-bezier(.65,0,.25,1) for transforms, small overshoot only on the final unfold"
     ],
     "axisDeg": 24.1
+  },
+  "performance": {
+    "rules": [
+      "Loop animations only use transform/opacity (compositor). No background-position, box-shadow or stroke-dashoffset loops.",
+      "Sections more than 300px outside the viewport get .offscreen → animation-play-state: paused for all their loops.",
+      "Starfield canvas: devicePixelRatio capped at 1.5; redraws every frame only while scrolling, otherwise ~30fps for the twinkle.",
+      "No mask-image on the hero (bottom fade is an overlay); nav backdrop blur 14px; no backdrop-filter on repeated cards."
+    ]
   }
 }
