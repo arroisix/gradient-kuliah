@@ -179,6 +179,9 @@ main, footer { position: relative; z-index: 1; }
 .hub { transition: none; }
 /* ---------- Hero: a flat universe ---------- */
 .hero { position: relative; padding-top: 128px; overflow: hidden; text-align: center; }
+/* the universe runs past the hero's bottom edge: fade it out instead of slicing orbit badges in half */
+.hero { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 200px)), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 200px)), transparent); }
+@media (max-width: 760px) { .hero { --fade: 160px; } }
 .hero-copy { position: relative; z-index: 3; display: grid; justify-items: center; gap: 22px; }
 .hero-copy::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 46%; width: min(980px, 130vw); height: 150%; translate: -50% -50%; border-radius: 50%; background: radial-gradient(closest-side, rgba(8,7,13,.97) 55%, rgba(8,7,13,.7) 75%, rgba(8,7,13,0)); pointer-events: none; animation: fade .9s ease-out 4.2s both; }
 .hero h1 { font-size: clamp(44px, 7.4vw, 84px); font-weight: 800; line-height: 1.04; letter-spacing: -0.03em; }
