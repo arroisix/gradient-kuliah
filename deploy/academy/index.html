@@ -748,7 +748,9 @@ footer { border-top: 1px solid var(--line); overflow: hidden; }
 .closing .g-icon { width: 72px; height: 72px; box-shadow: 0 0 0 10px rgba(95,43,206,.1), 0 0 60px rgba(95,43,206,.35); }
 
 /* ---------- "Mulai belajar" picker ---------- */
-dialog.picker { width: min(560px, calc(100% - 32px)); max-height: calc(100% - 48px); padding: 0; border: 1px solid var(--line); border-radius: 26px; background: #12101a; color: var(--text); box-shadow: 0 40px 120px rgba(0,0,0,.7); }
+html.modal-open { overflow: hidden; }
+dialog.picker { overscroll-behavior: contain; }
+dialog.picker { width: min(560px, calc(100% - 32px)); max-height: calc(100% - 48px); padding: 0; border: 1px solid var(--line); border-radius: 24px; background: var(--card); color: var(--text); box-shadow: 0 40px 120px rgba(0,0,0,.7); }
 dialog.picker::backdrop { background: rgba(0,0,0,.72); backdrop-filter: blur(6px); }
 dialog.picker[open] { animation: dlg-in .45s var(--ease-back); }
 dialog.picker[open]::backdrop { animation: fade .3s ease-out; }
@@ -757,15 +759,15 @@ dialog.picker[open]::backdrop { animation: fade .3s ease-out; }
 .picker-head h2 { font-size: 26px; line-height: 1.15; font-weight: 900; letter-spacing: -0.01em; }
 .picker-head p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 .x { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #2c2c2c; color: var(--text); font: 800 16px/1 var(--display); cursor: pointer; box-shadow: 0 3px 0 #333333; flex: none; }
-.stage-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px 24px 0; }
-.stage-pick span { font: 700 13px/1 var(--display); color: var(--muted); margin-right: 2px; }
-.stage-pick button { height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--line); background: #1b1826; color: var(--text); font: 800 13px/1 var(--display); cursor: pointer; transition: background-color .2s, border-color .2s; }
-.stage-pick button:hover { border-color: rgba(255,255,255,.22); }
-.stage-pick button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); box-shadow: 0 3px 0 var(--brand-lip); }
-.option.dim { filter: grayscale(.8) brightness(.5); }
+.stage-pick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 16px 24px 0; padding: 4px; border-radius: 12px; background: #141414; border: 1px solid var(--line); }
+@media (max-width: 520px) { .stage-pick { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stage-pick button { height: 36px; padding: 0 8px; border-radius: 9px; border: 0; background: transparent; color: var(--muted); font: 600 13px/1 var(--body); white-space: nowrap; cursor: pointer; transition: background-color .2s, color .2s; }
+.stage-pick button:hover { color: var(--text); }
+.stage-pick button[aria-pressed="true"] { background: #2c2c2c; color: var(--text); box-shadow: inset 0 0 0 1px #333; }
+.option.dim { filter: grayscale(.7) brightness(.55); }
 .option .fit { display: none; padding: 3px 9px; border-radius: 99px; font: 900 11px/1.3 var(--display); background: var(--mint); color: #062b22; }
 .option.match .fit { display: inline-block; }
-.options { display: grid; gap: 10px; padding: 16px 24px 8px; }
+.options { display: grid; gap: 10px; padding: 16px 24px 24px; }
 .option { transition: filter .25s, border-color .2s, transform .2s var(--ease-back), background-color .2s; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px; border-radius: 16px; border: 2px solid var(--line); background: var(--card); transition: border-color .2s, transform .2s var(--ease-back), background-color .2s; }
 .option:hover, .option:focus-visible { border-color: color-mix(in srgb, var(--c) 70%, transparent); background: color-mix(in srgb, var(--c) 7%, var(--card)); transform: translateY(-2px); }
 .option .name { --h: 20px; }
@@ -1128,14 +1130,12 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
     <button class="x" type="button" data-close aria-label="Tutup">✕</button>
   </div>
   <div class="stage-pick" role="group" aria-label="Jenjangmu sekarang">
-    <span>Aku sekarang:</span>
-    <button type="button" data-stage="sma">SMA kelas 10–11</button>
-    <button type="button" data-stage="sma12">SMA kelas 12</button>
-    <button type="button" data-stage="gap">Gap year</button>
-    <button type="button" data-stage="kuliah">Kuliah</button>
+    <button type="button" data-stage="sma" aria-pressed="true">SMA kelas 10–11</button>
+    <button type="button" data-stage="sma12" aria-pressed="false">SMA kelas 12</button>
+    <button type="button" data-stage="gap" aria-pressed="false">Gap year</button>
+    <button type="button" data-stage="kuliah" aria-pressed="false">Kuliah</button>
   </div>
   <div class="options" id="options"></div>
-  <p class="picker-foot">Belum yakin? <a href="#mastery" data-close>Lihat dulu cara Gradient memetakan kekuatanmu</a>.</p>
 </dialog>
 
 <script>
@@ -1440,7 +1440,7 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
   const dlg = document.getElementById('picker');
   document.getElementById('options').innerHTML = PRODUCTS.map((p, i) =>
     `<a class="option" href="${p.href}" data-for="${p.for.join(' ')}" style="--c:var(--${p.id});--i:${i}" data-close>
-       <span><span class="t"><span class="name">${LOGO[p.id]}</span><span class="who">${p.who}</span><span class="fit">Cocok untukmu</span></span><span class="d">${p.d}</span></span>
+       <span><span class="t"><span class="name">${LOGO[p.id]}</span><span class="fit">Cocok untukmu</span></span><span class="d">${p.d}</span></span>
        <span class="go" aria-hidden="true">›</span></a>`).join('');
   document.addEventListener('click', (e) => {
     const open = e.target.closest('[data-start]');
@@ -1448,14 +1448,18 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
     if (e.target.closest('[data-close]') && dlg.open) dlg.close();
   });
   dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
-  dlg.querySelectorAll('[data-stage]').forEach((b) => b.addEventListener('click', () => {
-    const on = b.getAttribute('aria-pressed') !== 'true';
-    dlg.querySelectorAll('[data-stage]').forEach((x) => x.setAttribute('aria-pressed', String(on && x === b)));
+  // one stage is always selected (default: SMA kelas 10–11); matching products stay bright
+  const pickStage = (b) => {
+    dlg.querySelectorAll('[data-stage]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     dlg.querySelectorAll('.option').forEach((o) => {
       const fit = o.dataset.for.split(' ').includes(b.dataset.stage);
-      o.classList.toggle('match', on && fit); o.classList.toggle('dim', on && !fit);
+      o.classList.toggle('match', fit); o.classList.toggle('dim', !fit);
     });
-  }));
+  };
+  dlg.querySelectorAll('[data-stage]').forEach((b) => b.addEventListener('click', () => pickStage(b)));
+  pickStage(dlg.querySelector('[data-stage][aria-pressed="true"]'));
+  // lock the page behind the dialog
+  new MutationObserver(() => document.documentElement.classList.toggle('modal-open', dlg.open)).observe(dlg, { attributes: true, attributeFilter: ['open'] });
 
 
   /* Private: drag the tutor strip sideways with a mouse (touch scrolls natively) */
