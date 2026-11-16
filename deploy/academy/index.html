@@ -763,7 +763,7 @@ dialog.picker[open]::backdrop { animation: fade .3s ease-out; }
 .picker-head p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 .x { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #2c2c2c; color: var(--text); font: 800 16px/1 var(--display); cursor: pointer; box-shadow: 0 3px 0 #333333; flex: none; }
 .stage-pick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 16px 24px 0; padding: 4px; border-radius: 12px; background: #141414; border: 1px solid var(--line); }
-@media (max-width: 520px) { .stage-pick { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .stage-pick { display: flex; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; } .stage-pick::-webkit-scrollbar { display: none; } .stage-pick button { flex: 0 0 auto; padding: 0 14px; scroll-snap-align: start; } }
 .stage-pick button { height: 36px; padding: 0 8px; border-radius: 9px; border: 0; background: transparent; color: var(--muted); font: 600 13px/1 var(--body); white-space: nowrap; cursor: pointer; transition: background-color .2s, color .2s; }
 .stage-pick button:hover { color: var(--text); }
 .stage-pick button[aria-pressed="true"] { background: #2c2c2c; color: var(--text); box-shadow: inset 0 0 0 1px #333; }
@@ -1475,7 +1475,7 @@ dialog.picker[open] .opt-wrap:not(.hide) > .option { animation: rise .5s var(--e
       w.classList.toggle('hide', !fit); w.inert = !fit; w.setAttribute('aria-hidden', String(!fit));
     });
   };
-  dlg.querySelectorAll('[data-stage]').forEach((b) => b.addEventListener('click', () => pickStage(b)));
+  dlg.querySelectorAll('[data-stage]').forEach((b) => b.addEventListener('click', () => { pickStage(b); b.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }));
   pickStage(dlg.querySelector('[data-stage][aria-pressed="true"]'));
   // lock the page behind the dialog
   new MutationObserver(() => document.documentElement.classList.toggle('modal-open', dlg.open)).observe(dlg, { attributes: true, attributeFilter: ['open'] });
