@@ -703,7 +703,7 @@
     {
       "id": "switcher-open",
       "component": "Nav product switcher",
-      "trigger": "hover (desktop) / click",
+      "trigger": "hover (mouse): opens on enter; closes 300ms after the pointer moves outside trigger + gap + menu (position-based, a still cursor never closes it). Click/tap toggles.",
       "transition": "opacity 180ms ease-out, translate 180ms ease-out",
       "from": {
         "opacity": 0,
@@ -739,9 +739,9 @@
     },
     {
       "id": "picker-stage",
-      "component": "Picker stage chips (Aku sekarang…)",
+      "component": "Picker stage tabs (SMA kelas 10–11 default)",
       "transition": "filter 250ms, border-color 200ms, transform 200ms easeBack",
-      "selected": "matching products get “Cocok untukmu”, others dim (grayscale .6, opacity .45)"
+      "selected": "non-matching products collapse and hide: row height 1fr → 0fr 420ms easeOut, card opacity 1 → 0 (280ms), translateY -8px, scale .97; matching ones expand back the same way. No 'Cocok untukmu' tag."
     },
     {
       "id": "demo-answer",
