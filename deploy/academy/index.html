@@ -160,6 +160,9 @@ main, footer { position: relative; z-index: 1; }
 .switch.open .switch-btn .chev { rotate: 180deg; }
 .switch-menu { position: absolute; top: calc(100% + 22px); left: -4px; width: 200px; overflow: hidden; border-radius: 8px; background: #1e1e1e; border: 1px solid #333; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1); opacity: 0; scale: .98; transform-origin: top left; pointer-events: none; transition: opacity .15s ease-out, scale .15s ease-out; }
 .switch.open .switch-menu { opacity: 1; scale: 1; pointer-events: auto; }
+/* invisible bridge over the gap between trigger and menu so the pointer never "leaves" on the way down */
+.switch.open::after, .nl-prod.open::after { content: ""; position: absolute; left: -12px; right: -12px; top: 100%; height: 26px; }
+.nl-prod.open::after { left: -130px; right: -130px; }
 .gm-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; transition: background-color .2s; }
 .gm-item:hover, .gm-item:focus-visible, .gm-item.active { background: #2c2c2c; outline: none; }
 .gcheck { flex: none; }
@@ -1400,21 +1403,21 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
   if (!reduce) [document.getElementById('map-card'), ...document.querySelectorAll('.card, .panel')].forEach((el) => (el.id === 'map-card' || el.querySelector('.bar')) && io.observe(el));
 
   /* ---- navbar product switcher ---- */
+  /* Shared dropdown behaviour. Mouse: open on hover, close 350ms after the pointer leaves the trigger + menu
+     (moving across the gap never closes it); clicking the trigger while hover-opened keeps it open.
+     Touch / pen / keyboard: the trigger click toggles. */
+  function hoverMenu(wrap, btn, setOpen) {
+    let timer, viaHover = false;
+    const isOpen = () => wrap.classList.contains('open');
+    wrap.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(timer); if (!isOpen()) { setOpen(true); viaHover = true; } });
+    wrap.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(timer); timer = setTimeout(() => { setOpen(false); viaHover = false; }, 350); });
+    btn.addEventListener('click', () => { clearTimeout(timer); if (isOpen() && viaHover) { viaHover = false; return; } setOpen(!isOpen()); viaHover = false; });
+  }
   const sw = document.getElementById('switch'), swBtn = sw.querySelector('.switch-btn');
   const SHORT = { tka: 'Persiapan Tes Kemampuan Akademik untuk siswa SMA.', utbk: 'Persiapan SNBT untuk tembus PTN impian.', kuliah: 'Video dosen top, latihan soal, dan AI Copilot.', private: 'Kelas privat dengan tutor terpilih.' };
   let swTimer;
   const setOpen = (on) => { sw.classList.toggle('open', on); swBtn.setAttribute('aria-expanded', String(on)); };
-  // hover opens on desktop; a click right after a hover-open must not close it again
-  let openedAt = 0;
-  swBtn.addEventListener('click', () => {
-    const open = sw.classList.contains('open');
-    if (open && performance.now() - openedAt < 400) return;
-    setOpen(!open); openedAt = performance.now();
-  });
-  if (matchMedia('(hover: hover)').matches) {
-    sw.addEventListener('mouseenter', () => { clearTimeout(swTimer); if (!sw.classList.contains('open')) { setOpen(true); openedAt = performance.now(); } });
-    sw.addEventListener('mouseleave', () => { swTimer = setTimeout(() => setOpen(false), 160); });
-  }
+  hoverMenu(sw, swBtn, setOpen);
   document.addEventListener('click', (e) => { if (!sw.contains(e.target)) setOpen(false); else if (e.target.closest('.gm-item')) setOpen(false); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sw.classList.contains('open')) { setOpen(false); swBtn.focus(); } });
 
@@ -1423,9 +1426,7 @@ dialog.picker[open] .option { animation: rise .5s var(--ease-out) both; animatio
   if (np) {
     const nb = np.querySelector('.nl-btn'); let tmr;
     const npOpen = (v) => { np.classList.toggle('open', v); nb.setAttribute('aria-expanded', String(v)); };
-    np.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { clearTimeout(tmr); npOpen(true); } });
-    np.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') tmr = setTimeout(() => npOpen(false), 160); });
-    nb.addEventListener('click', () => npOpen(!np.classList.contains('open')));
+    hoverMenu(np, nb, npOpen);
     document.addEventListener('click', (e) => { if (!np.contains(e.target)) npOpen(false); });
     np.addEventListener('keydown', (e) => {
       const items = [...np.querySelectorAll('.pm-item')]; const i = items.indexOf(document.activeElement);
